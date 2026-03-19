@@ -1,0 +1,1870 @@
+fileFormatVersion: 2
+guid: d58d95598e8b8bf4c98e5f0a7ed23ee2
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8279
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeea28314052d784292b439084dc6ab1
+      internalID: -891493052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 8279
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 028f082c336ad6a439ce2b7096f34065
+      internalID: 1402684029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 8279
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 662b9b92b97f08c498770f48b69389df
+      internalID: 981007283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 8279
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03c64bc3651bf7c4c87f2b15e389f640
+      internalID: -1651787324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 8279
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6e9a73864738ec4ebff79239d54c494
+      internalID: -2045115840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7726
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5ffbb48090eedd44946a58a2c936fc1
+      internalID: 136160463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 7726
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 558e82a7b8c87f948b316822135758e9
+      internalID: -1795881197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 7726
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88c9fccd2b53e384c93df5b1aa77ec70
+      internalID: -620643044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 7726
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f046cca393bdf34e903796cfd4c5e1e
+      internalID: 728526964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 7726
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a30df8df9c38b4e85e152f379270fe
+      internalID: 559403173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7173
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d2162468b1950f4286b06f898b86748
+      internalID: 458761046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 7173
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e071b8910403ecd4faacf534f088c3dd
+      internalID: -1281722606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 7173
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16938b7df83ddda459dce3383b1d54aa
+      internalID: 307064848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 7173
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db2d9b3473ceff4408db97f9317f1ed5
+      internalID: -426338867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 7173
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bda08fff041714c44b74036357875a79
+      internalID: 1557854670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6620
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b88a193de88429f49af799a5addd68cd
+      internalID: -1836076274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 6620
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 197f6d0f99e546d478acbac24b1be841
+      internalID: 2015082851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 6620
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1666107b16ce6ae4c8686a7fa05042d6
+      internalID: -1902444070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 6620
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10fb74bd7ad093a458bfe7a77282c798
+      internalID: 1082725340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 6620
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 390658043a561f940973d8413f93561e
+      internalID: -1281893833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6067
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaa48f430fbb6064b832ab0ee5276825
+      internalID: 228345855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 6067
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39b03ba65c58d8b4a9207af28ea40b98
+      internalID: 1967677496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 6067
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43f6902fb9feab64895eb1af9961526e
+      internalID: 442752054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 6067
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1222dbaec22103c4dbd880c29a927152
+      internalID: -337033511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 6067
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce8dd760b09a02f4796f25116051adcc
+      internalID: 1174188010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5514
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3b46fafe5442b04286bb799d412ccf5
+      internalID: -1783433080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 5514
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc851bbe8183f8f438e062f6f895e2ed
+      internalID: 193620393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 5514
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbd67565089ebaf42942912f969631cc
+      internalID: -1519258200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 5514
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2959555fcaabad5438a3fa667b353353
+      internalID: -237742306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 5514
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dbb43a9f9d30f24dbcda96e3c6618b1
+      internalID: 1899277920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4961
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f9ac6e393373074bb199de71b4f2164
+      internalID: 2135636551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 4961
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 704db7e82e00c7e40a4b1c35ea728003
+      internalID: -428260305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 4961
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5aeddf4448c4154695e16ee67df38a8
+      internalID: -988798973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 4961
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b49250adfc5102c4e8bce2dca3242f4b
+      internalID: -755009396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 4961
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2ca65433d3abe142b0f3cb9670addc8
+      internalID: -997494997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4408
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f387c12166a1a9045b55c84e99f50b06
+      internalID: 1455442445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 4408
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8bc185d56994a94baf0c9c50da92d9e
+      internalID: 118323814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 4408
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fda06829ddacd54fa2c47ba8f23e24d
+      internalID: -969721086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 4408
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1cae40302b095a4e90d40775b11930e
+      internalID: 716606341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 4408
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b20995b019ed2f468837d85d91d9709
+      internalID: -1800915673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3855
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b2cc44f08d9ada4ba5e548c8a315c37
+      internalID: -2069363486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 3855
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95329f84307df994ca66d5c18319bb7c
+      internalID: 1574357570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 3855
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98af20af0ee935a4caf6a97b6ac30019
+      internalID: -1849693761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 3855
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41fb2c67b1d433941908c30a72415468
+      internalID: 46736573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 3855
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1df692d3cd4f7db46ad248bd9b7f3a42
+      internalID: -1774102314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3302
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63754d1b3fa7dcf45b124ea80828ba3d
+      internalID: -1730538068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 3302
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a95b7c6113daeda4683bad61bd6b32fd
+      internalID: 1221557206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 3302
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dc569eae7da6474694e5aba586c62cc
+      internalID: -2042956478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 3302
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2bbe83fa0725d241a77d63af18f02e6
+      internalID: -1801128687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 3302
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 703f92ab9bb2d5d4c903671b160a7de0
+      internalID: 63656783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2749
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cb73df5863fac54b845b4d80e91701d
+      internalID: 78189826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 2749
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b889cdf9718ece4c98c51d985bc4fd5
+      internalID: 2040457879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 2749
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d25abbc45421a434ba667e0a0df29829
+      internalID: 1606604059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 2749
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c35f178a06b83f94597ce4f6053fc550
+      internalID: -239403259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 2749
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dff6d5f9b02aaa44e926cb2df6a800ef
+      internalID: 25280331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2196
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5a96b95385d8c14ead26ad2b7d42e33
+      internalID: -1905185193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 2196
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8032a214a4f8584ab6dd5e254590b68
+      internalID: -1644194687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 2196
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d141ea0ba193c1489b30905cb6d7707
+      internalID: 743733700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 2196
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03340f37478d3d542b40dc89abae68d8
+      internalID: 1082378356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 2196
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a15e6d4a536544c8e07448f0d388aa
+      internalID: -2011022613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1643
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ada69ffeeadc974cbc3c5ba46adbc7b
+      internalID: -2086563855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 1643
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88e665bd5aed3f14fadc04f25b36d6c6
+      internalID: -927323973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1643
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc6c8df2b894cfd438ac168fd2ad3a73
+      internalID: -1288875738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 1643
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82eff98b7b3e670409d117d813bb5fc3
+      internalID: 199227894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 1643
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 556370633170add47bdd593a54abe94f
+      internalID: -957227444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1090
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2249429448a1db24481e8e1054d801e9
+      internalID: 977942399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 1090
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 104d8d24e52d9924eab4120532c298c3
+      internalID: 1083113062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1090
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dd5ad373dcae4a45971d95a55217308
+      internalID: 957058419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 1090
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a93f8941a08df77478361295350e4149
+      internalID: -1980925792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 1090
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff46fbe9753639f4589366065ec8c9c5
+      internalID: -1581784200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_70
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 537
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 002aa831a3a42f1409d1f5127264a4fe
+      internalID: -1732256291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_71
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 537
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 210e9bf3b75e0ef4d892f35d009f509f
+      internalID: 1265010192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_72
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 537
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d480dfc6e119c524a94d2c178e3ac07b
+      internalID: -534384715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_73
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 537
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24374da9e947e474ab2ee2b358f56590
+      internalID: 444176755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SadCat_sprte_sheet_74
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 537
+        width: 308
+        height: 553
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bde9d0aa484187b43b3b3826c31845a1
+      internalID: -756787904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 0ebe99fe31581dc48ae72151e7e6a8fe
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":308.0,"y":553.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      SadCat_sprte_sheet_0: -891493052
+      SadCat_sprte_sheet_1: 1402684029
+      SadCat_sprte_sheet_10: 458761046
+      SadCat_sprte_sheet_11: -1281722606
+      SadCat_sprte_sheet_12: 307064848
+      SadCat_sprte_sheet_13: -426338867
+      SadCat_sprte_sheet_14: 1557854670
+      SadCat_sprte_sheet_15: -1836076274
+      SadCat_sprte_sheet_16: 2015082851
+      SadCat_sprte_sheet_17: -1902444070
+      SadCat_sprte_sheet_18: 1082725340
+      SadCat_sprte_sheet_19: -1281893833
+      SadCat_sprte_sheet_2: 981007283
+      SadCat_sprte_sheet_20: 228345855
+      SadCat_sprte_sheet_21: 1967677496
+      SadCat_sprte_sheet_22: 442752054
+      SadCat_sprte_sheet_23: -337033511
+      SadCat_sprte_sheet_24: 1174188010
+      SadCat_sprte_sheet_25: -1783433080
+      SadCat_sprte_sheet_26: 193620393
+      SadCat_sprte_sheet_27: -1519258200
+      SadCat_sprte_sheet_28: -237742306
+      SadCat_sprte_sheet_29: 1899277920
+      SadCat_sprte_sheet_3: -1651787324
+      SadCat_sprte_sheet_30: 2135636551
+      SadCat_sprte_sheet_31: -428260305
+      SadCat_sprte_sheet_32: -988798973
+      SadCat_sprte_sheet_33: -755009396
+      SadCat_sprte_sheet_34: -997494997
+      SadCat_sprte_sheet_35: 1455442445
+      SadCat_sprte_sheet_36: 118323814
+      SadCat_sprte_sheet_37: -969721086
+      SadCat_sprte_sheet_38: 716606341
+      SadCat_sprte_sheet_39: -1800915673
+      SadCat_sprte_sheet_4: -2045115840
+      SadCat_sprte_sheet_40: -2069363486
+      SadCat_sprte_sheet_41: 1574357570
+      SadCat_sprte_sheet_42: -1849693761
+      SadCat_sprte_sheet_43: 46736573
+      SadCat_sprte_sheet_44: -1774102314
+      SadCat_sprte_sheet_45: -1730538068
+      SadCat_sprte_sheet_46: 1221557206
+      SadCat_sprte_sheet_47: -2042956478
+      SadCat_sprte_sheet_48: -1801128687
+      SadCat_sprte_sheet_49: 63656783
+      SadCat_sprte_sheet_5: 136160463
+      SadCat_sprte_sheet_50: 78189826
+      SadCat_sprte_sheet_51: 2040457879
+      SadCat_sprte_sheet_52: 1606604059
+      SadCat_sprte_sheet_53: -239403259
+      SadCat_sprte_sheet_54: 25280331
+      SadCat_sprte_sheet_55: -1905185193
+      SadCat_sprte_sheet_56: -1644194687
+      SadCat_sprte_sheet_57: 743733700
+      SadCat_sprte_sheet_58: 1082378356
+      SadCat_sprte_sheet_59: -2011022613
+      SadCat_sprte_sheet_6: -1795881197
+      SadCat_sprte_sheet_60: -2086563855
+      SadCat_sprte_sheet_61: -927323973
+      SadCat_sprte_sheet_62: -1288875738
+      SadCat_sprte_sheet_63: 199227894
+      SadCat_sprte_sheet_64: -957227444
+      SadCat_sprte_sheet_65: 977942399
+      SadCat_sprte_sheet_66: 1083113062
+      SadCat_sprte_sheet_67: 957058419
+      SadCat_sprte_sheet_68: -1980925792
+      SadCat_sprte_sheet_69: -1581784200
+      SadCat_sprte_sheet_7: -620643044
+      SadCat_sprte_sheet_70: -1732256291
+      SadCat_sprte_sheet_71: 1265010192
+      SadCat_sprte_sheet_72: -534384715
+      SadCat_sprte_sheet_73: 444176755
+      SadCat_sprte_sheet_74: -756787904
+      SadCat_sprte_sheet_8: 728526964
+      SadCat_sprte_sheet_9: 559403173
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

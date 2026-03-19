@@ -1,0 +1,30 @@
+{
+    "Popups": [
+        {
+            "Key": "LoadGame",
+            "Message": "불러오기 기능 준비 중",
+            "Subtitle": "고대의 기록 장치를 가동하고 있습니다...",
+            "AnimationKey": "LoadingState"
+        },
+        {
+            "Key": "Settings",
+            "Message": "환경설정 준비 중",
+            "Subtitle": "마법적인 시스템 기어를 조정하는 중입니다.",
+            "AnimationKey": "SettingsGear"
+        },
+        {
+            "Key": "Archive",
+            "Message": "보관함 준비 중",
+            "Subtitle": "잊힌 지식의 서고를 정리하고 있습니다.",
+            "AnimationKey": "ArchiveOpen"
+        },
+        {
+            "Key": "Sorry",
+            "Message": "아직 개발 중입니다...",
+            "Subtitle": "아직 구상중이거나 만드는 중이에요... \n 죄송합니다... \n 더열심히 할게요....",
+            
+            "AnimationKey": "Sad_cat"
+            
+        }
+    ]
+}

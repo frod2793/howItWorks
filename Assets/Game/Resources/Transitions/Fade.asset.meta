@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1014c72b15d22c84e9eb913c74cc9781
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 225607
+  packageName: Easy Transitions
+  packageVersion: 1.4
+  assetPath: Assets/EasyTransitions/Transitions/Fade/Fade.asset
+  uploadId: 587727
