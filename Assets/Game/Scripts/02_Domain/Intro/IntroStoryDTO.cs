@@ -30,6 +30,11 @@ public class IntroStepDTO
 [Serializable]
 public class IntroStoryDataDTO
 {
+    /// <summary>
+    /// [설명]: 텍스트 출력 속도 (초 단위)입니다.
+    /// </summary>
+    public float TypingSpeed = 0.05f;
+
     public List<IntroStepDTO> Steps = new List<IntroStepDTO>();
 }
 #endregion

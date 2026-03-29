@@ -10,7 +10,6 @@ public class IntroLifetimeScope : LifetimeScope
 {
     #region 에디터 설정
     [SerializeField] private IntroView m_introView;
-    [SerializeField] private float m_typingSpeed = 0.05f;
     #endregion
 
     protected override void Configure(IContainerBuilder builder)
@@ -50,7 +49,7 @@ public class IntroLifetimeScope : LifetimeScope
             
             if (m_introView != null && introVM != null)
             {
-                m_introView.Setup(m_typingSpeed);
+                m_introView.Setup(introVM.TypingSpeed);
                 m_introView.Initialize(introVM, sceneLoader, soundService);
             }
         }

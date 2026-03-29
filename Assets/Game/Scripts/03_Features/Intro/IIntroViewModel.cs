@@ -13,6 +13,7 @@ public interface IIntroViewModel
     string CurrentSpeaker { get; }
     string CurrentContent { get; }
     bool IsLastStep { get; }
+    float TypingSpeed { get; }
 
     void StartIntro();
     void HandleNext();
