@@ -26,7 +26,7 @@ public class TitleViewModel : ITitleViewModel
     #region 공개 메서드
     public void NewGame()
     {
-        Debug.Log("[TitleViewModel] 새 게임 시작! 인게임 씬으로 이동합니다.");
+        Debug.Log("[TitleViewModel] 인게임 씬 로드 시작");
         
         if (m_sceneLoader != null)
         {

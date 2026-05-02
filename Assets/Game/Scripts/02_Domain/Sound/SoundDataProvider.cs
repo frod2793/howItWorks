@@ -38,7 +38,7 @@ public class SoundDataProvider
         }
         else
         {
-            Debug.LogWarning($"[SoundDataProvider] 오디오 클립을 찾을 수 없습니다: {key}");
+            Debug.LogWarning($"[SoundDataProvider] 오디오 클립 로드 실패: {key}");
         }
 
         return clip;

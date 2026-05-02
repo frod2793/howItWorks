@@ -18,7 +18,7 @@ public class SceneLoaderService : ISceneLoader
         
         if (m_defaultSettings == null)
         {
-            Debug.LogWarning("[SceneLoaderService] 기본 트랜지션 설정을 찾을 수 없습니다. Resources/Transitions/Fade 확인 필요.");
+            Debug.LogWarning("[SceneLoaderService] 기본 설정 로드 실패: Fade");
         }
     }
 
@@ -33,13 +33,13 @@ public class SceneLoaderService : ISceneLoader
         var manager = TransitionManager.Instance();
         if (manager == null)
         {
-            Debug.LogError("[SceneLoaderService] TransitionManager 인스턴스를 찾을 수 없습니다. 씬에 TransitionManager가 있는지 확인하세요.");
+            Debug.LogError("[SceneLoaderService] TransitionManager 인스턴스 없음");
             return;
         }
 
         if (m_defaultSettings == null)
         {
-            Debug.LogError($"[SceneLoaderService] '{DEFAULT_TRANSITION_PATH}' 에셋을 로드할 수 없습니다. Resources 폴더를 확인하세요.");
+            Debug.LogError($"[SceneLoaderService] 에셋 로드 실패: {DEFAULT_TRANSITION_PATH}");
             return;
         }
 

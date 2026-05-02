@@ -36,7 +36,7 @@ public class IntroLifetimeScope : LifetimeScope
     {
         if (Container == null)
         {
-            Debug.LogError("[IntroLifetimeScope] VContainer가 아직 초기화되지 않았습니다.");
+            Debug.LogError("[IntroLifetimeScope] VContainer 초기화 미완료");
             return;
         }
 
@@ -55,7 +55,7 @@ public class IntroLifetimeScope : LifetimeScope
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"[IntroLifetimeScope] 의존성 해결 실패: {e.Message}\n프로젝트 설정(VContainer Project Settings)을 확인하십시오.");
+            Debug.LogError($"[IntroLifetimeScope] 의존성 해결 실패: {e.Message}");
         }
     }
 }

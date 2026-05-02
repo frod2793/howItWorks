@@ -25,7 +25,7 @@ public class PopupViewEditor : Editor
             }
             else
             {
-                Debug.LogWarning("[PopupViewEditor] 테스트는 플레이 모드에서만 가능합니다.");
+                Debug.LogWarning("[PopupViewEditor] 플레이 모드 전용 기능");
             }
         }
         

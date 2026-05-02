@@ -11,18 +11,18 @@ using Cysharp.Threading.Tasks;
 public class PopupView : MonoBehaviour
 {
     #region 에디터 설정
-    [Header("Basic UI Elements")]
+    [Header("기본 UI 요소")]
     [SerializeField] private TMP_Text m_messageText;
     [SerializeField] private Button m_confirmButton;
     [SerializeField] private RectTransform m_popupPanel;
 
-    [Header("Extended Content Settings")]
+    [Header("확장 콘텐츠 설정")]
     [SerializeField] private TMP_Text m_subtitleText;
     [SerializeField] private Animator m_contentAnimator;
     [SerializeField] private TypewriterEffect m_subtitleTypewriter;
 
     #region 에디터 설정 (디버그/테스트)
-    [Header("Debug Settings")]
+    [Header("디버그 설정")]
     [SerializeField] private bool m_loopSubtitle;
     [SerializeField] private string m_testKey;
     #endregion
@@ -42,17 +42,29 @@ public class PopupView : MonoBehaviour
     }
     public void Initialize(IPopupViewModel viewModel)
     {
-        if (viewModel == null) return;
+        if (viewModel == null)
+        {
+            return;
+        }
         m_viewModel = viewModel;
 
         // 팝업 시에는 배경의 타이핑 사운드 등을 중지
-        m_soundService?.StopLoopSFX();
+        if (m_soundService != null)
+        {
+            m_soundService.StopLoopSFX();
+        }
 
         // 기본 텍스트 설정
-        if (m_messageText != null) m_messageText.text = m_viewModel.Message;
+        if (m_messageText != null)
+        {
+            m_messageText.text = m_viewModel.Message;
+        }
         
         // 자막 텍스트 초기화
-        if (m_subtitleText != null) m_subtitleText.text = "";
+        if (m_subtitleText != null)
+        {
+            m_subtitleText.text = "";
+        }
 
         // 버튼 바인딩
         if (m_confirmButton != null)
@@ -81,7 +93,7 @@ public class PopupView : MonoBehaviour
     {
         if (m_debugDataProvider == null || string.IsNullOrEmpty(m_testKey))
         {
-            Debug.LogWarning("[PopupView] 테스트 데이터 제공자가 없거나 테스트 키가 비어있습니다.");
+            Debug.LogWarning("[PopupView] 테스트 설정 미비");
             return;
         }
 
@@ -111,9 +123,13 @@ public class PopupView : MonoBehaviour
             
             do
             {
-                foreach (var line in lines)
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    var line = lines[i];
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
                     
                     await m_subtitleTypewriter.Play(m_subtitleText, line.Trim());
                     
@@ -144,7 +160,10 @@ public class PopupView : MonoBehaviour
     private void CloseWithAnimation()
     {
         // 타이핑 중이면 즉시 중단
-        if (m_subtitleTypewriter != null) m_subtitleTypewriter.Stop();
+        if (m_subtitleTypewriter != null)
+        {
+            m_subtitleTypewriter.Stop();
+        }
 
         // 애니메이터 상태 초기화
         ResetAllAnimatorBools();
@@ -169,10 +188,15 @@ public class PopupView : MonoBehaviour
     /// </summary>
     private void ResetAllAnimatorBools()
     {
-        if (m_contentAnimator == null) return;
-
-        foreach (var param in m_contentAnimator.parameters)
+        if (m_contentAnimator == null)
         {
+            return;
+        }
+
+        var parameters = m_contentAnimator.parameters;
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            var param = parameters[i];
             if (param.type == AnimatorControllerParameterType.Bool)
             {
                 m_contentAnimator.SetBool(param.name, false);
