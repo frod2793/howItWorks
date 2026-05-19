@@ -6,11 +6,6 @@ namespace Features.InGame
 {
     public class InGameQuickMenuView : MonoBehaviour
     {
-        [SerializeField] private Button m_settingsButton;
-        [SerializeField] private Button m_logButton;
-        [SerializeField] private Toggle m_autoToggle;
-        [SerializeField] private Toggle m_skipToggle;
-
         private IQuickMenuViewModel m_viewModel;
 
         [Inject]
@@ -18,54 +13,48 @@ namespace Features.InGame
         {
             m_viewModel = viewModel;
 
-            if (m_settingsButton != null)
+            // 상태 변경 이벤트 구독 (시각적 피드백 필요 시 활용)
+            m_viewModel.OnAutoToggled += (isOn) =>
             {
-                m_settingsButton.onClick.AddListener(() =>
-                {
-                    m_viewModel.OpenSettings();
-                });
-            }
-            if (m_logButton != null)
+                Debug.Log($"[QuickMenu] AUTO State: {isOn}");
+                // TODO: 버튼 색상 변경 등 연출 추가 가능
+            };
+
+            m_viewModel.OnSkipToggled += (isOn) =>
             {
-                m_logButton.onClick.AddListener(() =>
-                {
-                    m_viewModel.OpenLog();
-                });
-            }
-            if (m_autoToggle != null)
-            {
-                m_autoToggle.onValueChanged.AddListener((isOn) =>
-                {
-                    m_viewModel.ToggleAuto(isOn);
-                });
-            }
-            if (m_skipToggle != null)
-            {
-                m_skipToggle.onValueChanged.AddListener((isOn) =>
-                {
-                    m_viewModel.ToggleSkip(isOn);
-                });
-            }
+                Debug.Log($"[QuickMenu] SKIP State: {isOn}");
+                // TODO: 버튼 색상 변경 등 연출 추가 가능
+            };
         }
 
-        private void OnDestroy()
+        public void func_OnSaveButtonClicked()
         {
-            if (m_settingsButton != null)
-            {
-                m_settingsButton.onClick.RemoveAllListeners();
-            }
-            if (m_logButton != null)
-            {
-                m_logButton.onClick.RemoveAllListeners();
-            }
-            if (m_autoToggle != null)
-            {
-                m_autoToggle.onValueChanged.RemoveAllListeners();
-            }
-            if (m_skipToggle != null)
-            {
-                m_skipToggle.onValueChanged.RemoveAllListeners();
-            }
+            m_viewModel?.RequestSave();
+        }
+
+        public void func_OnLoadButtonClicked()
+        {
+            m_viewModel?.RequestLoad();
+        }
+
+        public void func_OnLogButtonClicked()
+        {
+            m_viewModel?.RequestLog();
+        }
+
+        public void func_OnAutoButtonClicked()
+        {
+            m_viewModel?.ClickAuto();
+        }
+
+        public void func_OnSkipButtonClicked()
+        {
+            m_viewModel?.ClickSkip();
+        }
+
+        public void func_OnMenuButtonClicked()
+        {
+            m_viewModel?.RequestMenu();
         }
     }
 }

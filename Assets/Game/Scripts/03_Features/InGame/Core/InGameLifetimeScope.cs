@@ -31,7 +31,7 @@ namespace Features.InGame
 
             m_topBarVM.OnMenuClicked += () =>
             {
-                m_quickMenuVM.OpenSettings();
+                m_quickMenuVM.RequestMenu();
             };
         }
 

@@ -107,38 +107,46 @@ namespace Features.InGame
 
     public class QuickMenuViewModel : IQuickMenuViewModel
     {
-        public event Action OnSettingsRequested;
+        public event Action OnSaveRequested;
+        public event Action OnLoadRequested;
         public event Action OnLogRequested;
         public event Action<bool> OnAutoToggled;
         public event Action<bool> OnSkipToggled;
+        public event Action OnMenuRequested;
 
-        public void OpenSettings()
+        private bool m_isAutoOn = false;
+        private bool m_isSkipOn = false;
+
+        public void RequestSave()
         {
-            if (OnSettingsRequested != null)
-            {
-                OnSettingsRequested.Invoke();
-            }
+            OnSaveRequested?.Invoke();
         }
-        public void OpenLog()
+
+        public void RequestLoad()
         {
-            if (OnLogRequested != null)
-            {
-                OnLogRequested.Invoke();
-            }
+            OnLoadRequested?.Invoke();
         }
-        public void ToggleAuto(bool isOn)
+
+        public void RequestLog()
         {
-            if (OnAutoToggled != null)
-            {
-                OnAutoToggled.Invoke(isOn);
-            }
+            OnLogRequested?.Invoke();
         }
-        public void ToggleSkip(bool isOn)
+
+        public void ClickAuto()
         {
-            if (OnSkipToggled != null)
-            {
-                OnSkipToggled.Invoke(isOn);
-            }
+            m_isAutoOn = !m_isAutoOn;
+            OnAutoToggled?.Invoke(m_isAutoOn);
+        }
+
+        public void ClickSkip()
+        {
+            m_isSkipOn = !m_isSkipOn;
+            OnSkipToggled?.Invoke(m_isSkipOn);
+        }
+
+        public void RequestMenu()
+        {
+            OnMenuRequested?.Invoke();
         }
     }
 

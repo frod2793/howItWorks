@@ -41,14 +41,19 @@ namespace Features.InGame
 
     public interface IQuickMenuViewModel
     {
-        event Action OnSettingsRequested;
+        event Action OnSaveRequested;
+        event Action OnLoadRequested;
         event Action OnLogRequested;
         event Action<bool> OnAutoToggled;
         event Action<bool> OnSkipToggled;
-        void OpenSettings();
-        void OpenLog();
-        void ToggleAuto(bool isOn);
-        void ToggleSkip(bool isOn);
+        event Action OnMenuRequested;
+
+        void RequestSave();
+        void RequestLoad();
+        void RequestLog();
+        void ClickAuto();
+        void ClickSkip();
+        void RequestMenu();
     }
 
     public interface IEmotionPopupViewModel
