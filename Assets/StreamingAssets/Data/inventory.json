@@ -1,0 +1,16 @@
+[
+  {
+    "itemId": "ITEM_KEY_CARD",
+    "name": "보안 키 카드",
+    "isClue": true,
+    "description": "중앙 통제실에 접근할 수 있는 레벨 3 키 카드.",
+    "connectedSubplotId": "sub_spy_01"
+  },
+  {
+    "itemId": "ITEM_OLD_PHOTO",
+    "name": "바랜 사진",
+    "isClue": false,
+    "description": "과거의 기억이 담겨 있는 희미한 단체 사진.",
+    "connectedSubplotId": ""
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ACH_FIRST_STEP",
+    "title": "첫 걸음",
+    "description": "게임을 시작하고 정문을 지나치십시오.",
+    "category": "Normal"
+  },
+  {
+    "id": "ACH_LOOP_DISCOVERED",
+    "title": "루프의 편린",
+    "description": "2회차 이상에서만 나타나는 특이한 대사를 감지하십시오.",
+    "category": "Secret"
+  },
+  {
+    "id": "ACH_TRUE_ENDING",
+    "title": "안티그래비티",
+    "description": "모든 비밀 모듈을 복구하고 진엔딩에 도달하십시오.",
+    "category": "Ending"
+  }
+]

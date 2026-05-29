@@ -1,0 +1,37 @@
+[
+  {
+    "dialogueId": "DLG_001",
+    "speakerName": "프로토타입 플레이어",
+    "content": "이것은 시스템에 로드된 JSON 기반 다이얼로그의 첫 번째 대사입니다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player_Normal"
+  },
+  {
+    "dialogueId": "DLG_002",
+    "speakerName": "동료 요원",
+    "content": "성공적으로 데이터를 파싱하여 뷰모델 및 뷰 컴포넌트에 주입했군요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Agent_Friendly"
+  },
+  {
+    "dialogueId": "DLG_003",
+    "speakerName": "",
+    "content": "정적이고도 긴장감 넘치는 정적이 샌드박스 화면 내부를 감싼다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_004",
+    "speakerName": "인공지능",
+    "content": "인공지능 프레임워크가 정상 작동 중입니다. 다음 버튼을 클릭하십시오.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_AI_System"
+  },
+  {
+    "dialogueId": "DLG_005",
+    "speakerName": "시스템",
+    "content": "본 화면은 StreamingAssets의 Json 데이터 파일 로딩 테스트 상태입니다.",
+    "dialogueType": "SystemMessage",
+    "speakerIconKey": ""
+  }
+]

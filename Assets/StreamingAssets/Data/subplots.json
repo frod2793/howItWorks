@@ -1,0 +1,14 @@
+[
+  {
+    "subplotId": "sub_spy_01",
+    "name": "요원과의 스파이 작전",
+    "clueDistribution": ["ITEM_KEY_CARD"],
+    "convergedEndingId": "Ending_Secret_02"
+  },
+  {
+    "subplotId": "sub_romance_01",
+    "name": "정문 앞 잔잔한 대화",
+    "clueDistribution": ["ITEM_OLD_PHOTO"],
+    "convergedEndingId": "Ending_Normal_01"
+  }
+]

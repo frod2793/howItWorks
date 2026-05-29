@@ -1,0 +1,14 @@
+[
+  {
+    "id": "BRANCH_001_A",
+    "isMainBranch": true,
+    "endingRequirement": "",
+    "description": "정직하게 통과하는 루트"
+  },
+  {
+    "id": "BRANCH_001_B",
+    "isMainBranch": false,
+    "endingRequirement": "Ending_Secret_02",
+    "description": "담을 넘어 탈출하는 루트"
+  }
+]

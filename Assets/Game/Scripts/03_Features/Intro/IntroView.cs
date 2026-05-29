@@ -1,10 +1,12 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Features.InGame;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using VContainer;
 
 public class IntroView : MonoBehaviour
 {
@@ -13,12 +15,28 @@ public class IntroView : MonoBehaviour
     [SerializeField] private TMP_Text m_contentText;
     [SerializeField] private TypewriterEffect m_typewriter;
 
+    [Header("테스트 및 디버그 설정")]
+    [SerializeField] private bool m_skipIntro = false;
+
     private IIntroViewModel m_viewModel;
+    private DialogueFlowController m_dialogueFlowController;
     private ISceneLoader m_sceneLoader;
     private ISoundService m_soundService;
     private bool m_canNextStep = false;
     private float m_typingSpeed = 0.05f;
     private CancellationTokenSource m_autoProceedCts;
+
+    [Inject]
+    public void Construct(
+        IIntroViewModel viewModel, 
+        DialogueFlowController dialogueFlowController, 
+        ISceneLoader sceneLoader = null, 
+        ISoundService soundService = null)
+    {
+        m_dialogueFlowController = dialogueFlowController;
+        Setup(viewModel.TypingSpeed);
+        Initialize(viewModel, sceneLoader, soundService);
+    }
 
     public void Setup(float typingSpeed)
     {
@@ -39,6 +57,12 @@ public class IntroView : MonoBehaviour
         m_viewModel = viewModel;
         m_sceneLoader = sceneLoader;
         m_soundService = soundService;
+
+        if (m_skipIntro)
+        {
+            FinishIntroDeferred().Forget();
+            return;
+        }
         
         m_viewModel.OnStoryChanged += UpdateStory;
         m_viewModel.OnIntroFinished += FinishIntro;
@@ -75,6 +99,12 @@ public class IntroView : MonoBehaviour
         m_viewModel.StartIntro();
     }
 
+    public void func_OnSkipIntroClick()
+    {
+        CancelAutoProceed();
+        FinishIntro();
+    }
+
     private void Update()
     {
         if (m_viewModel == null)
@@ -82,16 +112,25 @@ public class IntroView : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current != null)
         {
-            if (m_typewriter != null && m_typewriter.IsTyping)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                m_typewriter.Skip();
+                func_OnSkipIntroClick();
+                return;
             }
-            else if (m_canNextStep)
+
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                CancelAutoProceed();
-                ProceedNext();
+                if (m_typewriter != null && m_typewriter.IsTyping)
+                {
+                    m_typewriter.Skip();
+                }
+                else if (m_canNextStep)
+                {
+                    CancelAutoProceed();
+                    ProceedNext();
+                }
             }
         }
     }
@@ -177,17 +216,21 @@ public class IntroView : MonoBehaviour
         }
     }
 
+    private async UniTaskVoid FinishIntroDeferred()
+    {
+        await UniTask.Yield();
+        FinishIntro();
+    }
+
     private void FinishIntro()
     {
-        Debug.Log("[IntroView] 타이틀 씬 전환");
+        Debug.Log("[IntroView] 인트로 뷰 비활성화 및 다이얼로그 시스템 시작");
         
-        if (m_sceneLoader != null)
+        gameObject.SetActive(false);
+
+        if (m_dialogueFlowController != null)
         {
-            m_sceneLoader.LoadScene("Title", 1.0f);
-        }
-        else
-        {
-            Debug.LogWarning("[IntroView] SceneLoader 누락");
+            m_dialogueFlowController.StartDialogueFlowAsync().Forget();
         }
     }
 

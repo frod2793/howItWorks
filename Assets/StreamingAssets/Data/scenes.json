@@ -1,0 +1,18 @@
+[
+  {
+    "id": "SCENE_001",
+    "isMain": true,
+    "expectedMinutes": 10,
+    "characters": ["CHAR_PLAYER"],
+    "summary": "이야기의 시작점. 정문에서의 독백.",
+    "branchOptions": ["BRANCH_001_A", "BRANCH_001_B"]
+  },
+  {
+    "id": "SCENE_002",
+    "isMain": true,
+    "expectedMinutes": 15,
+    "characters": ["CHAR_PLAYER", "CHAR_SPY"],
+    "summary": "기밀 요원과의 비밀 조우.",
+    "branchOptions": ["BRANCH_002_A"]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "moduleId": "MOD-001",
+    "name": "감정 분석 모듈",
+    "averageComplexity": 5.5,
+    "functionDescription": "대상의 맥박과 표정 데이터를 수집하여 실시간 감정 추이를 인덱싱합니다."
+  },
+  {
+    "moduleId": "MOD-002",
+    "name": "인과 루프 동기화기",
+    "averageComplexity": 7.2,
+    "functionDescription": "평행 세계선 간의 회차 누적 자원을 동기화하고 의식에 주입합니다."
+  }
+]

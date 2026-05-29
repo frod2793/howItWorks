@@ -3,99 +3,47 @@ using VContainer.Unity;
 using Features.InGame;
 using UnityEngine;
 
-namespace Features.InGame
+#region 씬 초기화 (VContainer)
+public class InGameLifetimeScope : LifetimeScope
 {
-    public class InGameOrchestrator : IStartable
+    #region 에디터 설정
+
+    #endregion
+
+    protected override void Configure(IContainerBuilder builder)
     {
-        private readonly ITopBarViewModel m_topBarVM;
-        private readonly IIllustrationViewModel m_illustrationVM;
-        private readonly IDialogueViewModel m_dialogueVM;
-        private readonly IChoiceViewModel m_choiceVM;
-        private readonly IQuickMenuViewModel m_quickMenuVM;
-        private readonly IEmotionPopupViewModel m_emotionVM;
-
-        public InGameOrchestrator(
-            ITopBarViewModel topBarVM,
-            IIllustrationViewModel illustrationVM,
-            IDialogueViewModel dialogueVM,
-            IChoiceViewModel choiceVM,
-            IQuickMenuViewModel quickMenuVM,
-            IEmotionPopupViewModel emotionVM)
-        {
-            m_topBarVM = topBarVM;
-            m_illustrationVM = illustrationVM;
-            m_dialogueVM = dialogueVM;
-            m_choiceVM = choiceVM;
-            m_quickMenuVM = quickMenuVM;
-            m_emotionVM = emotionVM;
-
-            m_topBarVM.OnMenuClicked += () =>
-            {
-                m_quickMenuVM.RequestMenu();
-            };
-        }
-
-        public void Start()
-        {
-            Debug.Log("[InGameOrchestrator] 시스템 시작");
-            InitializeGame();
-        }
-
-        private void InitializeGame()
-        {
-            m_topBarVM.UpdateStats(new Domain.InGame.PlayerStatsDTO
-            {
-                SceneNumber = 1,
-                CurrentLocation = "학교 정문",
-                Day = 1,
-                Playthrough = 1,
-                HP = 100,
-                MaxHP = 100,
-                Money = 5000
-            });
-
-            m_dialogueVM.DisplayDialogue(new Domain.InGame.DialogueDTO
-            {
-                SpeakerName = "나",
-                Content = "드디어 첫날이 시작되었다.",
-                BackgroundSpriteKey = "BG_School_Gate"
-            });
-
-            m_emotionVM.ShowEmotion("Excited");
-        }
+        ConfigureIntro(builder);
+        ConfigureInGame(builder);
     }
 
-    public class InGameLifetimeScope : LifetimeScope
+    private void ConfigureIntro(IContainerBuilder builder)
     {
-        [Header("뷰 참조")]
-        [SerializeField] private InGameTopBarView m_topBarView;
-        [SerializeField] private InGameIllustrationView m_illustrationView;
-        [SerializeField] private InGameDialogueView m_dialogueView;
-        [SerializeField] private InGameChoiceView m_choiceView;
-        [SerializeField] private InGameQuickMenuView m_quickMenuView;
-        [SerializeField] private InGameEmotionPopupView m_emotionPopupView;
-        [SerializeField] private InGameUIVisibilityView m_visibilityView;
+        builder.Register<IntroDataProvider>(Lifetime.Singleton);
 
-        protected override void Configure(IContainerBuilder builder)
+        builder.Register(container =>
         {
-            builder.Register<TopBarViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<IllustrationViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<DialogueViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<ChoiceViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<QuickMenuViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<EmotionPopupViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<UIVisibilityViewModel>(Lifetime.Singleton).AsImplementedInterfaces();
+            var provider = container.Resolve<IntroDataProvider>();
+            var data = provider.LoadIntroData();
+            return new IntroViewModel(data);
+        }, Lifetime.Scoped).As<IIntroViewModel>();
 
-            builder.RegisterEntryPoint<InGameOrchestrator>();
-            builder.RegisterEntryPoint<InGameInputController>();
+        builder.RegisterComponentInHierarchy<IntroView>();
+    }
 
-            builder.RegisterComponent(m_topBarView);
-            builder.RegisterComponent(m_illustrationView);
-            builder.RegisterComponent(m_dialogueView);
-            builder.RegisterComponent(m_choiceView);
-            builder.RegisterComponent(m_quickMenuView);
-            builder.RegisterComponent(m_emotionPopupView);
-            builder.RegisterComponent(m_visibilityView);
-        }
+    private void ConfigureInGame(IContainerBuilder builder)
+    {
+        builder.Register<GameDataManager>(Lifetime.Singleton).AsImplementedInterfaces();
+
+        builder.Register<DialogueViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<SceneInfoViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<SidePanelViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<DialogueFlowController>(Lifetime.Singleton);
+
+        builder.RegisterEntryPoint<InGameInputController>();
+
+        builder.RegisterComponentInHierarchy<InGameDialogueView>();
+        builder.RegisterComponentInHierarchy<InGameSceneInfoView>();
+        builder.RegisterComponentInHierarchy<InGameSidePanelView>();
     }
 }
+#endregion

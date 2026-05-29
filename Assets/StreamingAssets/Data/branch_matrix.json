@@ -1,0 +1,14 @@
+[
+  {
+    "branchId": "BRANCH_001_A",
+    "nextSceneId": "SCENE_002",
+    "endingConditions": [],
+    "subplotImpacts": ["sub_spy_01"]
+  },
+  {
+    "branchId": "BRANCH_001_B",
+    "nextSceneId": "SCENE_003",
+    "endingConditions": ["Ending_Secret_02"],
+    "subplotImpacts": []
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "actionType": "Talk",
+    "requiredSubplotId": "sub_romance_01"
+  },
+  {
+    "actionType": "Remember",
+    "requiredSubplotId": ""
+  },
+  {
+    "actionType": "Feel",
+    "requiredSubplotId": ""
+  },
+  {
+    "actionType": "Play",
+    "requiredSubplotId": "sub_game_01"
+  }
+]

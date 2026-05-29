@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using VContainer;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using Domain.InGame;
 
 namespace Features.InGame
@@ -15,17 +16,27 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_nameText;
         [SerializeField] private TextMeshProUGUI m_contentText;
         [SerializeField] private TypewriterEffect m_typewriterEffect;
+        [SerializeField] private Button m_autoButton;
 
         private Image m_backgroundImage;
         private IDialogueViewModel m_viewModel;
-        private IQuickMenuViewModel m_quickMenuVM;
+
+        private bool m_isAutoMode = false;
+        private CancellationTokenSource m_autoProceedCts;
 
         [Inject]
-        public void Construct(IDialogueViewModel viewModel, IQuickMenuViewModel quickMenuVM)
+        public void Construct(IDialogueViewModel viewModel)
         {
             m_viewModel = viewModel;
-            m_quickMenuVM = quickMenuVM;
             m_viewModel.OnDialogueUpdated += UpdateDialogue;
+
+            m_viewModel.OnSkipRequested += () =>
+            {
+                if (m_typewriterEffect != null)
+                {
+                    m_typewriterEffect.Skip();
+                }
+            };
 
             m_backgroundImage = GetComponent<Image>();
 
@@ -47,33 +58,76 @@ namespace Features.InGame
 
         public void func_OnAutoButtonClicked()
         {
-            if (m_quickMenuVM != null)
+            if (m_autoButton != null)
             {
-                m_quickMenuVM.ClickAuto();
+                var image = m_autoButton.GetComponent<Image>();
+                if (image != null)
+                {
+                    if (!m_isAutoMode)
+                    {
+                        image.color = new Color(Random.value, Random.value, Random.value, 1f);
+                    }
+                    else
+                    {
+                        image.color = Color.white;
+                    }
+                }
+            }
+
+            m_isAutoMode = !m_isAutoMode;
+            if (m_isAutoMode)
+            {
+                StartAutoProceed().Forget();
+            }
+            else
+            {
+                CancelAutoProceed();
             }
         }
 
         public void func_OnSkipButtonClicked()
         {
-            if (m_quickMenuVM != null)
-            {
-                m_quickMenuVM.ClickSkip();
-            }
         }
 
         public void func_OnLogButtonClicked()
         {
-            if (m_quickMenuVM != null)
-            {
-                m_quickMenuVM.RequestLog();
-            }
         }
 
         public void func_OnMenuButtonClicked()
         {
-            if (m_quickMenuVM != null)
+        }
+
+        private async UniTaskVoid StartAutoProceed()
+        {
+            CancelAutoProceed();
+            m_autoProceedCts = new CancellationTokenSource();
+            var token = m_autoProceedCts.Token;
+
+            try
             {
-                m_quickMenuVM.RequestMenu();
+                while (m_isAutoMode)
+                {
+                    await UniTask.WaitUntil(() => { return !m_viewModel.IsTyping; }, cancellationToken: token);
+                    await UniTask.Delay(System.TimeSpan.FromSeconds(2.0f), cancellationToken: token);
+
+                    if (m_isAutoMode && m_viewModel != null)
+                    {
+                        m_viewModel.RequestNext();
+                    }
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+        }
+
+        private void CancelAutoProceed()
+        {
+            if (m_autoProceedCts != null)
+            {
+                m_autoProceedCts.Cancel();
+                m_autoProceedCts.Dispose();
+                m_autoProceedCts = null;
             }
         }
 
@@ -89,13 +143,15 @@ namespace Features.InGame
                 {
                     m_speakerIcon.gameObject.SetActive(false);
                 }
+                m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content).Forget();
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
+                    m_viewModel.IsTyping = false;
                 }
             }
             else if (dialogue.Type == DialogueType.SystemMessage)
@@ -115,6 +171,7 @@ namespace Features.InGame
                         m_typewriterEffect.Stop();
                     }
                     m_contentText.text = $"<mspace=16px>{dialogue.Content}</mspace>";
+                    m_viewModel.IsTyping = false;
                 }
             }
             else
@@ -138,13 +195,15 @@ namespace Features.InGame
                         m_speakerIcon.gameObject.SetActive(true);
                     }
                 }
+                m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content).Forget();
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
+                    m_viewModel.IsTyping = false;
                 }
             }
         }
@@ -155,6 +214,7 @@ namespace Features.InGame
             {
                 m_viewModel.OnDialogueUpdated -= UpdateDialogue;
             }
+            CancelAutoProceed();
         }
     }
 }

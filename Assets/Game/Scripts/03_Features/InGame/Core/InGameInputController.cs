@@ -1,22 +1,30 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using VContainer.Unity;
 
 namespace Features.InGame
 {
     public class InGameInputController : ITickable
     {
-        private readonly IUIVisibilityViewModel m_visibilityVM;
+        private readonly IDialogueViewModel m_dialogueVM;
 
-        public InGameInputController(IUIVisibilityViewModel visibilityVM)
+        public InGameInputController(IDialogueViewModel dialogueVM)
         {
-            m_visibilityVM = visibilityVM;
+            m_dialogueVM = dialogueVM;
         }
 
         public void Tick()
         {
-            if (Input.GetKeyDown(KeyCode.H))
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
-                m_visibilityVM.ToggleVisibility();
+                if (m_dialogueVM.IsTyping)
+                {
+                    m_dialogueVM.RequestSkip();
+                }
+                else
+                {
+                    m_dialogueVM.RequestNext();
+                }
             }
         }
     }

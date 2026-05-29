@@ -1,0 +1,21 @@
+{
+  "slotId": 1,
+  "globalProgress": {
+    "playthroughCount": 2,
+    "unlockedEndings": ["Ending_Normal_01"],
+    "currentAct": "ACT_02"
+  },
+  "subplotProgress": {
+    "sub_spy_01": 2,
+    "sub_romance_01": 4
+  },
+  "resources": {
+    "karma": 45,
+    "emotion": 60,
+    "monitoring": 20,
+    "trust": 75,
+    "playthroughAwareness": 12
+  },
+  "currentSceneId": "SCENE_002",
+  "savedAt": "2026-05-29T14:18:00"
+}

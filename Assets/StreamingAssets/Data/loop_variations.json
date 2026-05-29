@@ -1,0 +1,14 @@
+[
+  {
+    "playthroughIndex": 1,
+    "difficultyMultiplier": 1.0,
+    "narrativeTheme": "첫 번째 혼돈의 시작",
+    "loopModifiers": []
+  },
+  {
+    "playthroughIndex": 2,
+    "difficultyMultiplier": 1.25,
+    "narrativeTheme": "반복되는 기시감",
+    "loopModifiers": ["SPY_ALERT_INCREASED", "HIDDEN_CLUES_APPEAR"]
+  }
+]

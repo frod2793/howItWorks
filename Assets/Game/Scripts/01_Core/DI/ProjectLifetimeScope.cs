@@ -19,8 +19,9 @@ public class ProjectLifetimeScope : LifetimeScope
             .AsImplementedInterfaces();
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         DontDestroyOnLoad(gameObject);
     }
 }

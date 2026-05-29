@@ -1,0 +1,26 @@
+[
+  {
+    "id": "CHAR_PLAYER",
+    "name": "나",
+    "isTalkable": true,
+    "colorToken": "#FFFFFF",
+    "portraitSpriteKey": "Portrait_Player_Normal",
+    "subplotConnections": []
+  },
+  {
+    "id": "CHAR_SPY",
+    "name": "기밀 요원",
+    "isTalkable": true,
+    "colorToken": "#FF4500",
+    "portraitSpriteKey": "Portrait_Agent_Secret",
+    "subplotConnections": ["sub_spy_01"]
+  },
+  {
+    "id": "CHAR_PRESIDENT",
+    "name": "대통령",
+    "isTalkable": false,
+    "colorToken": "#FFD700",
+    "portraitSpriteKey": "Portrait_President_Stern",
+    "subplotConnections": []
+  }
+]

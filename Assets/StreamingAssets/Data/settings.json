@@ -1,0 +1,17 @@
+{
+  "resolutionWidth": 1920,
+  "resolutionHeight": 1080,
+  "isFullScreen": true,
+  "masterVolume": 0.8,
+  "bgmVolume": 0.7,
+  "sfxVolume": 0.9,
+  "textSpeed": 2.5,
+  "autoPlaySpeed": 2.0,
+  "language": "Korean",
+  "keyBinds": [
+    { "action": "NextText", "keyName": "Space" },
+    { "action": "ToggleUI", "keyName": "H" },
+    { "action": "QuickSave", "keyName": "F5" },
+    { "action": "QuickLoad", "keyName": "F9" }
+  ]
+}
