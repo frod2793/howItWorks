@@ -69,6 +69,18 @@ namespace Domain.InGame
         public string ChoiceText;
     }
 
+    [Serializable]
+    public class DialogueChoiceDTO
+    {
+        public int ChoiceId;
+        public string Title;
+        public string Subtitle;
+        public string Description;
+        public string Condition;
+        public bool IsLocked;
+        public string ColorType;
+    }
+
     // ==========================================
     // 15종 데이터 구조에 대응하는 DTO 세트 정의
     // ==========================================

@@ -29,6 +29,7 @@ namespace Features.InGame
         {
             m_viewModel = viewModel;
             m_viewModel.OnDialogueUpdated += UpdateDialogue;
+            m_viewModel.OnChoicesUpdated += HandleChoicesUpdated;
 
             m_viewModel.OnSkipRequested += () =>
             {
@@ -208,11 +209,24 @@ namespace Features.InGame
             }
         }
 
+        private void HandleChoicesUpdated(System.Collections.Generic.List<DialogueChoiceDTO> choices)
+        {
+            if (choices != null && choices.Count > 0)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                gameObject.SetActive(true);
+            }
+        }
+
         private void OnDestroy()
         {
             if (m_viewModel != null)
             {
                 m_viewModel.OnDialogueUpdated -= UpdateDialogue;
+                m_viewModel.OnChoicesUpdated -= HandleChoicesUpdated;
             }
             CancelAutoProceed();
         }

@@ -25,6 +25,7 @@ namespace Features.InGame
             m_sidePanelVM = sidePanelVM;
             m_dataManager = dataManager;
             m_dialogueVM.OnNextRequested += PlayNextDialogue;
+            m_dialogueVM.OnChoiceSelected += HandleChoiceSelected;
         }
 
         public async UniTaskVoid StartDialogueFlowAsync()
@@ -89,13 +90,62 @@ namespace Features.InGame
             }
             else
             {
-                m_dialogueVM.NotifyComplete();
-                m_dialogueVM.DisplayDialogue(new DialogueDTO
+                var choices = new List<DialogueChoiceDTO>
                 {
-                    Type = DialogueType.SystemMessage,
-                    Content = "--- 다이얼로그 테스트 시나리오 종료 ---"
-                });
+                    new DialogueChoiceDTO
+                    {
+                        ChoiceId = 1,
+                        Title = "대화하다",
+                        Subtitle = "TALK",
+                        Description = "지배자의 사연을 듣는다",
+                        Condition = "any",
+                        IsLocked = false,
+                        ColorType = "Yellow"
+                    },
+                    new DialogueChoiceDTO
+                    {
+                        ChoiceId = 2,
+                        Title = "기억하다",
+                        Subtitle = "REMEMBER",
+                        Description = "엘레나의 이름 — 회상 트리거",
+                        Condition = "C2 -> 진엔딩 +",
+                        IsLocked = false,
+                        ColorType = "Blue"
+                    },
+                    new DialogueChoiceDTO
+                    {
+                        ChoiceId = 3,
+                        Title = "느끼다",
+                        Subtitle = "FEEL",
+                        Description = "감정으로 다가간다 (그리움 활성)",
+                        Condition = "C3 -> 진엔딩 ✔",
+                        IsLocked = false,
+                        ColorType = "Orange"
+                    },
+                    new DialogueChoiceDTO
+                    {
+                        ChoiceId = 4,
+                        Title = "놓아주다",
+                        Subtitle = "LET GO",
+                        Description = "회차를 다시 시작한다",
+                        Condition = "잠금 — A·B 엔딩 후 활성",
+                        IsLocked = true,
+                        ColorType = "Gray"
+                    }
+                };
+
+                m_dialogueVM.DisplayChoices(choices);
             }
+        }
+
+        private void HandleChoiceSelected(int choiceId)
+        {
+            Debug.Log($"[DialogueFlowController] 선택지 {choiceId}번 카드가 처리되었습니다.");
+            m_dialogueVM.DisplayDialogue(new DialogueDTO
+            {
+                Type = DialogueType.SystemMessage,
+                Content = $"--- {choiceId}번 선택 결과 진행 완료 ---"
+            });
         }
 
         private void PlayDialogueAtIndex(int index)

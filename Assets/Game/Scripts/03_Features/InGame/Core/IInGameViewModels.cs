@@ -11,11 +11,17 @@ namespace Features.InGame
         event Action OnDialogueComplete;
         event Action OnNextRequested;
         event Action OnSkipRequested;
+        event Action<List<DialogueChoiceDTO>> OnChoicesUpdated;
+        event Action<int> OnChoiceSelected;
         bool IsTyping { get; set; }
+        bool IsDisplayingChoices { get; }
+        DialogueDTO CurrentDialogue { get; }
         void DisplayDialogue(DialogueDTO dialogue);
         void RequestNext();
         void NotifyComplete();
         void RequestSkip();
+        void DisplayChoices(List<DialogueChoiceDTO> choices);
+        void SelectChoice(int choiceId);
     }
 
     public interface ISceneInfoViewModel

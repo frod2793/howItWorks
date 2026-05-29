@@ -42,6 +42,8 @@ public class InGameLifetimeScope : LifetimeScope
         builder.RegisterEntryPoint<InGameInputController>();
 
         builder.RegisterComponentInHierarchy<InGameDialogueView>();
+        builder.RegisterComponentOnNewGameObject<InGameMiniDialogueView>(Lifetime.Scoped, "MiniDialoguePanel");
+        builder.RegisterComponentOnNewGameObject<InGameDialogueOptionsGroupView>(Lifetime.Scoped, "DialogueOptionsGroup");
         builder.RegisterComponentInHierarchy<InGameSceneInfoView>();
         builder.RegisterComponentInHierarchy<InGameSidePanelView>();
     }
