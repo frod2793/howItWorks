@@ -35,7 +35,12 @@ public class SoundService : MonoBehaviour, ISoundService
 
     public void PlayBGM(string key, float fadeDuration = 0.5f, bool loop = true)
     {
-        var clip = m_dataProvider?.GetClip(key);
+        AudioClip clip = null;
+        if (m_dataProvider != null)
+        {
+            clip = m_dataProvider.GetClip(key);
+        }
+
         if (clip == null)
         {
             return;
@@ -84,7 +89,12 @@ public class SoundService : MonoBehaviour, ISoundService
 
     public void PlaySFX(string key, float volumeScale = 1.0f)
     {
-        var clip = m_dataProvider?.GetClip(key);
+        AudioClip clip = null;
+        if (m_dataProvider != null)
+        {
+            clip = m_dataProvider.GetClip(key);
+        }
+
         if (clip != null)
         {
             m_sfxSource.PlayOneShot(clip, volumeScale * m_sfxMasterVolume);
@@ -93,7 +103,12 @@ public class SoundService : MonoBehaviour, ISoundService
 
     public void PlayLoopSFX(string key, float volumeScale = 1.0f)
     {
-        var clip = m_dataProvider?.GetClip(key);
+        AudioClip clip = null;
+        if (m_dataProvider != null)
+        {
+            clip = m_dataProvider.GetClip(key);
+        }
+
         if (clip != null)
         {
             m_loopSfxSource.clip = clip;

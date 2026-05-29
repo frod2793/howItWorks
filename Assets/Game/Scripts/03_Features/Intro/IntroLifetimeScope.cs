@@ -14,10 +14,8 @@ public class IntroLifetimeScope : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        // Data Provider 등록
         builder.Register<IntroDataProvider>(Lifetime.Singleton);
 
-        // ViewModel 등록 (데이터 로드 포함)
         builder.Register(container =>
         {
             var provider = container.Resolve<IntroDataProvider>();
@@ -25,7 +23,6 @@ public class IntroLifetimeScope : LifetimeScope
             return new IntroViewModel(data);
         }, Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
-        // View 인스턴스 주입
         if (m_introView != null)
         {
             builder.RegisterComponent(m_introView);
@@ -40,7 +37,6 @@ public class IntroLifetimeScope : LifetimeScope
             return;
         }
 
-        // 인트로 자동 시작을 위해 씬 진입 시 초기화 수행
         try 
         {
             var introVM = Container.Resolve<IIntroViewModel>();

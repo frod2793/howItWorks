@@ -36,17 +36,48 @@ public class TitleViewModel : ITitleViewModel
 
     public void LoadGame()
     {
-        OnRequestPopup?.Invoke("Sorry");
+        if (OnRequestPopup != null)
+        {
+            OnRequestPopup.Invoke("Sorry");
+        }
     }
 
     public void OpenSettings()
     {
-        OnRequestPopup?.Invoke("Sorry");
+        if (OnRequestPopup != null)
+        {
+            OnRequestPopup.Invoke("Sorry");
+        }
     }
 
     public void OpenArchive()
     {
-        OnRequestPopup?.Invoke("Sorry");
+        if (OnRequestPopup != null)
+        {
+            OnRequestPopup.Invoke("Sorry");
+        }
+    }
+
+    public void OpenStoryTree()
+    {
+        if (OnRequestPopup != null)
+        {
+            OnRequestPopup.Invoke("Sorry");
+        }
+    }
+
+    public void OpenCredits()
+    {
+        if (OnRequestPopup != null)
+        {
+            OnRequestPopup.Invoke("Sorry");
+        }
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("[TitleViewModel] 게임 종료 호출");
+        Application.Quit();
     }
     #endregion
 }

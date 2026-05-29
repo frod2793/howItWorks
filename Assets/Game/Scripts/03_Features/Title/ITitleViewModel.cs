@@ -10,5 +10,8 @@ public interface ITitleViewModel
     void LoadGame();
     void OpenSettings();
     void OpenArchive();
+    void OpenStoryTree();
+    void OpenCredits();
+    void QuitGame();
 }
 #endregion

@@ -22,11 +22,8 @@ public class SoundDataProvider
             return cachedClip;
         }
 
-        // 1. BGM 폴더에서 검색 (하위 폴더 포함 가능성이 있으므로 경로 주의)
-        // 실제 구조에 따라 "BGM/Title/titleSample02" 처럼 키를 넘겨야 할 수도 있습니다.
         var clip = Resources.Load<AudioClip>(BGM_PATH + key);
         
-        // 2. SFX 폴더에서 검색
         if (clip == null)
         {
             clip = Resources.Load<AudioClip>(SFX_PATH + key);

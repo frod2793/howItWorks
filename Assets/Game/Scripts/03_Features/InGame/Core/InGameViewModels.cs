@@ -119,34 +119,52 @@ namespace Features.InGame
 
         public void RequestSave()
         {
-            OnSaveRequested?.Invoke();
+            if (OnSaveRequested != null)
+            {
+                OnSaveRequested.Invoke();
+            }
         }
 
         public void RequestLoad()
         {
-            OnLoadRequested?.Invoke();
+            if (OnLoadRequested != null)
+            {
+                OnLoadRequested.Invoke();
+            }
         }
 
         public void RequestLog()
         {
-            OnLogRequested?.Invoke();
+            if (OnLogRequested != null)
+            {
+                OnLogRequested.Invoke();
+            }
         }
 
         public void ClickAuto()
         {
             m_isAutoOn = !m_isAutoOn;
-            OnAutoToggled?.Invoke(m_isAutoOn);
+            if (OnAutoToggled != null)
+            {
+                OnAutoToggled.Invoke(m_isAutoOn);
+            }
         }
 
         public void ClickSkip()
         {
             m_isSkipOn = !m_isSkipOn;
-            OnSkipToggled?.Invoke(m_isSkipOn);
+            if (OnSkipToggled != null)
+            {
+                OnSkipToggled.Invoke(m_isSkipOn);
+            }
         }
 
         public void RequestMenu()
         {
-            OnMenuRequested?.Invoke();
+            if (OnMenuRequested != null)
+            {
+                OnMenuRequested.Invoke();
+            }
         }
     }
 

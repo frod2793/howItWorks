@@ -10,20 +10,24 @@ namespace Features.InGame
     public class InGameDialogueView : MonoBehaviour
     {
         [Header("UI 구성 요소")]
-        [SerializeField] private Image m_backgroundImage;
         [SerializeField] private Image m_speakerIcon;
+        [SerializeField] private GameObject m_speakerBox;
         [SerializeField] private TextMeshProUGUI m_nameText;
         [SerializeField] private TextMeshProUGUI m_contentText;
-        [SerializeField] private Button m_nextButton;
         [SerializeField] private TypewriterEffect m_typewriterEffect;
 
+        private Image m_backgroundImage;
         private IDialogueViewModel m_viewModel;
+        private IQuickMenuViewModel m_quickMenuVM;
 
         [Inject]
-        public void Construct(IDialogueViewModel viewModel)
+        public void Construct(IDialogueViewModel viewModel, IQuickMenuViewModel quickMenuVM)
         {
             m_viewModel = viewModel;
+            m_quickMenuVM = quickMenuVM;
             m_viewModel.OnDialogueUpdated += UpdateDialogue;
+
+            m_backgroundImage = GetComponent<Image>();
 
             if (m_backgroundImage != null)
             {
@@ -31,43 +35,117 @@ namespace Features.InGame
                 color.a = 0.85f;
                 m_backgroundImage.color = color;
             }
+        }
 
-            if (m_nextButton != null)
+        public void func_OnNextButtonClicked()
+        {
+            if (m_viewModel != null)
             {
-                m_nextButton.onClick.AddListener(() =>
-                {
-                    m_viewModel.RequestNext();
-                });
+                m_viewModel.RequestNext();
+            }
+        }
+
+        public void func_OnAutoButtonClicked()
+        {
+            if (m_quickMenuVM != null)
+            {
+                m_quickMenuVM.ClickAuto();
+            }
+        }
+
+        public void func_OnSkipButtonClicked()
+        {
+            if (m_quickMenuVM != null)
+            {
+                m_quickMenuVM.ClickSkip();
+            }
+        }
+
+        public void func_OnLogButtonClicked()
+        {
+            if (m_quickMenuVM != null)
+            {
+                m_quickMenuVM.RequestLog();
+            }
+        }
+
+        public void func_OnMenuButtonClicked()
+        {
+            if (m_quickMenuVM != null)
+            {
+                m_quickMenuVM.RequestMenu();
             }
         }
 
         private void UpdateDialogue(DialogueDTO dialogue)
         {
-            if (m_nameText != null)
+            if (dialogue.Type == DialogueType.Narration)
             {
-                m_nameText.text = dialogue.SpeakerName;
-            }
-            
-            if (m_speakerIcon != null)
-            {
-                if (string.IsNullOrEmpty(dialogue.SpeakerIconKey))
+                if (m_speakerBox != null)
+                {
+                    m_speakerBox.SetActive(false);
+                }
+                if (m_speakerIcon != null)
                 {
                     m_speakerIcon.gameObject.SetActive(false);
                 }
-                else
+                if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_speakerIcon.gameObject.SetActive(true);
-                    // TODO: ResourceLoader를 통한 아이콘 교체 로직
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content).Forget();
+                }
+                else if (m_contentText != null)
+                {
+                    m_contentText.text = dialogue.Content;
                 }
             }
-
-            if (m_typewriterEffect != null && m_contentText != null)
+            else if (dialogue.Type == DialogueType.SystemMessage)
             {
-                m_typewriterEffect.Play(m_contentText, dialogue.Content).Forget();
+                if (m_speakerBox != null)
+                {
+                    m_speakerBox.SetActive(false);
+                }
+                if (m_speakerIcon != null)
+                {
+                    m_speakerIcon.gameObject.SetActive(false);
+                }
+                if (m_contentText != null)
+                {
+                    if (m_typewriterEffect != null)
+                    {
+                        m_typewriterEffect.Stop();
+                    }
+                    m_contentText.text = $"<mspace=16px>{dialogue.Content}</mspace>";
+                }
             }
-            else if (m_contentText != null)
+            else
             {
-                m_contentText.text = dialogue.Content;
+                if (m_speakerBox != null)
+                {
+                    m_speakerBox.SetActive(true);
+                }
+                if (m_nameText != null)
+                {
+                    m_nameText.text = dialogue.SpeakerName;
+                }
+                if (m_speakerIcon != null)
+                {
+                    if (string.IsNullOrEmpty(dialogue.SpeakerIconKey))
+                    {
+                        m_speakerIcon.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        m_speakerIcon.gameObject.SetActive(true);
+                    }
+                }
+                if (m_typewriterEffect != null && m_contentText != null)
+                {
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content).Forget();
+                }
+                else if (m_contentText != null)
+                {
+                    m_contentText.text = dialogue.Content;
+                }
             }
         }
 
@@ -76,10 +154,6 @@ namespace Features.InGame
             if (m_viewModel != null)
             {
                 m_viewModel.OnDialogueUpdated -= UpdateDialogue;
-            }
-            if (m_nextButton != null)
-            {
-                m_nextButton.onClick.RemoveAllListeners();
             }
         }
     }

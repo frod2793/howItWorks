@@ -48,32 +48,27 @@ public class PopupView : MonoBehaviour
         }
         m_viewModel = viewModel;
 
-        // 팝업 시에는 배경의 타이핑 사운드 등을 중지
         if (m_soundService != null)
         {
             m_soundService.StopLoopSFX();
         }
 
-        // 기본 텍스트 설정
         if (m_messageText != null)
         {
             m_messageText.text = m_viewModel.Message;
         }
         
-        // 자막 텍스트 초기화
         if (m_subtitleText != null)
         {
             m_subtitleText.text = "";
         }
 
-        // 버튼 바인딩
         if (m_confirmButton != null)
         {
             m_confirmButton.onClick.RemoveAllListeners();
             m_confirmButton.onClick.AddListener(CloseWithAnimation);
         }
 
-        // 전체 팝업 연출 시작
         StartShowSequence().Forget();
     }
 
@@ -106,17 +101,14 @@ public class PopupView : MonoBehaviour
     #region 애니메이션 및 연출 로직
     private async UniTaskVoid StartShowSequence()
     {
-        // 1. 팝업 패널 스케일 업 (기본 애니메이션)
         await ShowPanelAnimation();
 
-        // 2. 스프라이트 애니메이션 실행 (애니메이션 키가 있는 경우)
         if (m_contentAnimator != null && !string.IsNullOrEmpty(m_viewModel.AnimationKey))
         {
             ResetAllAnimatorBools();
             m_contentAnimator.SetBool(m_viewModel.AnimationKey, true);
         }
 
-        // 3. 자막 한 줄씩 순차 타이핑 시작 (자막 내용이 있는 경우)
         if (m_subtitleTypewriter != null && !string.IsNullOrEmpty(m_viewModel.Subtitle))
         {
             var lines = m_viewModel.Subtitle.Split('\n');
@@ -133,11 +125,9 @@ public class PopupView : MonoBehaviour
                     
                     await m_subtitleTypewriter.Play(m_subtitleText, line.Trim());
                     
-                    // 줄 사이 대기 시간 (사용자 경험을 위해 1초 정도 대기)
                     await UniTask.Delay(System.TimeSpan.FromSeconds(1.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
                 }
 
-                // 루프 사이 짧은 대기 (다시 처음으로 돌아가기 전)
                 if (m_loopSubtitle)
                 {
                     await UniTask.Delay(System.TimeSpan.FromSeconds(0.5f), cancellationToken: this.GetCancellationTokenOnDestroy());
@@ -159,13 +149,11 @@ public class PopupView : MonoBehaviour
 
     private void CloseWithAnimation()
     {
-        // 타이핑 중이면 즉시 중단
         if (m_subtitleTypewriter != null)
         {
             m_subtitleTypewriter.Stop();
         }
 
-        // 애니메이터 상태 초기화
         ResetAllAnimatorBools();
 
         if (m_popupPanel != null)
@@ -206,7 +194,6 @@ public class PopupView : MonoBehaviour
 
     private void PlayTypingSound()
     {
-        // 개별 재생 대신 루핑 사운드를 사용하므로 이 메서드는 비워둡니다.
     }
 
 #endregion

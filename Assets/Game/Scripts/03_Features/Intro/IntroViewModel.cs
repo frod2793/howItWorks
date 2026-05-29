@@ -20,7 +20,20 @@ public class IntroViewModel : IIntroViewModel
     public string CurrentSpeaker => m_currentIndex >= 0 ? m_storyData.Steps[m_currentIndex].Speaker : string.Empty;
     public string CurrentContent => m_currentIndex >= 0 ? m_storyData.Steps[m_currentIndex].Content : string.Empty;
     public bool IsLastStep => m_currentIndex >= m_storyData.Steps.Count - 1;
-    public float TypingSpeed => m_storyData?.TypingSpeed ?? 0.05f;
+    public float TypingSpeed
+    {
+        get
+        {
+            if (m_storyData != null)
+            {
+                return m_storyData.TypingSpeed;
+            }
+            else
+            {
+                return 0.05f;
+            }
+        }
+    }
     #endregion
 
     /// <summary>
@@ -40,7 +53,10 @@ public class IntroViewModel : IIntroViewModel
     {
         if (m_storyData == null || m_storyData.Steps.Count == 0)
         {
-            OnIntroFinished?.Invoke();
+            if (OnIntroFinished != null)
+            {
+                OnIntroFinished.Invoke();
+            }
             return;
         }
 
@@ -56,11 +72,17 @@ public class IntroViewModel : IIntroViewModel
 
         if (m_currentIndex < m_storyData.Steps.Count)
         {
-            OnStoryChanged?.Invoke(CurrentSpeaker, CurrentContent);
+            if (OnStoryChanged != null)
+            {
+                OnStoryChanged.Invoke(CurrentSpeaker, CurrentContent);
+            }
         }
         else
         {
-            OnIntroFinished?.Invoke();
+            if (OnIntroFinished != null)
+            {
+                OnIntroFinished.Invoke();
+            }
         }
     }
 
@@ -69,7 +91,10 @@ public class IntroViewModel : IIntroViewModel
     /// </summary>
     public void RequestSkip()
     {
-        OnSkipRequested?.Invoke();
+        if (OnSkipRequested != null)
+        {
+            OnSkipRequested.Invoke();
+        }
     }
     #endregion
 }

@@ -3,12 +3,6 @@ using UnityEngine.UI;
 
 public class TitleView : MonoBehaviour
 {
-    [Header("메뉴 버튼")]
-    [SerializeField] private Button m_newGameButton;
-    [SerializeField] private Button m_loadGameButton;
-    [SerializeField] private Button m_settingsButton;
-    [SerializeField] private Button m_archiveButton;
-
     private ITitleViewModel m_viewModel;
     private ISoundService m_soundService;
 
@@ -25,42 +19,61 @@ public class TitleView : MonoBehaviour
         {
             m_soundService.PlayBGM("Title/titleSample03", 1.0f);
         }
+    }
 
-        if (m_newGameButton != null)
+    public void func_OnNewGameButtonClicked()
+    {
+        if (m_viewModel != null)
         {
-            m_newGameButton.onClick.AddListener(m_viewModel.NewGame);
-        }
-        if (m_loadGameButton != null)
-        {
-            m_loadGameButton.onClick.AddListener(m_viewModel.LoadGame);
-        }
-        if (m_settingsButton != null)
-        {
-            m_settingsButton.onClick.AddListener(m_viewModel.OpenSettings);
-        }
-        if (m_archiveButton != null)
-        {
-            m_archiveButton.onClick.AddListener(m_viewModel.OpenArchive);
+            m_viewModel.NewGame();
         }
     }
 
-    private void OnDestroy()
+    public void func_OnLoadGameButtonClicked()
     {
-        if (m_newGameButton != null)
+        if (m_viewModel != null)
         {
-            m_newGameButton.onClick.RemoveAllListeners();
+            m_viewModel.LoadGame();
         }
-        if (m_loadGameButton != null)
+    }
+
+    public void func_OnStoryTreeButtonClicked()
+    {
+        if (m_viewModel != null)
         {
-            m_loadGameButton.onClick.RemoveAllListeners();
+            m_viewModel.OpenStoryTree();
         }
-        if (m_settingsButton != null)
+    }
+
+    public void func_OnArchiveButtonClicked()
+    {
+        if (m_viewModel != null)
         {
-            m_settingsButton.onClick.RemoveAllListeners();
+            m_viewModel.OpenArchive();
         }
-        if (m_archiveButton != null)
+    }
+
+    public void func_OnSettingsButtonClicked()
+    {
+        if (m_viewModel != null)
         {
-            m_archiveButton.onClick.RemoveAllListeners();
+            m_viewModel.OpenSettings();
+        }
+    }
+
+    public void func_OnCreditsButtonClicked()
+    {
+        if (m_viewModel != null)
+        {
+            m_viewModel.OpenCredits();
+        }
+    }
+
+    public void func_OnQuitButtonClicked()
+    {
+        if (m_viewModel != null)
+        {
+            m_viewModel.QuitGame();
         }
     }
 }

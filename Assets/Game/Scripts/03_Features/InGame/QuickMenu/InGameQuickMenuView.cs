@@ -13,48 +13,63 @@ namespace Features.InGame
         {
             m_viewModel = viewModel;
 
-            // 상태 변경 이벤트 구독 (시각적 피드백 필요 시 활용)
             m_viewModel.OnAutoToggled += (isOn) =>
             {
-                Debug.Log($"[QuickMenu] AUTO State: {isOn}");
-                // TODO: 버튼 색상 변경 등 연출 추가 가능
+                Debug.Log($"[QuickMenu] 자동 재생 상태: {isOn}");
             };
 
             m_viewModel.OnSkipToggled += (isOn) =>
             {
-                Debug.Log($"[QuickMenu] SKIP State: {isOn}");
-                // TODO: 버튼 색상 변경 등 연출 추가 가능
+                Debug.Log($"[QuickMenu] 스킵 상태: {isOn}");
             };
         }
 
         public void func_OnSaveButtonClicked()
         {
-            m_viewModel?.RequestSave();
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestSave();
+            }
         }
 
         public void func_OnLoadButtonClicked()
         {
-            m_viewModel?.RequestLoad();
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestLoad();
+            }
         }
 
         public void func_OnLogButtonClicked()
         {
-            m_viewModel?.RequestLog();
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestLog();
+            }
         }
 
         public void func_OnAutoButtonClicked()
         {
-            m_viewModel?.ClickAuto();
+            if (m_viewModel != null)
+            {
+                m_viewModel.ClickAuto();
+            }
         }
 
         public void func_OnSkipButtonClicked()
         {
-            m_viewModel?.ClickSkip();
+            if (m_viewModel != null)
+            {
+                m_viewModel.ClickSkip();
+            }
         }
 
         public void func_OnMenuButtonClicked()
         {
-            m_viewModel?.RequestMenu();
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestMenu();
+            }
         }
     }
 }

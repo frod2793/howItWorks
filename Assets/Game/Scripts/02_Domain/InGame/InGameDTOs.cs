@@ -14,8 +14,16 @@ namespace Domain.InGame
         public int Money;
     }
 
+    public enum DialogueType
+    {
+        Normal,
+        Narration,
+        SystemMessage
+    }
+
     public class DialogueDTO
     {
+        public DialogueType Type;
         public string SpeakerName;
         public string Content;
         public string CharacterSpriteKey;

@@ -29,7 +29,10 @@ public class PopupViewModel : IPopupViewModel
     #region 공개 메서드
     public void Close()
     {
-        OnClosed?.Invoke();
+        if (OnClosed != null)
+        {
+            OnClosed.Invoke();
+        }
     }
     #endregion
 }
