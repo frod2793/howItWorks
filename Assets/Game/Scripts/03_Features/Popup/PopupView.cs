@@ -66,7 +66,7 @@ public class PopupView : MonoBehaviour
         if (m_confirmButton != null)
         {
             m_confirmButton.onClick.RemoveAllListeners();
-            m_confirmButton.onClick.AddListener(CloseWithAnimation);
+            m_confirmButton.onClick.AddListener(func_CloseWithAnimation);
         }
 
         StartShowSequence().Forget();
@@ -112,6 +112,8 @@ public class PopupView : MonoBehaviour
         if (m_subtitleTypewriter != null && !string.IsNullOrEmpty(m_viewModel.Subtitle))
         {
             var lines = m_viewModel.Subtitle.Split('\n');
+            var delayOneSecond = System.TimeSpan.FromSeconds(1.0f);
+            var delayHalfSecond = System.TimeSpan.FromSeconds(0.5f);
             
             do
             {
@@ -125,12 +127,12 @@ public class PopupView : MonoBehaviour
                     
                     await m_subtitleTypewriter.Play(m_subtitleText, line.Trim());
                     
-                    await UniTask.Delay(System.TimeSpan.FromSeconds(1.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
+                    await UniTask.Delay(delayOneSecond, cancellationToken: this.GetCancellationTokenOnDestroy());
                 }
 
                 if (m_loopSubtitle)
                 {
-                    await UniTask.Delay(System.TimeSpan.FromSeconds(0.5f), cancellationToken: this.GetCancellationTokenOnDestroy());
+                    await UniTask.Delay(delayHalfSecond, cancellationToken: this.GetCancellationTokenOnDestroy());
                 }
 
             } while (m_loopSubtitle);
@@ -147,7 +149,7 @@ public class PopupView : MonoBehaviour
         }
     }
 
-    private void CloseWithAnimation()
+    public void func_CloseWithAnimation()
     {
         if (m_subtitleTypewriter != null)
         {

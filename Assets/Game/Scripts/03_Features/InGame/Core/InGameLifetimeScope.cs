@@ -6,9 +6,6 @@ using UnityEngine;
 #region 씬 초기화 (VContainer)
 public class InGameLifetimeScope : LifetimeScope
 {
-    #region 에디터 설정
-
-    #endregion
 
     protected override void Configure(IContainerBuilder builder)
     {

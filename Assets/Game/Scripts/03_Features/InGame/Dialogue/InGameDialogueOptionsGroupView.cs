@@ -11,12 +11,16 @@ namespace Features.InGame
 
         private IDialogueViewModel m_viewModel;
 
+        private void Awake()
+        {
+            gameObject.SetActive(false);
+        }
+
         [Inject]
         public void Construct(IDialogueViewModel viewModel)
         {
             m_viewModel = viewModel;
             m_viewModel.OnChoicesUpdated += HandleChoicesUpdated;
-            gameObject.SetActive(false);
         }
 
         private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)

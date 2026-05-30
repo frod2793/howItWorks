@@ -33,13 +33,16 @@ public class TypewriterEffect : MonoBehaviour
             OnStartTyping.Invoke();
         }
 
-        tmpText.text = "";
+        tmpText.text = content;
+        tmpText.maxVisibleCharacters = 0;
+
+        var delayTimeSpan = System.TimeSpan.FromSeconds(m_typingSpeed);
         
         try
         {
             for (int i = 1; i <= content.Length; i++)
             {
-                tmpText.text = content.Substring(0, i);
+                tmpText.maxVisibleCharacters = i;
                 
                 if (!char.IsWhiteSpace(content[i - 1]))
                 {
@@ -49,12 +52,12 @@ public class TypewriterEffect : MonoBehaviour
                     }
                 }
 
-                await UniTask.Delay(System.TimeSpan.FromSeconds(m_typingSpeed), cancellationToken: m_cts.Token);
+                await UniTask.Delay(delayTimeSpan, cancellationToken: m_cts.Token);
             }
         }
         catch (System.OperationCanceledException)
         {
-            tmpText.text = content;
+            tmpText.maxVisibleCharacters = content.Length;
         }
         finally
         {

@@ -8,42 +8,34 @@ namespace Features.InGame
 {
     public class InGameDialogueOptionCardView : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI m_shortcutText;
         [SerializeField] private TextMeshProUGUI m_titleText;
-        [SerializeField] private TextMeshProUGUI m_subtitleText;
         [SerializeField] private TextMeshProUGUI m_descriptionText;
-        [SerializeField] private TextMeshProUGUI m_conditionText;
-        [SerializeField] private Image m_borderImage;
-        [SerializeField] private CanvasGroup m_canvasGroup;
-        [SerializeField] private Button m_button;
+        private CanvasGroup m_canvasGroup;
+        private Image m_borderImage;
+        private Button m_button;
 
         private DialogueChoiceDTO m_data;
         private Action<int> m_onSelected;
+
+        private void Awake()
+        {
+            m_borderImage = GetComponent<Image>();
+            m_button = GetComponent<Button>();
+            m_canvasGroup = GetComponent<CanvasGroup>();
+        }
 
         public void SetCardData(DialogueChoiceDTO dto, Action<int> onSelected)
         {
             m_data = dto;
             m_onSelected = onSelected;
 
-            if (m_shortcutText != null)
-            {
-                m_shortcutText.text = dto.ChoiceId.ToString();
-            }
             if (m_titleText != null)
             {
                 m_titleText.text = dto.Title;
             }
-            if (m_subtitleText != null)
-            {
-                m_subtitleText.text = dto.Subtitle;
-            }
             if (m_descriptionText != null)
             {
                 m_descriptionText.text = dto.Description;
-            }
-            if (m_conditionText != null)
-            {
-                m_conditionText.text = dto.Condition;
             }
 
             if (m_borderImage != null)
