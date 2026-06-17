@@ -2,6 +2,7 @@ using VContainer;
 using VContainer.Unity;
 using Features.InGame;
 using UnityEngine;
+using Domain.InGame;
 
 #region 씬 초기화 (VContainer)
 public class InGameLifetimeScope : LifetimeScope
@@ -36,13 +37,21 @@ public class InGameLifetimeScope : LifetimeScope
         builder.Register<SidePanelViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<DialogueFlowController>(Lifetime.Singleton);
 
-        builder.RegisterEntryPoint<InGameInputController>();
+        builder.Register<InGameSaveSystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<InGameSoundSystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<InGameInventorySystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<ResourceDomainService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+        builder.RegisterEntryPoint<InGameOrchestrator>().AsSelf().As<IInGameOrchestrator>();
 
         builder.RegisterComponentInHierarchy<InGameDialogueView>();
-        builder.RegisterComponentOnNewGameObject<InGameMiniDialogueView>(Lifetime.Scoped, "MiniDialoguePanel");
-        builder.RegisterComponentOnNewGameObject<InGameDialogueOptionsGroupView>(Lifetime.Scoped, "DialogueOptionsGroup");
+        builder.RegisterComponentInHierarchy<InGameMiniDialogueView>();
+        builder.RegisterComponentInHierarchy<InGameDialogueOptionsManager>();
         builder.RegisterComponentInHierarchy<InGameSceneInfoView>();
         builder.RegisterComponentInHierarchy<InGameSidePanelView>();
+        builder.RegisterComponentInHierarchy<InGameCharacterView>();
     }
 }
 #endregion
+
+

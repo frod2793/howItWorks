@@ -42,8 +42,8 @@ namespace Features.InGame
 
             m_sidePanelVM.UpdateSidePanelData(new SidePanelDTO
             {
-                TrustStocks = 2,
-                MaxTrustStocks = 5,
+                CatoStocks = 2,
+                MaxCatoStocks = 5,
                 Sadness = 6,
                 Joy = 1,
                 Curiosity = 7,

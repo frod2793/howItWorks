@@ -29,8 +29,8 @@ namespace Domain.InGame
     [Serializable]
     public class SidePanelDTO
     {
-        public int TrustStocks;
-        public int MaxTrustStocks;
+        public int CatoStocks;
+        public int MaxCatoStocks;
         public int Sadness;
         public int Joy;
         public int Curiosity;

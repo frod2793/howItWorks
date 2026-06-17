@@ -17,6 +17,8 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_contentText;
         [SerializeField] private TypewriterEffect m_typewriterEffect;
         [SerializeField] private Button m_autoButton;
+        [SerializeField] private Button m_inventoryButton;
+        [SerializeField] private TextMeshProUGUI m_lineProgressText;
 
         private Image m_backgroundImage;
         private IDialogueViewModel m_viewModel;
@@ -94,7 +96,7 @@ namespace Features.InGame
         {
         }
 
-        public void func_OnMenuButtonClicked()
+        public void func_OnInventoryButtonClicked()
         {
         }
 

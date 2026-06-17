@@ -22,6 +22,12 @@ namespace Features.InGame
         {
             CurrentDialogue = dialogue;
             IsDisplayingChoices = false;
+            
+            if (OnChoicesUpdated != null)
+            {
+                OnChoicesUpdated.Invoke(null);
+            }
+
             if (OnDialogueUpdated != null)
             {
                 OnDialogueUpdated.Invoke(dialogue);

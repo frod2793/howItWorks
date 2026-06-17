@@ -1,37 +1,527 @@
 [
   {
     "dialogueId": "DLG_001",
-    "speakerName": "프로토타입 플레이어",
-    "content": "이것은 시스템에 로드된 JSON 기반 다이얼로그의 첫 번째 대사입니다.",
-    "dialogueType": "Normal",
-    "speakerIconKey": "Icon_Player_Normal"
-  },
-  {
-    "dialogueId": "DLG_002",
-    "speakerName": "동료 요원",
-    "content": "성공적으로 데이터를 파싱하여 뷰모델 및 뷰 컴포넌트에 주입했군요.",
-    "dialogueType": "Normal",
-    "speakerIconKey": "Icon_Agent_Friendly"
-  },
-  {
-    "dialogueId": "DLG_003",
     "speakerName": "",
-    "content": "정적이고도 긴장감 넘치는 정적이 샌드박스 화면 내부를 감싼다.",
+    "content": "[씬 1-C: 수업]\n교실. 깨끗하다. 창문이 없다. 스크린이 벽 전체를 차지한다. 영상이 재생된다.",
     "dialogueType": "Narration",
     "speakerIconKey": ""
   },
   {
-    "dialogueId": "DLG_004",
-    "speakerName": "인공지능",
-    "content": "인공지능 프레임워크가 정상 작동 중입니다. 다음 버튼을 클릭하십시오.",
+    "dialogueId": "DLG_002",
+    "speakerName": "",
+    "content": "영상 내용: 야만인 남자가 작은 제단 위에서 자신을 채찍으로 치고 있다. 뒤에 막집들이 보인다. 황야. 남자는 윗옷 없이 짚으로 엮은 치마를 입고 있다. 여기저기 상처.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_003",
+    "speakerName": "야만인",
+    "content": "크헉!",
     "dialogueType": "Normal",
-    "speakerIconKey": "Icon_AI_System"
+    "speakerIconKey": "Icon_Savage"
+  },
+  {
+    "dialogueId": "DLG_004",
+    "speakerName": "야만인",
+    "content": "신이시여, 창조의 섭리를 거스르는 저들을 벌하소서, 그러나 그 자비로우심으로 그 뒤에는 부디 그들을 용서하소서.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Savage"
   },
   {
     "dialogueId": "DLG_005",
+    "speakerName": "야만인",
+    "content": "자신들이 무슨 일을 저지르는 자들에게, 부디 그 자비로우심으로 용서를 베푸소서.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Savage"
+  },
+  {
+    "dialogueId": "DLG_006",
+    "speakerName": "야만인",
+    "content": "그리고 감히 저들을 고치지 못하는 우리를 벌하소서, 신께서 부여하신 사명을 다하지 못하는 우리에게 부디 자비를 베푸소서.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Savage"
+  },
+  {
+    "dialogueId": "DLG_007",
+    "speakerName": "",
+    "content": "교실 안의 스크린이 꺼지고 정적이 흐른다. 이내 학생들의 비웃음이 들려온다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_008",
+    "speakerName": "학생들",
+    "content": "와하하하하하!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Students"
+  },
+  {
+    "dialogueId": "DLG_009",
+    "speakerName": "교사",
+    "content": "여러분, 신이라는 것을 믿으며, 한 번도 모습을 드러낸 적 없는 그 허상에게 의지하며 살아간다고 생각해보세요. 그렇게 할 수 있도록 의지가 부여된 우리의 모습을 상상해보세요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_010",
+    "speakerName": "학생 1",
+    "content": "상상만 해도 끔찍해요!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student1"
+  },
+  {
+    "dialogueId": "DLG_011",
+    "speakerName": "주인공",
+    "content": "항상 피곤하고 지칠 것 같아요. 카토를 100그램씩은 들고 다녀야 할 것 같아요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_012",
+    "speakerName": "",
+    "content": "주인공의 농담 섞인 대사에 교실 내 학생들의 웃음소리가 커진다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_013",
+    "speakerName": "교사",
+    "content": "맞아요. 그만큼 카토를 먹는다면 문제가 생기겠지만, 저런 멍청한 사람에게는 그것이 필요할 지도 모르겠네요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_014",
+    "speakerName": "학생들",
+    "content": "와하하하하하!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Students"
+  },
+  {
+    "dialogueId": "DLG_015",
+    "speakerName": "교사",
+    "content": "여러분, 이런 야만인들은 보면 어떤 생각이 드나요?",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_016",
+    "speakerName": "학생 2",
+    "content": "이렇게 깨끗하고 편한 곳을 스스로 내쳤다는 것이 너무 우스워요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student2"
+  },
+  {
+    "dialogueId": "DLG_017",
+    "speakerName": "주인공",
+    "content": "왜 스스로 고통을 선택하는지 잘 모르겠어요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_018",
+    "speakerName": "교사",
+    "content": "맞아요. 그리고 우리는 아마 영원히 그 이유를 알 수 없을 거에요, 알 필요도 없고 말이에요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_019",
+    "speakerName": "",
+    "content": "교실에 짧은 정적이 감돈다. 약 0.5초간의 고요.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_020",
+    "speakerName": "교사",
+    "content": "여러분, 야만인 구역으로의 견학이 이제 겨우 1주일밖에 남지 않았어요. 여러분들이 야만인들의 모습을 직접 보고 나면, 이런 영상을 보는 것보다도 훨씬 우스울 거에요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_021",
+    "speakerName": "주인공",
+    "content": "선생님, 그런데 혹시 야만인들이 저렇게 채찍으로 자기를 치는 것처럼, 저희를 치려고 하면 어떻게 하나요? 조금 무서워요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_022",
+    "speakerName": "교사",
+    "content": "그건 전혀 걱정할 것 없어요. 야만인들은 감히 저희를 공격할 수 없으니까요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Teacher"
+  },
+  {
+    "dialogueId": "DLG_023",
+    "speakerName": "",
+    "content": "[씬 1-D: 귀가]\n기숙사로 돌아가는 복도. 모든 아이들이 같은 속도로 걷는다. 주인공도 같은 속도로 걷는다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_024",
+    "speakerName": "",
+    "content": "복도에서 속도를 높여 빠르게 걷기를 시도해보았다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_025",
     "speakerName": "시스템",
-    "content": "본 화면은 StreamingAssets의 Json 데이터 파일 로딩 테스트 상태입니다.",
+    "content": "빨리 걸을 이유가 없다.",
     "dialogueType": "SystemMessage",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_026",
+    "speakerName": "",
+    "content": "걸음을 늦추어 보았다. 다른 아이들이 스쳐 지나가고 주인공은 잠시 멈춰선다. 1초 뒤 다시 걷기 시작한다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_027",
+    "speakerName": "시스템",
+    "content": "...",
+    "dialogueType": "SystemMessage",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_028",
+    "speakerName": "",
+    "content": "기숙사 방. 침대에 누운 주인공이 주머니에서 하얀 약알인 카토를 꺼내어 바라본다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_029",
+    "speakerName": "주인공",
+    "content": "오늘 수업에서 본 그 사람. 왜 스스로를 때리는 거지.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_030",
+    "speakerName": "",
+    "content": "이내 복잡한 생각을 지우며 카토를 삼킨다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_031",
+    "speakerName": "주인공",
+    "content": "...아무것도 아니야.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_032",
+    "speakerName": "",
+    "content": "화면이 페이드 아웃된다. 어색하고 모호한 감정이 카토의 약효와 함께 사그라든다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_033",
+    "speakerName": "",
+    "content": "[씬 2-A: 이동]\n견학 당일. 대형 차량 내부. 일정한 간격으로 줄을 맞춰 앉은 아이들. 창밖으로 도시의 청결한 은빛 건물들이 지나가더니 이윽고 끝없는 황야가 드러난다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_034",
+    "speakerName": "",
+    "content": "일정한 기계적 엔진 소리가 진동하는 차량 내. 아이들이 재잘거리며 웃지만 그 톤은 모두 동일하게 녹음된 음성처럼 고르다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_035",
+    "speakerName": "학생 3",
+    "content": "야만인 냄새 나면 어떡하지?",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student3"
+  },
+  {
+    "dialogueId": "DLG_036",
+    "speakerName": "학생 4",
+    "content": "카토 코에 넣으면 되지!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student4"
+  },
+  {
+    "dialogueId": "DLG_037",
+    "speakerName": "",
+    "content": "아이들이 기계적으로 같은 박자의 웃음을 터트린다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_038",
+    "speakerName": "가이드",
+    "content": "여러분, 곧 야만인 보호 구역에 도착합니다. 안전 규정을 안내드리겠습니다. 울타리 밖으로 나가지 마세요. 야만인에게 말을 걸지 마세요. 음식물을 주지 마세요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Guide"
+  },
+  {
+    "dialogueId": "DLG_039",
+    "speakerName": "",
+    "content": "[씬 2-B: 야만인 구역 입구]\n차량에서 하차하자 거대한 울타리로 둘러싸인 보호 구역이 맞이한다. 저 너머에 흙집들이 다닥다닥 붙어있고, 모락모락 연기가 피어오른다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_040",
+    "speakerName": "가이드",
+    "content": "자, 이곳이 제7 보호 구역입니다. 현재 야만인 약 200명이 거주하고 있습니다. 저희의 정기 모니터링 대상이죠.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Guide"
+  },
+  {
+    "dialogueId": "DLG_041",
+    "speakerName": "학생 5",
+    "content": "우와, 진짜 흙집이다!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student5"
+  },
+  {
+    "dialogueId": "DLG_042",
+    "speakerName": "학생 6",
+    "content": "동물원보다 재밌다!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student6"
+  },
+  {
+    "dialogueId": "DLG_043",
+    "speakerName": "",
+    "content": "울타리 경계선 근처에서 야만인 여자가 어린아이에게 조용히 젖을 먹이고 있다. 이를 발견한 학생 무리가 손가락질하며 깔깔 웃는다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_044",
+    "speakerName": "학생 7",
+    "content": "저거 뭐야? 직접 먹이는 거야?",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student7"
+  },
+  {
+    "dialogueId": "DLG_045",
+    "speakerName": "학생 8",
+    "content": "역겨워!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Student8"
+  },
+  {
+    "dialogueId": "DLG_046",
+    "speakerName": "주인공",
+    "content": "...",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_047",
+    "speakerName": "",
+    "content": "[씬 2-C: 노인과의 눈맞춤]\n주인공은 울타리 외곽을 홀로 거닐다 다른 학생 무리에서 조금 떨어진다. 울타리 너머, 거친 제단 옆에 웅크려 앉아 짚을 엮는 노인이 보인다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_048",
+    "speakerName": "",
+    "content": "시끌벅적하던 아이들의 웃음소리가 물속에 잠기듯 멀어지고, 거친 모래바람 소리와 노인의 손끝에서 짚이 엮이는 사각사각 소리만 귓가에 맴돈다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_049",
+    "speakerName": "",
+    "content": "노인이 고개를 든다. 주인공과 두 눈이 올곧게 마주친다. 노인의 깊은 눈동자에는 어떠한 적의도 경멸도 없다. 단지 한 인간을 바라보는 묵직한 시선.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_050",
+    "speakerName": "",
+    "content": "노인이 고개를 천천히 끄덕인다. 주인공은 그 낯선 온기에 몸이 굳는다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_051",
+    "speakerName": "",
+    "content": "[씬 2-D: 이동 수단 고장]\n대기하던 중, 가이드의 확성기 음성이 다급하게 울려 퍼진다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_052",
+    "speakerName": "가이드",
+    "content": "여러분, 죄송합니다. 차량에 기술적 문제가 발생했습니다. 수리 시간이 좀 필요할 것 같습니다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Guide"
+  },
+  {
+    "dialogueId": "DLG_053",
+    "speakerName": "학생들",
+    "content": "더 볼 수 있다!",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Students"
+  },
+  {
+    "dialogueId": "DLG_054",
+    "speakerName": "",
+    "content": "늘어난 자유 시간에 울타리로 다가선다. 노인은 여전히 같은 자리에 앉아 짚으로 작은 사람 형상의 인형을 엮고 있다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_055",
+    "speakerName": "",
+    "content": "노인이 주인공을 향해 인형을 가볍게 들어 보이더니, 이내 울타리 틈새로 손을 내밀어 짚 인형을 쥐여주려 한다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_056",
+    "speakerName": "시스템",
+    "content": "짚 인형을 수락하시겠습니까? (인벤토리에 보존됩니다)",
+    "dialogueType": "SystemMessage",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_057",
+    "speakerName": "",
+    "content": "[씬 3-A: 밤, 기숙사]\n기숙사 소등 시간. 일렬로 누운 아이들은 일제히 일정한 숨소리를 내며 잠에 빠졌다. 오직 주인공만이 천장을 노려보며 깨어 있다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_058",
+    "speakerName": "",
+    "content": "손바닥 위에 올려놓은 은백색 카토 알약이 어둠 속에서 은은한 형광을 발한다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_059",
+    "speakerName": "시스템",
+    "content": "이 약물을 복용하시겠습니까? (거부 시 주머니에 보관되며 밤마다 무의식의 틈새로 전이됩니다)",
+    "dialogueType": "SystemMessage",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_060",
+    "speakerName": "",
+    "content": "[씬 3-B: 첫 꿈]\n시야가 검게 물들었다가, 이내 벽도 천장도 한계도 존재하지 않는 주황빛으로 차오른다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_061",
+    "speakerName": "",
+    "content": "고요한 주황색 세계 속에서 정겨운 사람의 목소리가 들려온다. 포근한 모성의 자장가 같은 콧노래 소리.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_062",
+    "speakerName": "",
+    "content": "이름 모를 존재의 묵직하고 따스한 손길이 주인공의 헝클어진 머리카락을 느리게 쓸어내린다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_063",
+    "speakerName": "주인공",
+    "content": "따뜻하다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_064",
+    "speakerName": "주인공",
+    "content": "계속 있고 싶다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_065",
+    "speakerName": "주인공",
+    "content": "가지 마.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_066",
+    "speakerName": "",
+    "content": "[씬 3-C: 기상 — 균열]\n요란한 아침 경보가 울리고 기숙사의 모든 학생들이 마치 지시된 컴퓨터 프로세스처럼 벌떡 일어난다. 주인공은 0.5초 늦게 눈꺼풀을 밀어 올린다. 손끝이 어색하게 떨린다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_067",
+    "speakerName": "배급원",
+    "content": "오늘도 안전합니다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Distributor"
+  },
+  {
+    "dialogueId": "DLG_068",
+    "speakerName": "",
+    "content": "배급원에게 카토를 수령한 주인공은 그것을 삼키지 않고 몰래 바지 주머니 속으로 밀어 넣는다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_069",
+    "speakerName": "배급원",
+    "content": "...지금 안 드세요?",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Distributor"
+  },
+  {
+    "dialogueId": "DLG_070",
+    "speakerName": "주인공",
+    "content": "나중에 먹을게요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_071",
+    "speakerName": "배급원",
+    "content": "...네, 그러세요.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Distributor"
+  },
+  {
+    "dialogueId": "DLG_072",
+    "speakerName": "",
+    "content": "[씬 3-D: 이탈]\n등굣길. 학생들의 행렬에 섞여 걷던 주인공의 발이 점점 진흙에 빠진 듯 무거워진다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_073",
+    "speakerName": "",
+    "content": "가장자리에 서서 앞서 걸어가는 동일한 발걸음들을 바라본다. 그리고 결심한 듯 몸을 돌려, 질서정연한 행렬 바깥으로 한 걸음 이탈한다.",
+    "dialogueType": "Narration",
+    "speakerIconKey": ""
+  },
+  {
+    "dialogueId": "DLG_074",
+    "speakerName": "주인공",
+    "content": "이유를 모르겠다. 그냥 간다.",
+    "dialogueType": "Normal",
+    "speakerIconKey": "Icon_Player"
+  },
+  {
+    "dialogueId": "DLG_075",
+    "speakerName": "",
+    "content": "주변의 기계식 냉방 소음이 바람 소리로 뒤덮인다. 멀어져 가는 은빛 도시를 뒤로하고, 홀로 황야를 향해 뚜벅뚜벅 걷기 시작한다.",
+    "dialogueType": "Narration",
     "speakerIconKey": ""
   }
 ]

@@ -11,6 +11,7 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_sceneTitleText;
         [SerializeField] private TextMeshProUGUI m_locationText;
         [SerializeField] private TextMeshProUGUI m_playthroughText;
+        [SerializeField] private UnityEngine.UI.Button m_menuButton;
 
         private ISceneInfoViewModel m_viewModel;
 
@@ -55,6 +56,11 @@ namespace Features.InGame
             {
                 m_playthroughText.text = $"{info.Playthrough}회차";
             }
+        }
+
+        public void func_OnSettingsButtonClicked()
+        {
+            // 설정/메뉴 팝업 호출 로직
         }
 
         private void OnDestroy()

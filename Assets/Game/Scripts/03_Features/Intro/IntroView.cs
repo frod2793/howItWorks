@@ -49,6 +49,8 @@ public class IntroView : MonoBehaviour
 
     public void Initialize(IIntroViewModel viewModel, ISceneLoader sceneLoader = null, ISoundService soundService = null)
     {
+        m_skipIntro = true;
+
         if (viewModel == null)
         {
             return;
