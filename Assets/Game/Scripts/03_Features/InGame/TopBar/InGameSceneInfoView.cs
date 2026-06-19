@@ -24,6 +24,12 @@ namespace Features.InGame
 
         private void Start()
         {
+            if (m_menuButton != null)
+            {
+                m_menuButton.onClick.RemoveAllListeners();
+                m_menuButton.onClick.AddListener(func_OnSettingsButtonClicked);
+            }
+
             if (m_sceneTitleText != null)
             {
                 m_sceneTitleText.text = "승(承) · 씬 8 — 카토 위기";
@@ -60,7 +66,10 @@ namespace Features.InGame
 
         public void func_OnSettingsButtonClicked()
         {
-            // 설정/메뉴 팝업 호출 로직
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestSettings();
+            }
         }
 
         private void OnDestroy()

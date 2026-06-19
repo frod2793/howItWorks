@@ -94,6 +94,10 @@ namespace Features.InGame
 
         public void func_OnLogButtonClicked()
         {
+            if (m_viewModel != null)
+            {
+                m_viewModel.RequestBacklog();
+            }
         }
 
         public void func_OnInventoryButtonClicked()

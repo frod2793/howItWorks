@@ -13,6 +13,7 @@ namespace Features.InGame
         event Action OnSkipRequested;
         event Action<List<DialogueChoiceDTO>> OnChoicesUpdated;
         event Action<int> OnChoiceSelected;
+        event Action OnRequestBacklog;
         bool IsTyping { get; set; }
         bool IsDisplayingChoices { get; }
         DialogueDTO CurrentDialogue { get; }
@@ -22,12 +23,15 @@ namespace Features.InGame
         void RequestSkip();
         void DisplayChoices(List<DialogueChoiceDTO> choices);
         void SelectChoice(int choiceId);
+        void RequestBacklog();
     }
 
     public interface ISceneInfoViewModel
     {
         event Action<SceneInfoDTO> OnSceneInfoChanged;
+        event Action OnRequestSettings;
         void UpdateSceneInfo(SceneInfoDTO info);
+        void RequestSettings();
     }
 
     public interface ISidePanelViewModel

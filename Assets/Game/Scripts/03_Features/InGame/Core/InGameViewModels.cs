@@ -13,6 +13,7 @@ namespace Features.InGame
         public event Action OnSkipRequested;
         public event Action<List<DialogueChoiceDTO>> OnChoicesUpdated;
         public event Action<int> OnChoiceSelected;
+        public event Action OnRequestBacklog;
 
         public bool IsTyping { get; set; }
         public bool IsDisplayingChoices { get; private set; }
@@ -79,17 +80,34 @@ namespace Features.InGame
                 OnChoicesUpdated.Invoke(null);
             }
         }
+
+        public void RequestBacklog()
+        {
+            if (OnRequestBacklog != null)
+            {
+                OnRequestBacklog.Invoke();
+            }
+        }
     }
 
     public class SceneInfoViewModel : ISceneInfoViewModel
     {
         public event Action<SceneInfoDTO> OnSceneInfoChanged;
+        public event Action OnRequestSettings;
 
         public void UpdateSceneInfo(SceneInfoDTO info)
         {
             if (OnSceneInfoChanged != null)
             {
                 OnSceneInfoChanged.Invoke(info);
+            }
+        }
+
+        public void RequestSettings()
+        {
+            if (OnRequestSettings != null)
+            {
+                OnRequestSettings.Invoke();
             }
         }
     }

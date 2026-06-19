@@ -42,6 +42,9 @@ namespace Features.Settings
         [SerializeField] private Button m_applyButton;
 
         private ISettingsViewModel m_viewModel;
+        private Button[] m_tabButtonsArray;
+        private TMP_Text[] m_tabTextsArray;
+        private Image[] m_tabImagesArray;
 
         public void Initialize(ISettingsViewModel viewModel)
         {
@@ -53,6 +56,28 @@ namespace Features.Settings
 
             m_viewModel.OnStateChanged += UpdateUIValues;
             m_viewModel.OnCloseRequested += func_Close;
+
+            m_tabButtonsArray = new Button[]
+            {
+                m_audioTabButton,
+                m_textTabButton,
+                m_displayTabButton,
+                m_accessibilityTabButton,
+                m_saveTabButton,
+                m_inputTabButton
+            };
+
+            m_tabTextsArray = new TMP_Text[m_tabButtonsArray.Length];
+            m_tabImagesArray = new Image[m_tabButtonsArray.Length];
+
+            for (int i = 0; i < m_tabButtonsArray.Length; i++)
+            {
+                if (m_tabButtonsArray[i] != null)
+                {
+                    m_tabTextsArray[i] = m_tabButtonsArray[i].GetComponentInChildren<TMP_Text>();
+                    m_tabImagesArray[i] = m_tabButtonsArray[i].GetComponent<Image>();
+                }
+            }
 
             SetupButtonListeners();
             SetupSliderListeners();
@@ -314,6 +339,35 @@ namespace Features.Settings
             if (m_inputPanel != null)
             {
                 m_inputPanel.SetActive(tabIndex == 5);
+            }
+
+            if (m_tabButtonsArray != null)
+            {
+                for (int i = 0; i < m_tabButtonsArray.Length; i++)
+                {
+                    if (i == tabIndex)
+                    {
+                        if (m_tabTextsArray[i] != null)
+                        {
+                            m_tabTextsArray[i].color = new Color(0.92f, 0.84f, 0.76f, 1.0f);
+                        }
+                        if (m_tabImagesArray[i] != null)
+                        {
+                            m_tabImagesArray[i].color = new Color(0.2f, 0.2f, 0.2f, 0.9f);
+                        }
+                    }
+                    else
+                    {
+                        if (m_tabTextsArray[i] != null)
+                        {
+                            m_tabTextsArray[i].color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+                        }
+                        if (m_tabImagesArray[i] != null)
+                        {
+                            m_tabImagesArray[i].color = new Color(0.1f, 0.1f, 0.1f, 0.2f);
+                        }
+                    }
+                }
             }
         }
 

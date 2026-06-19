@@ -297,4 +297,14 @@ namespace Domain.InGame
         public int TriggerDialogueIndex;
         public List<GameChoiceDTO> Choices;
     }
+
+    [Serializable]
+    public class BacklogItemDTO
+    {
+        public string SpeakerName;
+        public string Content;
+        public string SpeakerIconKey;
+        public DialogueType Type;
+        public bool HasBranchEffect;
+    }
 }

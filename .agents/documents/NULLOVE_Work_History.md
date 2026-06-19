@@ -154,6 +154,17 @@ public class ChoiceTriggerDTO
 - **View 구현**: [SettingsView.cs](file:///e:/Unity_workSpace/Projects/howItWorks/Assets/Game/Scripts/03_Features/Settings/SettingsView.cs)는 오디오 탭 내의 슬라이더(0~100) 및 토글 컴포넌트를 ViewModel 속성과 단방향 연동하며, 사이드바 버튼 클릭 시 해당하는 탭 콘텐츠 패널이 활성화되는 탭 전환 구조를 가지고 있습니다.
 - **타이틀 씬 통합**: [TitleViewModel.cs](file:///e:/Unity_workSpace/Projects/howItWorks/Assets/Game/Scripts/03_Features/Title/TitleViewModel.cs)의 환경설정 버튼 클릭 이벤트를 신규 `OnRequestSettings`와 연동하고, [TitleLifetimeScope.cs](file:///e:/Unity_workSpace/Projects/howItWorks/Assets/Game/Scripts/03_Features/Title/TitleLifetimeScope.cs)에서 의존성 바인딩을 마쳐 `SettingsView`의 `func_Open()`이 호출되도록 설계했습니다.
 
+### 2.5. 대사 백로그(Backlog) 시스템 구축 및 스크롤 뷰 레이아웃 개선
+- **목적**: 인게임 진행 도중 사용자가 `LOG_Button` 또는 `Tab` 키를 누르면 이전 대사 내역(화자 이름, 대화 내용, 분기 영향 여부)을 팝업 형태로 조회할 수 있도록 함.
+- **핵심 아키텍처 (MVVM & DTO)**:
+  - **`BacklogItemDTO`**: 화자 명칭, 대화 내용, 분기 영향 여부를 담는 데이터 전송용 DTO 정의.
+  - **`BacklogViewModel`**: `DialogueViewModel.OnDialogueUpdated` 이벤트를 구독하여 실시간으로 발화된 대사를 내부 DTO 리스트에 수집하고 누적. `choices_data.json` 데이터 상에 정의된 `TriggerDialogueIndex`와 현재 대사 인덱스를 비교하여 분기점 직전의 대사에 `HasBranchEffect = true` 마크업 적용.
+  - **`BacklogView`**: 팝업 렌더링 시점에 누적된 DTO 목록을 복제 생성하여 UI 갱신.
+- **ScrollRect 아이템 찌그러짐 및 앵커 잠금 버그 해결 (에디터 사전 세팅)**:
+  - **현상**: 스크롤 뷰 `Content` 하위의 `ItemPrefab` 복제 시 가로 앵커가 `(0, 0)`으로 초기화되고 마진이 비틀려 가로 영역이 극도로 축소되며 텍스트가 뭉개지는 현상 발생. 부모의 `Vertical Layout Group`에 의해 에디터에서 자식의 앵커 변경이 차단(Lock)됨.
+  - **해결 방안**: `ItemPrefab`을 레이아웃 그룹 간섭 밖인 `BacklogPanel` 바로 하위 계층으로 이동시켜 앵커 잠금을 강제 해제함. 앵커를 가로 Stretch `(0, 1) ~ (1, 1)`, 좌우 오프셋 `0f`, 기본 세로 높이 `80f`로 설정한 뒤 씬(`InGame.unity`) 파일에 영구 저장함.
+  - **코드 롤백 및 안정성**: `BacklogView.cs`에 추가했던 임시 런타임 RectTransform 보정 로직을 완전 삭제하여 씬 디자인과의 의존성을 배제했으며, 유니티 Fake Null 방지를 위해 삼항 연산자를 이용한 안정성 널체크 구조로 개편함.
+
 ---
 
 ## 3. 연출 대사 제외 계획 (Staging Direction Exclusion Plan)
@@ -234,6 +245,30 @@ public class ChoiceTriggerDTO
   - 설정 화면이 팝업으로 오픈되어 있는 동안 뒤에 깔린 타이틀 메뉴 UI 버튼에 클릭 및 마우스 호버 등 인터랙션이 겹쳐서 전달되는 간섭 버그가 발생했습니다.
   - 이를 해결하기 위해 `TitleViewModel`에서 설정 창의 오픈/클로즈 요청 라이프사이클을 구독하도록 바인딩하고, 설정 화면 활성화 시 타이틀 메뉴 버튼들의 Interactable 상태 및 전체 UI 활성화 상태를 제어하여 UI 중복 처리를 원천 방지하였습니다.
   - uGUI 슬라이더(Slider)의 기본 비주얼 뼈대(Background, Fill Area, Fill, Handle Slide Area, Handle)가 누락되어 순수 하얀색 사각형으로 렌더링되던 문제를 해결하고자, 에디터 상에서 VContainer 라이프사이클에 맞물리게 실제 비주얼 요소를 계층형 uGUI 구조로 자동 배치하는 C# 스크립트를 빌드 및 가동하여 슬라이더 UI 렌더링을 시각적으로 구현 완료했습니다.
+
+---
+
+### 4.4. 대사 백로그 에디터 세팅 가이드
+- **BacklogView 컴포넌트 직렬화 필드 설정**:
+  - `m_backlogPanel`: 백로그 윈도우 전체 오브젝트 (`BacklogPanel`)
+  - `m_sceneInfoText`: 백로그 탭 상단의 씬 요약 정보 텍스트 컴포넌트 (`InfoText`)
+  - `m_itemPrefab`: 자식 대사 항목 템플릿 (`ItemPrefab` - 이제 `BacklogPanel` 하위에 계층 배치됨)
+  - `m_contentParent`: `ScrollView/Viewport/Content` (수직 스크롤 배치 부모)
+- **이벤트 구독 구조**:
+  - 대사 진행 시: `DialogueFlowController` -> `IDialogueViewModel.OnDialogueUpdated` -> `BacklogViewModel` (데이터 누적)
+  - 로그 요청 시: `LOG_Button` / `Tab` 키 -> `IDialogueViewModel.OnRequestBacklog` -> `InGameLifetimeScope` -> `BacklogView.func_Open()` (동적 리스트 렌더링 및 팝업 활성화)
+
+---
+
+## 5. 예정 작업 (Planned Tasks)
+
+### 5.1. 대사 백로그 및 스크롤뷰 레이아웃 고도화
+- [ ] **가변 높이 레이아웃 보완**: 대사 내용이 길어져 2줄 이상이 될 경우 `ContentText` 자동 줄바꿈 및 전체 백로그 항목 높이가 유동적으로 늘어나는 레이아웃 검증 (필요시 Layout Element의 preferredHeight 적용).
+- [ ] **자동 스크롤 기능**: 대사가 대량으로 쌓였을 때 스크롤 뷰 영역이 하단으로 자동 스크롤(Auto-scroll to bottom)되는 조작 편의성 기능 추가 검토.
+- [ ] **데이터 무결성 최종 검토**: 씬 전환 및 세이브/로드(Save/Load) 전후의 백로그 대사 목록 유실 여부 검증.
+
+### 5.2. 인게임 시스템 통합 테스트
+- [ ] **팝업 내비게이션 스택 관리**: 설정 윈도우와 백로그 UI 간의 중첩 활성화 시의 ESC 키 바인딩 및 뒤로가기 팝업 스택 제어 상태 검증.
 
 ---
 

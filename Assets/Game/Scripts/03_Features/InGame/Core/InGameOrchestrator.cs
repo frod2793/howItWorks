@@ -91,7 +91,10 @@ namespace Features.InGame
 
         public void OpenBacklog()
         {
-            Debug.Log("[InGameOrchestrator] 백로그 화면을 활성화합니다.");
+            if (DialogueVM != null)
+            {
+                DialogueVM.RequestBacklog();
+            }
         }
 
         public void Tick()

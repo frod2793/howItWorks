@@ -3,6 +3,7 @@ using VContainer.Unity;
 using Features.InGame;
 using UnityEngine;
 using Domain.InGame;
+using Features.Settings;
 
 #region 씬 초기화 (VContainer)
 public class InGameLifetimeScope : LifetimeScope
@@ -45,6 +46,9 @@ public class InGameLifetimeScope : LifetimeScope
         builder.Register<InGameInventorySystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         builder.Register<ResourceDomainService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
+        builder.Register<SettingsViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.Register<BacklogViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
         builder.RegisterEntryPoint<InGameOrchestrator>().AsSelf().As<IInGameOrchestrator>();
 
         builder.RegisterComponentInHierarchy<InGameDialogueView>();
@@ -53,6 +57,84 @@ public class InGameLifetimeScope : LifetimeScope
         builder.RegisterComponentInHierarchy<InGameSceneInfoView>();
         builder.RegisterComponentInHierarchy<InGameSidePanelView>();
         builder.RegisterComponentInHierarchy<InGameCharacterView>();
+        builder.RegisterComponentInHierarchy<SettingsView>();
+        builder.RegisterComponentInHierarchy<BacklogView>();
+    }
+
+    private void Start()
+    {
+        if (Container == null)
+        {
+            return;
+        }
+
+        ISettingsViewModel settingsVM = null;
+        try
+        {
+            settingsVM = Container.Resolve<ISettingsViewModel>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISettingsViewModel 해결 실패: {e.Message}");
+        }
+
+        var settingsView = Container.Resolve<SettingsView>();
+        if (settingsView != null && settingsVM != null)
+        {
+            settingsView.Initialize(settingsVM);
+        }
+
+        ISceneInfoViewModel sceneInfoVM = null;
+        try
+        {
+            sceneInfoVM = Container.Resolve<ISceneInfoViewModel>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISceneInfoViewModel 해결 실패: {e.Message}");
+        }
+
+        if (sceneInfoVM != null && settingsView != null)
+        {
+            sceneInfoVM.OnRequestSettings += () =>
+            {
+                settingsView.func_Open();
+            };
+        }
+
+        IBacklogViewModel backlogVM = null;
+        try
+        {
+            backlogVM = Container.Resolve<IBacklogViewModel>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] IBacklogViewModel 해결 실패: {e.Message}");
+        }
+
+        var backlogView = Container.Resolve<BacklogView>();
+        if (backlogView != null && backlogVM != null)
+        {
+            backlogView.Initialize(backlogVM);
+        }
+
+        IDialogueViewModel dialogueVM = null;
+        try
+        {
+            dialogueVM = Container.Resolve<IDialogueViewModel>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] IDialogueViewModel 해결 실패: {e.Message}");
+        }
+
+        if (dialogueVM != null && backlogView != null)
+        {
+            dialogueVM.OnRequestBacklog += () =>
+            {
+                backlogView.func_Open();
+            };
+        }
     }
 }
 #endregion
