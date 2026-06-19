@@ -7,6 +7,8 @@ using Domain.InGame;
 #region 씬 초기화 (VContainer)
 public class InGameLifetimeScope : LifetimeScope
 {
+    [Header("테스트 설정")]
+    [SerializeField] private int m_startDialogueIndex = 0;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -35,7 +37,8 @@ public class InGameLifetimeScope : LifetimeScope
         builder.Register<DialogueViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SceneInfoViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SidePanelViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-        builder.Register<DialogueFlowController>(Lifetime.Singleton);
+        builder.Register<DialogueFlowController>(Lifetime.Singleton)
+            .WithParameter("startDialogueIndex", m_startDialogueIndex);
 
         builder.Register<InGameSaveSystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         builder.Register<InGameSoundSystem>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();

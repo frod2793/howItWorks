@@ -60,6 +60,8 @@ namespace Domain.InGame
         public string CharacterSpriteKey;
         public string BackgroundSpriteKey;
         public string SpeakerIconKey;
+        public int CurrentLine;
+        public int TotalLines;
     }
 
     [Serializable]
@@ -197,6 +199,8 @@ namespace Domain.InGame
         public float masterVolume;
         public float bgmVolume;
         public float sfxVolume;
+        public float voiceVolume;
+        public bool muteOnFocusLost;
         public float textSpeed;
         public float autoPlaySpeed;
         public string language;

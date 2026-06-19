@@ -215,8 +215,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uADF8\uB9AC\uC6C0:  <color=#888888>\uBE44\uD65C\uC131 (\uAE30\uC068 <
-    3)</color>"
+  m_text: "\uADF8\uB9AC\uC6C0:  <color=#D4AF37>\uD65C\uC131</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: -6707874958448738504, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
@@ -591,9 +590,9 @@ RectTransform:
   m_Father: {fileID: 609093121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &118580289
 MonoBehaviour:
@@ -1605,6 +1604,7 @@ MonoBehaviour:
   - {fileID: 1066074733}
   - {fileID: 1675139806}
   - {fileID: 1341801055}
+  m_startDialogueIndex: 49
 --- !u!1 &222520131
 GameObject:
   m_ObjectHideFlags: 0
@@ -1925,9 +1925,9 @@ RectTransform:
   m_Father: {fileID: 573864980}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &282117965
 MonoBehaviour:
@@ -2468,9 +2468,9 @@ RectTransform:
   m_Father: {fileID: 573864980}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &427052278
 MonoBehaviour:
@@ -2738,9 +2738,9 @@ RectTransform:
   m_Father: {fileID: 1827135048}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &477328271
 MonoBehaviour:
@@ -3250,6 +3250,7 @@ GameObject:
   - component: {fileID: 573864983}
   - component: {fileID: 573864982}
   - component: {fileID: 573864981}
+  - component: {fileID: 573864986}
   m_Layer: 5
   m_Name: DialogueOptionCard_2
   m_TagString: Untagged
@@ -3398,6 +3399,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573864979}
   m_CullTransparentMesh: 1
+--- !u!114 &573864986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573864979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 20
+    m_Bottom: 20
+  m_ChildAlignment: 4
+  m_Spacing: 15
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &580873679
 GameObject:
   m_ObjectHideFlags: 0
@@ -3568,9 +3595,9 @@ RectTransform:
   m_Father: {fileID: 609093121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &607564977
 MonoBehaviour:
@@ -3686,6 +3713,7 @@ GameObject:
   - component: {fileID: 609093122}
   - component: {fileID: 609093126}
   - component: {fileID: 609093125}
+  - component: {fileID: 609093127}
   m_Layer: 5
   m_Name: DialogueOptionCard_1
   m_TagString: Untagged
@@ -3834,6 +3862,32 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &609093127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609093120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 20
+    m_Bottom: 20
+  m_ChildAlignment: 4
+  m_Spacing: 15
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &617967219
 GameObject:
   m_ObjectHideFlags: 0
@@ -4727,7 +4781,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#7992C8>\uC2AC\uD514</color>\n<color=#D4AF37><b>6</b></color>"
+  m_text: "<color=#7992C8>\uC2AC\uD514</color>\n<color=#D4AF37><b>8</b></color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: 2034859295}
@@ -6371,7 +6425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC6B0\uC138 \uAC10\uC815:  <color=#D4AF37>\uD638\uAE30\uC2EC (7)</color>"
+  m_text: "\uC6B0\uC138 \uAC10\uC815:  <color=#D4AF37>\uC2AC\uD514 (8)</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: -6707874958448738504, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
@@ -6821,6 +6875,7 @@ GameObject:
   - component: {fileID: 1117207740}
   - component: {fileID: 1117207739}
   - component: {fileID: 1117207738}
+  - component: {fileID: 1117207743}
   m_Layer: 5
   m_Name: DialogueOptionCard_3
   m_TagString: Untagged
@@ -6969,6 +7024,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117207736}
   m_CullTransparentMesh: 1
+--- !u!114 &1117207743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117207736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 20
+    m_Bottom: 20
+  m_ChildAlignment: 4
+  m_Spacing: 15
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1146925192
 GameObject:
   m_ObjectHideFlags: 0
@@ -7139,9 +7220,9 @@ RectTransform:
   m_Father: {fileID: 1827135048}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1150067692
 MonoBehaviour:
@@ -7423,9 +7504,9 @@ RectTransform:
   m_Father: {fileID: 1117207737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1174392979
 MonoBehaviour:
@@ -10842,9 +10923,9 @@ RectTransform:
   m_Father: {fileID: 1117207737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.2903, y: 38.3224}
-  m_SizeDelta: {x: -20.5806, y: -211.4827}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1682811907
 MonoBehaviour:
@@ -11136,7 +11217,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#D9B86D>\uAE30\uC068</color>\n<color=#D4AF37><b>1</b></color>"
+  m_text: "<color=#D9B86D>\uAE30\uC068</color>\n<color=#D4AF37><b>5</b></color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: -6707874958448738504, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
@@ -11273,7 +11354,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#AD4D53>\uACF5\uD3EC</color>\n<color=#D4AF37><b>3</b></color>"
+  m_text: "<color=#AD4D53>\uACF5\uD3EC</color>\n<color=#D4AF37><b>7</b></color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: -6707874958448738504, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
@@ -11599,6 +11680,7 @@ GameObject:
   - component: {fileID: 1827135051}
   - component: {fileID: 1827135050}
   - component: {fileID: 1827135049}
+  - component: {fileID: 1827135054}
   m_Layer: 5
   m_Name: DialogueOptionCard_4
   m_TagString: Untagged
@@ -11747,6 +11829,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1827135047}
   m_CullTransparentMesh: 1
+--- !u!114 &1827135054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827135047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 20
+    m_Bottom: 20
+  m_ChildAlignment: 4
+  m_Spacing: 15
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1832926873
 GameObject:
   m_ObjectHideFlags: 0
@@ -14246,7 +14354,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#8E729E>\uD63C\uB780</color>\n<color=#D4AF37><b>3</b></color>"
+  m_text: "<color=#8E729E>\uD63C\uB780</color>\n<color=#D4AF37><b>8</b></color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}
   m_sharedMaterial: {fileID: -6707874958448738504, guid: e9a2487d11d833d4c857956bf1e58bb8, type: 2}

@@ -136,6 +136,11 @@ namespace Features.InGame
 
         private void UpdateDialogue(DialogueDTO dialogue)
         {
+            if (m_lineProgressText != null)
+            {
+                m_lineProgressText.text = $"{dialogue.CurrentLine} / {dialogue.TotalLines}";
+            }
+
             if (dialogue.Type == DialogueType.Narration)
             {
                 if (m_speakerBox != null)

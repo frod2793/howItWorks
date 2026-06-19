@@ -16,6 +16,7 @@ public class TitleViewModel : ITitleViewModel
     /// [설명]: 팝업 조회를 위한 키값을 전달하는 이벤트입니다.
     /// </summary>
     public event Action<string> OnRequestPopup;
+    public event Action OnRequestSettings;
     #endregion
 
     public TitleViewModel(ISceneLoader sceneLoader)
@@ -44,9 +45,9 @@ public class TitleViewModel : ITitleViewModel
 
     public void OpenSettings()
     {
-        if (OnRequestPopup != null)
+        if (OnRequestSettings != null)
         {
-            OnRequestPopup.Invoke("Sorry");
+            OnRequestSettings.Invoke();
         }
     }
 

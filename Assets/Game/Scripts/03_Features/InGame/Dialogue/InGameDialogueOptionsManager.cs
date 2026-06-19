@@ -8,16 +8,16 @@ namespace Features.InGame
 {
     public class InGameDialogueOptionsManager : MonoBehaviour
     {
-        private List<InGameDialogueOptionsGroupView> m_optionGroups;
+        private List<InGameDialogueOptionCardView> m_optionCards;
 
         private IDialogueViewModel m_viewModel;
 
         private void Awake()
         {
-            var groups = GetComponentsInChildren<InGameDialogueOptionsGroupView>(true);
-            if (groups != null)
+            var cards = GetComponentsInChildren<InGameDialogueOptionCardView>(true);
+            if (cards != null)
             {
-                m_optionGroups = new List<InGameDialogueOptionsGroupView>(groups);
+                m_optionCards = new List<InGameDialogueOptionCardView>(cards);
             }
         }
 
@@ -27,13 +27,14 @@ namespace Features.InGame
             m_viewModel = viewModel;
             m_viewModel.OnChoicesUpdated += HandleChoicesUpdated;
 
-            if (m_optionGroups != null)
+            if (m_optionCards != null)
             {
-                for (int i = 0; i < m_optionGroups.Count; i++)
+                for (int i = 0; i < m_optionCards.Count; i++)
                 {
-                    if (m_optionGroups[i] != null)
+                    if (m_optionCards[i] != null)
                     {
-                        m_optionGroups[i].gameObject.SetActive(false);
+                        m_optionCards[i].gameObject.SetActive(true);
+                        m_optionCards[i].Hide();
                     }
                 }
             }
@@ -43,13 +44,14 @@ namespace Features.InGame
 
         private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
         {
-            if (m_optionGroups != null)
+            if (m_optionCards != null)
             {
-                for (int i = 0; i < m_optionGroups.Count; i++)
+                for (int i = 0; i < m_optionCards.Count; i++)
                 {
-                    if (m_optionGroups[i] != null)
+                    if (m_optionCards[i] != null)
                     {
-                        m_optionGroups[i].gameObject.SetActive(false);
+                        m_optionCards[i].gameObject.SetActive(true);
+                        m_optionCards[i].Hide();
                     }
                 }
             }
@@ -62,14 +64,21 @@ namespace Features.InGame
 
             gameObject.SetActive(true);
 
-            int activeIndex = choices.Count - 1;
-            if (m_optionGroups != null && activeIndex >= 0 && activeIndex < m_optionGroups.Count)
+            if (m_optionCards != null)
             {
-                var targetGroup = m_optionGroups[activeIndex];
-                if (targetGroup != null)
+                for (int i = 0; i < m_optionCards.Count; i++)
                 {
-                    targetGroup.gameObject.SetActive(true);
-                    targetGroup.SetGroupData(choices, OnCardSelected);
+                    if (m_optionCards[i] != null)
+                    {
+                        if (i < choices.Count)
+                        {
+                            m_optionCards[i].SetCardData(choices[i], OnCardSelected);
+                        }
+                        else
+                        {
+                            m_optionCards[i].Hide();
+                        }
+                    }
                 }
             }
         }

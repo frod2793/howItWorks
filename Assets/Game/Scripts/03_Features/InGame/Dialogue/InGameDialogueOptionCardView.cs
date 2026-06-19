@@ -60,19 +60,32 @@ namespace Features.InGame
 
             if (m_canvasGroup != null)
             {
+                m_canvasGroup.blocksRaycasts = true;
                 if (dto.IsLocked)
                 {
                     m_canvasGroup.alpha = 0.5f;
+                    m_canvasGroup.interactable = false;
                 }
                 else
                 {
                     m_canvasGroup.alpha = 1.0f;
+                    m_canvasGroup.interactable = true;
                 }
             }
 
             if (m_button != null)
             {
                 m_button.interactable = !dto.IsLocked;
+            }
+        }
+
+        public void Hide()
+        {
+            if (m_canvasGroup != null)
+            {
+                m_canvasGroup.alpha = 0f;
+                m_canvasGroup.blocksRaycasts = false;
+                m_canvasGroup.interactable = false;
             }
         }
 

@@ -39,5 +39,19 @@ public interface ISoundService
     /// [설명]: 전체 볼륨 설정을 변경합니다.
     /// </summary>
     void SetVolume(float bgmVolume, float sfxVolume);
+
+    float MasterVolume { get; }
+    float BGMVolume { get; }
+    float SFXVolume { get; }
+    float VoiceVolume { get; }
+    bool MuteOnFocusLost { get; }
+
+    void SetMasterVolume(float volume);
+    void SetBGMVolume(float volume);
+    void SetSFXVolume(float volume);
+    void SetVoiceVolume(float volume);
+    void SetMuteOnFocusLost(bool mute);
+    void LoadSettings();
+    void SaveSettings();
 }
 #endregion

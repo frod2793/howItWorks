@@ -16,17 +16,20 @@ namespace Features.InGame
         private int m_currentDialogueIndex = 0;
         private SidePanelDTO m_currentSidePanelData;
         private List<ChoiceTriggerDTO> m_choiceTriggers;
+        private int m_startDialogueIndex;
 
         public DialogueFlowController(
             IDialogueViewModel dialogueVM, 
             ISceneInfoViewModel sceneInfoVM, 
             ISidePanelViewModel sidePanelVM, 
-            IGameDataManager dataManager)
+            IGameDataManager dataManager,
+            int startDialogueIndex)
         {
             m_dialogueVM = dialogueVM;
             m_sceneInfoVM = sceneInfoVM;
             m_sidePanelVM = sidePanelVM;
             m_dataManager = dataManager;
+            m_startDialogueIndex = startDialogueIndex;
             m_dialogueVM.OnNextRequested += PlayNextDialogue;
             m_dialogueVM.OnChoiceSelected += HandleChoiceSelected;
         }
@@ -65,7 +68,7 @@ namespace Features.InGame
             await m_dataManager.LoadAllDataAsync();
             m_loadedDialogues = m_dataManager.GetDialogueLog();
             m_choiceTriggers = m_dataManager.GetChoiceTriggers();
-            m_currentDialogueIndex = 0;
+            m_currentDialogueIndex = m_startDialogueIndex;
 
             if (m_loadedDialogues != null && m_loadedDialogues.Count > 0)
             {
@@ -292,12 +295,30 @@ namespace Features.InGame
                 content = content.Substring(match.Length);
             }
 
+            string trimmedContent = content.Trim();
+            if (trimmedContent.StartsWith("(") && trimmedContent.EndsWith(")"))
+            {
+                parsedType = DialogueType.Narration;
+                content = "";
+            }
+
+            if (trimmedContent.StartsWith("[비주얼]") || 
+                trimmedContent.StartsWith("[카메라]") || 
+                trimmedContent.StartsWith("[사운드]") || 
+                trimmedContent.StartsWith("[연출 의도]"))
+            {
+                parsedType = DialogueType.Narration;
+                content = "";
+            }
+
             m_dialogueVM.DisplayDialogue(new DialogueDTO
             {
                 Type = parsedType,
                 SpeakerName = line.speakerName,
                 Content = content,
-                SpeakerIconKey = line.speakerIconKey
+                SpeakerIconKey = line.speakerIconKey,
+                CurrentLine = index + 1,
+                TotalLines = m_loadedDialogues.Count
             });
         }
     }
