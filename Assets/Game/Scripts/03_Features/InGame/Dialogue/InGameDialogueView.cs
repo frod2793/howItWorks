@@ -173,7 +173,7 @@ namespace Features.InGame
                     {
                         m_typewriterEffect.Stop();
                     }
-                    m_contentText.text = $"<mspace=16px>{dialogue.Content}</mspace>";
+                    m_contentText.text = dialogue.Content;
                     m_viewModel.IsTyping = false;
                 }
             }

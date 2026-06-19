@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Domain.InGame;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace Features.InGame
         private readonly IGameDataManager m_dataManager;
         private List<Domain.InGame.DialogueLineDTO> m_loadedDialogues;
         private int m_currentDialogueIndex = 0;
+        private SidePanelDTO m_currentSidePanelData;
+        private List<ChoiceTriggerDTO> m_choiceTriggers;
 
         public DialogueFlowController(
             IDialogueViewModel dialogueVM, 
@@ -32,33 +35,36 @@ namespace Features.InGame
         {
             m_sceneInfoVM.UpdateSceneInfo(new SceneInfoDTO
             {
-                ActName = "승(承)",
-                SceneNumber = 8,
-                SceneTitle = "카토 위기",
-                Location = "야만인 구역 외곽",
-                TimeOfDay = "밤",
+                ActName = "기(起)",
+                SceneNumber = 1,
+                SceneTitle = "첫 아침",
+                Location = "기숙사",
+                TimeOfDay = "낮",
                 Playthrough = 1
             });
 
-            m_sidePanelVM.UpdateSidePanelData(new SidePanelDTO
+            m_currentSidePanelData = new SidePanelDTO
             {
                 CatoStocks = 2,
                 MaxCatoStocks = 5,
-                Sadness = 6,
-                Joy = 1,
-                Curiosity = 7,
-                Fear = 3,
-                Confusion = 3,
-                Monitoring = 5,
-                Trust = 4,
-                LoopAwareness = 1,
+                Sadness = 0,
+                Joy = 0,
+                Curiosity = 0,
+                Fear = 0,
+                Confusion = 0,
+                Monitoring = 0,
+                Trust = 0,
+                LoopAwareness = 0,
                 MaxLoopAwareness = 5,
-                ActBranchInfo = "D1 · R · V · β",
-                PassedScenesInfo = "씬 2 · 3 · 5 · 7"
-            });
+                ActBranchInfo = "기(起) · A",
+                PassedScenesInfo = "씬 1"
+            };
+
+            m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
 
             await m_dataManager.LoadAllDataAsync();
             m_loadedDialogues = m_dataManager.GetDialogueLog();
+            m_choiceTriggers = m_dataManager.GetChoiceTriggers();
             m_currentDialogueIndex = 0;
 
             if (m_loadedDialogues != null && m_loadedDialogues.Count > 0)
@@ -81,6 +87,18 @@ namespace Features.InGame
             if (m_loadedDialogues == null)
             {
                 return;
+            }
+
+            if (m_choiceTriggers != null)
+            {
+                for (int i = 0; i < m_choiceTriggers.Count; i++)
+                {
+                    if (m_choiceTriggers[i].TriggerDialogueIndex == m_currentDialogueIndex)
+                    {
+                        ShowDataChoices(m_choiceTriggers[i].Choices);
+                        return;
+                    }
+                }
             }
 
             m_currentDialogueIndex++;
@@ -140,12 +158,73 @@ namespace Features.InGame
 
         private void HandleChoiceSelected(int choiceId)
         {
-            Debug.Log($"[DialogueFlowController] 선택지 {choiceId}번 카드가 처리되었습니다.");
+            if (m_choiceTriggers != null)
+            {
+                for (int i = 0; i < m_choiceTriggers.Count; i++)
+                {
+                    var trigger = m_choiceTriggers[i];
+                    for (int j = 0; j < trigger.Choices.Count; j++)
+                    {
+                        var choice = trigger.Choices[j];
+                        if (choice.ChoiceId == choiceId)
+                        {
+                            ApplyChoiceResult(choice.Result);
+                            return;
+                        }
+                    }
+                }
+            }
+
             m_dialogueVM.DisplayDialogue(new DialogueDTO
             {
                 Type = DialogueType.SystemMessage,
                 Content = $"--- {choiceId}번 선택 결과 진행 완료 ---"
             });
+        }
+
+        private void ShowDataChoices(List<GameChoiceDTO> choices)
+        {
+            var uiChoices = new List<DialogueChoiceDTO>();
+            for (int i = 0; i < choices.Count; i++)
+            {
+                uiChoices.Add(new DialogueChoiceDTO
+                {
+                    ChoiceId = choices[i].ChoiceId,
+                    Title = choices[i].Title,
+                    Subtitle = choices[i].Subtitle,
+                    Description = choices[i].Description,
+                    Condition = choices[i].Condition,
+                    IsLocked = choices[i].IsLocked,
+                    ColorType = choices[i].ColorType
+                });
+            }
+            m_dialogueVM.DisplayChoices(uiChoices);
+        }
+
+        private void ApplyChoiceResult(ChoiceResultDTO result)
+        {
+            if (result != null)
+            {
+                m_currentSidePanelData.CatoStocks += result.CatoDelta;
+                m_currentSidePanelData.Monitoring += result.MonitoringDelta;
+                m_currentSidePanelData.Curiosity += result.CuriosityDelta;
+                m_currentSidePanelData.Confusion += result.ConfusionDelta;
+                m_currentSidePanelData.Fear += result.FearDelta;
+                m_currentSidePanelData.Sadness += result.SadnessDelta;
+                m_currentSidePanelData.Joy += result.JoyDelta;
+                m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
+
+                if (!string.IsNullOrEmpty(result.FeedbackMessage))
+                {
+                    m_dialogueVM.DisplayDialogue(new DialogueDTO
+                    {
+                        Type = DialogueType.SystemMessage,
+                        Content = result.FeedbackMessage
+                    });
+                }
+
+                m_currentDialogueIndex = result.NextDialogueIndex;
+            }
         }
 
         private void PlayDialogueAtIndex(int index)
@@ -162,11 +241,62 @@ namespace Features.InGame
                 parsedType = DialogueType.SystemMessage;
             }
 
+            string content = line.content;
+
+            var match = Regex.Match(content, @"^\[씬\s*([^\]:]+?)\s*:\s*([^\]]+?)\]\s*[\r\n]*");
+            if (match.Success)
+            {
+                string sceneCode = match.Groups[1].Value.Trim();
+                string sceneTitle = match.Groups[2].Value.Trim();
+
+                int sceneNum = 1;
+                var numMatch = Regex.Match(sceneCode, @"\d+");
+                if (numMatch.Success)
+                {
+                    int.TryParse(numMatch.Value, out sceneNum);
+                }
+
+                string actName = "기(起)";
+                if (sceneNum >= 13)
+                {
+                    actName = "결(結)";
+                }
+                else if (sceneNum >= 9)
+                {
+                    actName = "전(轉)";
+                }
+                else if (sceneNum >= 4)
+                {
+                    actName = "승(承)";
+                }
+
+                string timeOfDay = "낮";
+                if (sceneTitle.Contains("밤") || sceneTitle.Contains("어둠") || sceneTitle.Contains("꿈"))
+                {
+                    timeOfDay = "밤";
+                }
+
+                if (m_sceneInfoVM != null)
+                {
+                    m_sceneInfoVM.UpdateSceneInfo(new SceneInfoDTO
+                    {
+                        ActName = actName,
+                        SceneNumber = sceneNum,
+                        SceneTitle = sceneTitle,
+                        Location = sceneCode,
+                        TimeOfDay = timeOfDay,
+                        Playthrough = 1
+                    });
+                }
+
+                content = content.Substring(match.Length);
+            }
+
             m_dialogueVM.DisplayDialogue(new DialogueDTO
             {
                 Type = parsedType,
                 SpeakerName = line.speakerName,
-                Content = line.content,
+                Content = content,
                 SpeakerIconKey = line.speakerIconKey
             });
         }

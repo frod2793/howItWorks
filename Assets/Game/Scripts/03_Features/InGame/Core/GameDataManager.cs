@@ -25,6 +25,7 @@ namespace Features.InGame
         private List<BranchMatrixDTO> m_branchMatrix;
         private List<SubplotDTO> m_subplots;
         private List<LoopVariationDTO> m_loopVariations;
+        private List<ChoiceTriggerDTO> m_choiceTriggers;
 
         public async UniTask LoadAllDataAsync()
         {
@@ -41,6 +42,7 @@ namespace Features.InGame
             m_branchMatrix = await LoadJsonListAsync<BranchMatrixDTO>("branch_matrix.json");
             m_subplots = await LoadJsonListAsync<SubplotDTO>("subplots.json");
             m_loopVariations = await LoadJsonListAsync<LoopVariationDTO>("loop_variations.json");
+            m_choiceTriggers = await LoadJsonListAsync<ChoiceTriggerDTO>("choices_data.json");
 
             await LoadEmotionTrendsAsync();
             await LoadPlaythroughLogsAsync();
@@ -170,5 +172,6 @@ namespace Features.InGame
         public List<BranchMatrixDTO> GetBranchMatrix() { return m_branchMatrix; }
         public List<SubplotDTO> GetSubplots() { return m_subplots; }
         public List<LoopVariationDTO> GetLoopVariations() { return m_loopVariations; }
+        public List<ChoiceTriggerDTO> GetChoiceTriggers() { return m_choiceTriggers; }
     }
 }

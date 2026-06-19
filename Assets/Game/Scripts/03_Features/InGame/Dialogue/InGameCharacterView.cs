@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -6,12 +8,23 @@ using DG.Tweening;
 
 namespace Features.InGame
 {
+    [Serializable]
+    public struct CharacterSpriteMap
+    {
+        public string characterName;
+        public Sprite sprite;
+        public bool isLeftPlacement;
+    }
+
     public class InGameCharacterView : MonoBehaviour
     {
         [Header("캐릭터 일러스트 위치 (좌/중/우)")]
         [SerializeField] private Image m_leftCharacterImage;
         [SerializeField] private Image m_centerCharacterImage;
         [SerializeField] private Image m_rightCharacterImage;
+
+        [Header("캐릭터 스프라이트 리소스 데이터 리스트")]
+        [SerializeField] private List<CharacterSpriteMap> m_characterSpriteMaps;
 
         private IDialogueViewModel m_viewModel;
 
@@ -22,13 +35,101 @@ namespace Features.InGame
             m_viewModel.OnDialogueUpdated += UpdateCharacterIllustration;
         }
 
+        private void Start()
+        {
+            InitImage(m_leftCharacterImage);
+            InitImage(m_centerCharacterImage);
+            InitImage(m_rightCharacterImage);
+        }
+
         private void UpdateCharacterIllustration(DialogueDTO dialogue)
         {
-            // 임시 구현: 발화자 이름에 따라 일러스트 변경 연출 (추후 확장)
-            if (dialogue.Type == DialogueType.Normal)
+            if (dialogue.Type == DialogueType.Narration || dialogue.Type == DialogueType.SystemMessage)
             {
-                // 실제 구현 시 캐릭터 스프라이트를 로드하고 DOTween으로 페이드인/아웃 연출
-                // m_centerCharacterImage.sprite = ...
+                FadeOutImage(m_leftCharacterImage);
+                FadeOutImage(m_centerCharacterImage);
+                FadeOutImage(m_rightCharacterImage);
+                return;
+            }
+
+            CharacterSpriteMap matchedMap = default;
+            bool isFound = false;
+
+            if (m_characterSpriteMaps != null)
+            {
+                for (int i = 0; i < m_characterSpriteMaps.Count; i++)
+                {
+                    if (m_characterSpriteMaps[i].characterName == dialogue.SpeakerName)
+                    {
+                        matchedMap = m_characterSpriteMaps[i];
+                        isFound = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isFound)
+            {
+                FadeOutImage(m_leftCharacterImage);
+                FadeOutImage(m_centerCharacterImage);
+                FadeOutImage(m_rightCharacterImage);
+                return;
+            }
+
+            Image targetImage = null;
+            if (matchedMap.isLeftPlacement)
+            {
+                targetImage = m_leftCharacterImage;
+                FadeOutImage(m_rightCharacterImage);
+                FadeOutImage(m_centerCharacterImage);
+            }
+            else
+            {
+                targetImage = m_rightCharacterImage;
+                FadeOutImage(m_leftCharacterImage);
+                FadeOutImage(m_centerCharacterImage);
+            }
+
+            if (targetImage != null)
+            {
+                if (matchedMap.sprite != null)
+                {
+                    targetImage.sprite = matchedMap.sprite;
+                    FadeInImage(targetImage);
+                }
+            }
+        }
+
+        private void InitImage(Image image)
+        {
+            if (image != null)
+            {
+                Color c = image.color;
+                c.a = 0f;
+                image.color = c;
+                image.gameObject.SetActive(false);
+            }
+        }
+
+        private void FadeInImage(Image image)
+        {
+            if (image != null)
+            {
+                image.gameObject.SetActive(true);
+                image.DOKill();
+                image.DOFade(1f, 0.3f);
+            }
+        }
+
+        private void FadeOutImage(Image image)
+        {
+            if (image != null)
+            {
+                image.DOKill();
+                image.DOFade(0f, 0.3f).OnComplete(() =>
+                {
+                    image.gameObject.SetActive(false);
+                });
             }
         }
 

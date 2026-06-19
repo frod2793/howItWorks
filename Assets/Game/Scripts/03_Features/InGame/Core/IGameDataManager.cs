@@ -23,5 +23,6 @@ namespace Features.InGame
         List<BranchMatrixDTO> GetBranchMatrix();
         List<SubplotDTO> GetSubplots();
         List<LoopVariationDTO> GetLoopVariations();
+        List<ChoiceTriggerDTO> GetChoiceTriggers();
     }
 }

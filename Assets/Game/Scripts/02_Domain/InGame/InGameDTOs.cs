@@ -258,4 +258,39 @@ namespace Domain.InGame
         public string narrativeTheme;
         public List<string> loopModifiers;
     }
+
+    [Serializable]
+    public class ChoiceResultDTO
+    {
+        public int NextDialogueIndex;
+        public int CatoDelta;
+        public int MonitoringDelta;
+        public int CuriosityDelta;
+        public int ConfusionDelta;
+        public int FearDelta;
+        public int SadnessDelta;
+        public int JoyDelta;
+        public string FeedbackMessage;
+        public string ItemRewardKey;
+    }
+
+    [Serializable]
+    public class GameChoiceDTO
+    {
+        public int ChoiceId;
+        public string Title;
+        public string Subtitle;
+        public string Description;
+        public string Condition;
+        public bool IsLocked;
+        public string ColorType;
+        public ChoiceResultDTO Result;
+    }
+
+    [Serializable]
+    public class ChoiceTriggerDTO
+    {
+        public int TriggerDialogueIndex;
+        public List<GameChoiceDTO> Choices;
+    }
 }

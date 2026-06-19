@@ -1,0 +1,190 @@
+[
+  {
+    "TriggerDialogueIndex": 49,
+    "Choices": [
+      {
+        "ChoiceId": 101,
+        "Title": "시선을 피한다",
+        "Subtitle": "AVOID",
+        "Description": "...아무것도 아니야.",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Blue",
+        "Result": {
+          "NextDialogueIndex": 50,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "주인공이 시선을 돌린다. 주머니에서 카토를 꺼낸다. 아직 낮이라 먹으면 안 된다. 잠시 들고 있다가 다시 넣는다.\n주인공: \"...아무것도 아니야.\"",
+          "ItemRewardKey": ""
+        }
+      },
+      {
+        "ChoiceId": 102,
+        "Title": "고개를 끄덕인다",
+        "Subtitle": "NOD",
+        "Description": "...이건 뭐지.",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Yellow",
+        "Result": {
+          "NextDialogueIndex": 50,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 1,
+          "ConfusionDelta": 1,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "주인공이 어색하게 고개를 끄덕인다. 노인이 미소를 짓는다. 주인공이 얼어붙는다.\n주인공: \"...이건 뭐지.\"",
+          "ItemRewardKey": ""
+        }
+      }
+    ]
+  },
+  {
+    "TriggerDialogueIndex": 55,
+    "Choices": [
+      {
+        "ChoiceId": 201,
+        "Title": "받는다",
+        "Subtitle": "ACCEPT",
+        "Description": "짚 인형을 수락한다. (인벤토리 보존)",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Yellow",
+        "Result": {
+          "NextDialogueIndex": 56,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 1,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "[시스템] 짚 인형을 획득했습니다. (인벤토리에 추가됨)",
+          "ItemRewardKey": "ITEM_STRAW_DOLL"
+        }
+      },
+      {
+        "ChoiceId": 202,
+        "Title": "뒤로 물러난다",
+        "Subtitle": "REFUSE",
+        "Description": "인형을 받지 않고 뒤돌아선다.",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Gray",
+        "Result": {
+          "NextDialogueIndex": 56,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "주인공이 뒤로 물러난다. 노인이 인형을 조용히 내려놓는다. 표정이 바뀌지 않는다.",
+          "ItemRewardKey": ""
+        }
+      }
+    ]
+  },
+  {
+    "TriggerDialogueIndex": 58,
+    "Choices": [
+      {
+        "ChoiceId": 301,
+        "Title": "카토를 먹는다",
+        "Subtitle": "TAKE CATO",
+        "Description": "약효를 받으며 감정을 억제한다.",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Blue",
+        "Result": {
+          "NextDialogueIndex": 65,
+          "CatoDelta": -1,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "[시스템] 카토를 복용했습니다. 마음의 동요가 가라앉고 편안해집니다. 꿈을 꾸지 않고 아침이 밝아옵니다.",
+          "ItemRewardKey": ""
+        }
+      },
+      {
+        "ChoiceId": 302,
+        "Title": "카토를 내려놓는다",
+        "Subtitle": "REFUSE CATO",
+        "Description": "약을 숨긴다. (꿈 시퀀스 진입)",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Orange",
+        "Result": {
+          "NextDialogueIndex": 59,
+          "CatoDelta": 0,
+          "MonitoringDelta": 1,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "[시스템] 카토를 거부하고 베개 밑에 숨겼습니다. 감시도가 증가합니다. 무의식의 따뜻한 빛 속으로 전이됩니다.",
+          "ItemRewardKey": ""
+        }
+      }
+    ]
+  },
+  {
+    "TriggerDialogueIndex": 73,
+    "Choices": [
+      {
+        "ChoiceId": 401,
+        "Title": "학교로 간다",
+        "Subtitle": "GO TO SCHOOL",
+        "Description": "규정에 맞춰 복귀한다. (루프 반복)",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Gray",
+        "Result": {
+          "NextDialogueIndex": 0,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 0,
+          "FearDelta": 0,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "[시스템] 결국 줄에 합류하여 학교로 돌아갑니다. 그러나 이탈에 대한 열망이 밤마다 싹트기 시작합니다. (씬 처음으로 리다이렉트)",
+          "ItemRewardKey": ""
+        }
+      },
+      {
+        "ChoiceId": 402,
+        "Title": "야만인 구역으로 간다",
+        "Subtitle": "ESCAPE",
+        "Description": "처음으로 규칙에서 완전히 이탈한다.",
+        "Condition": "any",
+        "IsLocked": false,
+        "ColorType": "Yellow",
+        "Result": {
+          "NextDialogueIndex": 74,
+          "CatoDelta": 0,
+          "MonitoringDelta": 0,
+          "CuriosityDelta": 0,
+          "ConfusionDelta": 1,
+          "FearDelta": 2,
+          "SadnessDelta": 0,
+          "JoyDelta": 0,
+          "FeedbackMessage": "[시스템] 최초의 규칙 위반. 주인공은 도시를 등지고 황야를 향해 걷기 시작합니다.",
+          "ItemRewardKey": ""
+        }
+      }
+    ]
+  }
+]
