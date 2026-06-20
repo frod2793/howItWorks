@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using VContainer;
-using Domain.InGame;
 
 namespace Features.InGame
 {
@@ -11,7 +11,7 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_sceneTitleText;
         [SerializeField] private TextMeshProUGUI m_locationText;
         [SerializeField] private TextMeshProUGUI m_playthroughText;
-        [SerializeField] private UnityEngine.UI.Button m_menuButton;
+        [SerializeField] private Button m_menuButton;
 
         private ISceneInfoViewModel m_viewModel;
 
@@ -19,7 +19,7 @@ namespace Features.InGame
         public void Construct(ISceneInfoViewModel viewModel)
         {
             m_viewModel = viewModel;
-            m_viewModel.OnSceneInfoChanged += UpdateSceneInfo;
+            m_viewModel.OnSceneInfoUpdated += UpdateSceneInfo;
         }
 
         private void Start()
@@ -46,21 +46,26 @@ namespace Features.InGame
             }
         }
 
-        private void UpdateSceneInfo(SceneInfoDTO info)
+        private void UpdateSceneInfo()
         {
+            if (m_viewModel == null)
+            {
+                return;
+            }
+
             if (m_sceneTitleText != null)
             {
-                m_sceneTitleText.text = $"{info.ActName} · 씬 {info.SceneNumber} — {info.SceneTitle}";
+                m_sceneTitleText.text = m_viewModel.DisplaySceneTitle;
             }
 
             if (m_locationText != null)
             {
-                m_locationText.text = $"{info.Location} · {info.TimeOfDay}";
+                m_locationText.text = m_viewModel.DisplayLocation;
             }
 
             if (m_playthroughText != null)
             {
-                m_playthroughText.text = $"{info.Playthrough}회차";
+                m_playthroughText.text = m_viewModel.DisplayPlaythrough;
             }
         }
 
@@ -76,7 +81,7 @@ namespace Features.InGame
         {
             if (m_viewModel != null)
             {
-                m_viewModel.OnSceneInfoChanged -= UpdateSceneInfo;
+                m_viewModel.OnSceneInfoUpdated -= UpdateSceneInfo;
             }
         }
     }

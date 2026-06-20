@@ -273,3 +273,35 @@ public class ChoiceTriggerDTO
 ---
 
 본 상세 작업 내역은 "HowItWorks" 프로젝트의 핵심 연출 및 분기 확장 데이터 관리 표준으로 활용되며, 어떠한 소스 코드 수정 없이도 신규 분기를 추가할 수 있는 무결한 기초 구조를 가집니다.
+
+---
+
+## 6. 추가 시스템 개선 내역 (2026-06-20 작업)
+
+### 6.1. 인트로 스킵 제어 아키텍처 개선 (DI 주입 전환)
+- **기존 문제**: 인스펙터의 설정에 무관하게 항상 인트로 스킵이 발생하던 하드코딩 논리 오류(`m_skipIntro = true;`)가 존재했습니다.
+- **해결 방안**: 스킵 여부 제어권을 최상위 DI 계층인 `InGameLifetimeScope`로 이전하였습니다.
+  - **`IIntroViewModel.cs`**: `bool SkipIntro { get; }` 읽기 전용 프로퍼티를 인터페이스에 노출했습니다.
+  - **`IntroViewModel.cs`**: 생성자로 `bool skipIntro` 값을 주입받아 읽기 전용 속성 `SkipIntro`에 바인딩했습니다.
+  - **`IntroView.cs`**: 하드코딩을 제거하고 뷰모델로부터 이 스킵 설정을 주입받아 동기화하였습니다 (`m_skipIntro = viewModel.SkipIntro;`).
+  - **`InGameLifetimeScope.cs`**: `[SerializeField] private bool m_skipIntro = true;` 직렬화 필드를 추가하여 뷰모델 등록 시 설정값을 파라미터로 넘겨주도록 변경하였습니다.
+
+### 6.2. MVVM 결합도 리팩토링 (씬 정보 뷰 단방향 바인딩)
+- **기존 문제**: `InGameSceneInfoView`가 `OnSceneInfoChanged(SceneInfoDTO)` 이벤트를 통해 `SceneInfoDTO` 모델/데이터 구조를 직접 구독하고, UI 텍스트 문자열 가공을 뷰(View) 내부에서 직접 처리하고 있어 MVVM 의존성 분리 원칙에 위배되었습니다.
+- **해결 방안**:
+  - **`ISceneInfoViewModel.cs`**: `event Action OnSceneInfoUpdated;` 이벤트와 `DisplaySceneTitle`, `DisplayLocation`, `DisplayPlaythrough` 가공 속성을 선언했습니다.
+  - **`SceneInfoViewModel.cs`**: `UpdateSceneInfo(SceneInfoDTO)` 호출 시 UI에 표현될 문자열 포맷팅을 미리 가공하여 속성에 저장하고 `OnSceneInfoUpdated` 이벤트를 호출하도록 책임을 가져갔습니다.
+  - **`InGameSceneInfoView.cs`**: `OnSceneInfoUpdated` 이벤트를 구독하여 매개변수 없이 뷰모델의 가공 속성을 단방향 바인딩하여 UI를 갱신합니다. 이로써 뷰의 모델 DTO 직접 참조를 완전히 제거했습니다.
+
+### 6.3. VContainer 생명주기 및 의존성 최적화
+- **기존 문제**: 뷰가 인트로 종료 후 다이얼로그 시스템 구동을 위해 외부에 직접 결합해 있거나 명확한 중개 주체가 없었습니다.
+- **해결 방안**: `InGameLifetimeScope.Start()`에서 `IIntroViewModel.OnIntroFinished` 이벤트를 구독하여 인트로가 종료되는 시점에 `DialogueFlowController.StartDialogueFlowAsync().Forget()`을 비동기 실행하도록 제어 흐름을 중개했습니다.
+- **using 최적화**: C# 파일 내에서 완전한 수식 네임스페이스 경로(예: `UnityEngine.UI.Button`)의 반복을 피하고 파일 최상단에 `using UnityEngine.UI;`를 명시하며, `System.Exception` -> `Exception` 등으로 코드를 최적화하고 가독성을 높였습니다.
+
+### 6.4. 플레이모드 통합 테스트 및 어셈블리 빌드 종속성 해결
+- **종속성 격리**: `DOTween` 및 `EasyTransitions`가 어셈블리 정의 파일(`.asmdef`) 없이 배치되어 커스텀 테스트 어셈블리(`Tests.asmdef`)에서 참조가 불가능한 문제를 해결하기 위해, `DOTween.Modules.asmdef` 및 `easytransitions.asmdef` 등을 신규 생성하고 `Game.asmdef` 및 `Tests.asmdef` 간의 참조 계층을 명확히 설정했습니다.
+- **통합 테스트 작성 (`IntegrationTest.cs`)**:
+  - 타이틀 씬 시작 -> 새 게임 버튼 클릭 및 로드 검증 -> 인트로 화면 스킵 클릭 -> 인게임 다이얼로그 진입 -> 49번/55번/58번 선택지 응답 및 스탯 변화 검증 -> 인벤토리 내 `ITEM_STRAW_DOLL` (짚 인형) 획득 정합성 검증까지의 플레이모드 통합 시나리오 테스트를 통과시켰습니다.
+
+### 6.5. 기능 명세서 작성
+- 프로젝트 에이전트 문서폴더 하위에 [functional_spec.md](file:///e:/Unity_workSpace/Projects/howItWorks/.agents/documents/functional_spec.md)를 생성 및 작성하여 타이틀, 인트로 스킵, 다이얼로그 감정 스탯, 선택지 분기, 설정창의 세부 동작 메커니즘을 명세화했습니다.

@@ -29,7 +29,11 @@ namespace Features.InGame
     public interface ISceneInfoViewModel
     {
         event Action<SceneInfoDTO> OnSceneInfoChanged;
+        event Action OnSceneInfoUpdated;
         event Action OnRequestSettings;
+        string DisplaySceneTitle { get; }
+        string DisplayLocation { get; }
+        string DisplayPlaythrough { get; }
         void UpdateSceneInfo(SceneInfoDTO info);
         void RequestSettings();
     }

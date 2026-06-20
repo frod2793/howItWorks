@@ -12,6 +12,7 @@ namespace Features.InGame
         private readonly ISceneInfoViewModel m_sceneInfoVM;
         private readonly ISidePanelViewModel m_sidePanelVM;
         private readonly IGameDataManager m_dataManager;
+        private readonly IInGameInventorySystem m_inventorySystem;
         private List<Domain.InGame.DialogueLineDTO> m_loadedDialogues;
         private int m_currentDialogueIndex = 0;
         private SidePanelDTO m_currentSidePanelData;
@@ -23,12 +24,14 @@ namespace Features.InGame
             ISceneInfoViewModel sceneInfoVM, 
             ISidePanelViewModel sidePanelVM, 
             IGameDataManager dataManager,
+            IInGameInventorySystem inventorySystem,
             int startDialogueIndex)
         {
             m_dialogueVM = dialogueVM;
             m_sceneInfoVM = sceneInfoVM;
             m_sidePanelVM = sidePanelVM;
             m_dataManager = dataManager;
+            m_inventorySystem = inventorySystem;
             m_startDialogueIndex = startDialogueIndex;
             m_dialogueVM.OnNextRequested += PlayNextDialogue;
             m_dialogueVM.OnChoiceSelected += HandleChoiceSelected;
@@ -216,6 +219,30 @@ namespace Features.InGame
                 m_currentSidePanelData.Sadness += result.SadnessDelta;
                 m_currentSidePanelData.Joy += result.JoyDelta;
                 m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
+
+                if (string.IsNullOrEmpty(result.ItemRewardKey) == false)
+                {
+                    if (m_inventorySystem != null)
+                    {
+                        var allInventoryTemplates = m_dataManager.GetInventory();
+                        InventoryItemDTO targetItem = null;
+                        if (allInventoryTemplates != null)
+                        {
+                            for (int i = 0; i < allInventoryTemplates.Count; i++)
+                            {
+                                if (allInventoryTemplates[i].itemId == result.ItemRewardKey)
+                                {
+                                    targetItem = allInventoryTemplates[i];
+                                    break;
+                                }
+                            }
+                        }
+                        if (targetItem != null)
+                        {
+                            m_inventorySystem.AddItem(targetItem);
+                        }
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(result.FeedbackMessage))
                 {

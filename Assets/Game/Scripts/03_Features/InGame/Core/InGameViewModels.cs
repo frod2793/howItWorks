@@ -93,13 +93,30 @@ namespace Features.InGame
     public class SceneInfoViewModel : ISceneInfoViewModel
     {
         public event Action<SceneInfoDTO> OnSceneInfoChanged;
+        public event Action OnSceneInfoUpdated;
         public event Action OnRequestSettings;
+
+        public string DisplaySceneTitle { get; private set; } = string.Empty;
+        public string DisplayLocation { get; private set; } = string.Empty;
+        public string DisplayPlaythrough { get; private set; } = string.Empty;
 
         public void UpdateSceneInfo(SceneInfoDTO info)
         {
+            if (info != null)
+            {
+                DisplaySceneTitle = $"{info.ActName} · 씬 {info.SceneNumber} — {info.SceneTitle}";
+                DisplayLocation = $"{info.Location} · {info.TimeOfDay}";
+                DisplayPlaythrough = $"{info.Playthrough}회차";
+            }
+
             if (OnSceneInfoChanged != null)
             {
                 OnSceneInfoChanged.Invoke(info);
+            }
+
+            if (OnSceneInfoUpdated != null)
+            {
+                OnSceneInfoUpdated.Invoke();
             }
         }
 

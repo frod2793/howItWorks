@@ -9,6 +9,7 @@ public class IntroViewModel : IIntroViewModel
 {
     #region 내부 필드
     private readonly IntroStoryDataDTO m_storyData;
+    private readonly bool m_skipIntro;
     private int m_currentIndex = -1;
     #endregion
 
@@ -20,6 +21,7 @@ public class IntroViewModel : IIntroViewModel
     public string CurrentSpeaker => m_currentIndex >= 0 ? m_storyData.Steps[m_currentIndex].Speaker : string.Empty;
     public string CurrentContent => m_currentIndex >= 0 ? m_storyData.Steps[m_currentIndex].Content : string.Empty;
     public bool IsLastStep => m_currentIndex >= m_storyData.Steps.Count - 1;
+    public bool SkipIntro => m_skipIntro;
     public float TypingSpeed
     {
         get
@@ -40,9 +42,10 @@ public class IntroViewModel : IIntroViewModel
     /// [설명]: 뷰모델 생성 시 스토리 데이터를 주입받습니다.
     /// </summary>
     /// <param name="storyData">로드된 인트로 스토리 DTO</param>
-    public IntroViewModel(IntroStoryDataDTO storyData)
+    public IntroViewModel(IntroStoryDataDTO storyData, bool skipIntro)
     {
         m_storyData = storyData;
+        m_skipIntro = skipIntro;
     }
 
     #region 공개 메서드
@@ -53,10 +56,7 @@ public class IntroViewModel : IIntroViewModel
     {
         if (m_storyData == null || m_storyData.Steps.Count == 0)
         {
-            if (OnIntroFinished != null)
-            {
-                OnIntroFinished.Invoke();
-            }
+            OnIntroFinished?.Invoke();
             return;
         }
 
@@ -72,17 +72,11 @@ public class IntroViewModel : IIntroViewModel
 
         if (m_currentIndex < m_storyData.Steps.Count)
         {
-            if (OnStoryChanged != null)
-            {
-                OnStoryChanged.Invoke(CurrentSpeaker, CurrentContent);
-            }
+            OnStoryChanged?.Invoke(CurrentSpeaker, CurrentContent);
         }
         else
         {
-            if (OnIntroFinished != null)
-            {
-                OnIntroFinished.Invoke();
-            }
+            OnIntroFinished?.Invoke();
         }
     }
 
@@ -91,9 +85,14 @@ public class IntroViewModel : IIntroViewModel
     /// </summary>
     public void RequestSkip()
     {
-        if (OnSkipRequested != null)
+        OnSkipRequested?.Invoke();
+    }
+
+    public void FinishIntro()
+    {
+        if (OnIntroFinished != null)
         {
-            OnSkipRequested.Invoke();
+            OnIntroFinished.Invoke();
         }
     }
     #endregion

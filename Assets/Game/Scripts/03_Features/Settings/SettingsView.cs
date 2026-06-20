@@ -373,6 +373,7 @@ namespace Features.Settings
 
         public void func_Open()
         {
+            gameObject.SetActive(true);
             if (m_settingsPanel != null)
             {
                 m_settingsPanel.SetActive(true);
@@ -381,6 +382,7 @@ namespace Features.Settings
 
         public void func_Close()
         {
+            gameObject.SetActive(false);
             if (m_settingsPanel != null)
             {
                 m_settingsPanel.SetActive(false);

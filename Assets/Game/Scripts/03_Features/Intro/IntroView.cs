@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -19,7 +20,6 @@ public class IntroView : MonoBehaviour
     [SerializeField] private bool m_skipIntro = false;
 
     private IIntroViewModel m_viewModel;
-    private DialogueFlowController m_dialogueFlowController;
     private ISceneLoader m_sceneLoader;
     private ISoundService m_soundService;
     private bool m_canNextStep = false;
@@ -29,11 +29,9 @@ public class IntroView : MonoBehaviour
     [Inject]
     public void Construct(
         IIntroViewModel viewModel, 
-        DialogueFlowController dialogueFlowController, 
         ISceneLoader sceneLoader = null, 
         ISoundService soundService = null)
     {
-        m_dialogueFlowController = dialogueFlowController;
         Setup(viewModel.TypingSpeed);
         Initialize(viewModel, sceneLoader, soundService);
     }
@@ -49,14 +47,13 @@ public class IntroView : MonoBehaviour
 
     public void Initialize(IIntroViewModel viewModel, ISceneLoader sceneLoader = null, ISoundService soundService = null)
     {
-        m_skipIntro = true;
-
         if (viewModel == null)
         {
             return;
         }
 
         m_viewModel = viewModel;
+        m_skipIntro = viewModel.SkipIntro;
         m_sceneLoader = sceneLoader;
         m_soundService = soundService;
 
@@ -97,7 +94,7 @@ public class IntroView : MonoBehaviour
 
     private async UniTaskVoid StartIntroSequence()
     {
-        await UniTask.Delay(System.TimeSpan.FromSeconds(1.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
         m_viewModel.StartIntro();
     }
 
@@ -185,7 +182,7 @@ public class IntroView : MonoBehaviour
 
         try
         {
-            await UniTask.Delay(System.TimeSpan.FromSeconds(2.0f), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(2.0f), cancellationToken: token);
 
             if (m_contentText != null)
             {
@@ -194,7 +191,7 @@ public class IntroView : MonoBehaviour
 
             ProceedNext();
         }
-        catch (System.OperationCanceledException)
+        catch (OperationCanceledException)
         {
         }
     }
@@ -230,9 +227,9 @@ public class IntroView : MonoBehaviour
         
         gameObject.SetActive(false);
 
-        if (m_dialogueFlowController != null)
+        if (m_viewModel != null)
         {
-            m_dialogueFlowController.StartDialogueFlowAsync().Forget();
+            m_viewModel.FinishIntro();
         }
     }
 

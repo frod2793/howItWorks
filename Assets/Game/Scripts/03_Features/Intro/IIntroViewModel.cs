@@ -14,8 +14,10 @@ public interface IIntroViewModel
     string CurrentContent { get; }
     bool IsLastStep { get; }
     float TypingSpeed { get; }
+    bool SkipIntro { get; }
 
     void StartIntro();
     void HandleNext();
+    void FinishIntro();
 }
 #endregion

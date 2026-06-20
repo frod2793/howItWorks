@@ -12,5 +12,12 @@
     "isClue": false,
     "description": "과거의 기억이 담겨 있는 희미한 단체 사진.",
     "connectedSubplotId": ""
+  },
+  {
+    "itemId": "ITEM_STRAW_DOLL",
+    "name": "짚 인형",
+    "isClue": true,
+    "description": "노인이 준 낡은 짚 인형. 왠지 따뜻한 기운이 느껴진다.",
+    "connectedSubplotId": "sub_straw_doll"
   }
 ]

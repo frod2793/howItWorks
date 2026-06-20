@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using VContainer;
 using VContainer.Unity;
 using Features.InGame;
@@ -10,6 +12,7 @@ public class InGameLifetimeScope : LifetimeScope
 {
     [Header("테스트 설정")]
     [SerializeField] private int m_startDialogueIndex = 0;
+    [SerializeField] private bool m_skipIntro = true;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -25,7 +28,7 @@ public class InGameLifetimeScope : LifetimeScope
         {
             var provider = container.Resolve<IntroDataProvider>();
             var data = provider.LoadIntroData();
-            return new IntroViewModel(data);
+            return new IntroViewModel(data, m_skipIntro);
         }, Lifetime.Scoped).As<IIntroViewModel>();
 
         builder.RegisterComponentInHierarchy<IntroView>();
@@ -73,7 +76,7 @@ public class InGameLifetimeScope : LifetimeScope
         {
             settingsVM = Container.Resolve<ISettingsViewModel>();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[InGameLifetimeScope] ISettingsViewModel 해결 실패: {e.Message}");
         }
@@ -89,7 +92,7 @@ public class InGameLifetimeScope : LifetimeScope
         {
             sceneInfoVM = Container.Resolve<ISceneInfoViewModel>();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[InGameLifetimeScope] ISceneInfoViewModel 해결 실패: {e.Message}");
         }
@@ -107,7 +110,7 @@ public class InGameLifetimeScope : LifetimeScope
         {
             backlogVM = Container.Resolve<IBacklogViewModel>();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[InGameLifetimeScope] IBacklogViewModel 해결 실패: {e.Message}");
         }
@@ -123,7 +126,7 @@ public class InGameLifetimeScope : LifetimeScope
         {
             dialogueVM = Container.Resolve<IDialogueViewModel>();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[InGameLifetimeScope] IDialogueViewModel 해결 실패: {e.Message}");
         }
@@ -133,6 +136,34 @@ public class InGameLifetimeScope : LifetimeScope
             dialogueVM.OnRequestBacklog += () =>
             {
                 backlogView.func_Open();
+            };
+        }
+
+        IIntroViewModel introVM = null;
+        try
+        {
+            introVM = Container.Resolve<IIntroViewModel>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] IIntroViewModel 해결 실패: {e.Message}");
+        }
+
+        DialogueFlowController dialogueFlowController = null;
+        try
+        {
+            dialogueFlowController = Container.Resolve<DialogueFlowController>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] DialogueFlowController 해결 실패: {e.Message}");
+        }
+
+        if (introVM != null && dialogueFlowController != null)
+        {
+            introVM.OnIntroFinished += () =>
+            {
+                dialogueFlowController.StartDialogueFlowAsync().Forget();
             };
         }
     }
