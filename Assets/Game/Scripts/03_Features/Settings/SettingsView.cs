@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using VContainer;
 
 namespace Features.Settings
 {
@@ -42,9 +43,16 @@ namespace Features.Settings
         [SerializeField] private Button m_applyButton;
 
         private ISettingsViewModel m_viewModel;
+        private ISoundService m_soundService;
         private Button[] m_tabButtonsArray;
         private TMP_Text[] m_tabTextsArray;
         private Image[] m_tabImagesArray;
+
+        [Inject]
+        public void Construct(ISoundService soundService)
+        {
+            m_soundService = soundService;
+        }
 
         public void Initialize(ISettingsViewModel viewModel)
         {
@@ -222,31 +230,55 @@ namespace Features.Settings
 
         public void func_OnAudioTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(0);
         }
 
         public void func_OnTextTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(1);
         }
 
         public void func_OnDisplayTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(2);
         }
 
         public void func_OnAccessibilityTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(3);
         }
 
         public void func_OnSaveTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(4);
         }
 
         public void func_OnInputTabButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             SwitchTab(5);
         }
 
@@ -292,6 +324,10 @@ namespace Features.Settings
 
         public void func_OnRestoreDefaultButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             if (m_viewModel != null)
             {
                 m_viewModel.ResetToDefault();
@@ -300,6 +336,10 @@ namespace Features.Settings
 
         public void func_OnCancelButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             if (m_viewModel != null)
             {
                 m_viewModel.CancelSettings();
@@ -308,6 +348,10 @@ namespace Features.Settings
 
         public void func_OnApplyButtonClicked()
         {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
             if (m_viewModel != null)
             {
                 m_viewModel.ApplySettings();
@@ -378,6 +422,11 @@ namespace Features.Settings
             {
                 m_settingsPanel.SetActive(true);
             }
+
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.MenuOpen);
+            }
         }
 
         public void func_Close()
@@ -386,6 +435,11 @@ namespace Features.Settings
             if (m_settingsPanel != null)
             {
                 m_settingsPanel.SetActive(false);
+            }
+
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.MenuClose);
             }
         }
     }

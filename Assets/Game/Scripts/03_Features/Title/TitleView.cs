@@ -23,6 +23,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnNewGameButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.NewGame);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.NewGame();
@@ -31,6 +35,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnLoadGameButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.LoadGame();
@@ -39,6 +47,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnStoryTreeButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.OpenStoryTree();
@@ -47,6 +59,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnArchiveButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.OpenArchive();
@@ -55,6 +71,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnSettingsButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.OpenSettings();
@@ -63,6 +83,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnCreditsButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.OpenCredits();
@@ -71,6 +95,10 @@ public class TitleView : MonoBehaviour
 
     public void func_OnQuitButtonClicked()
     {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
         if (m_viewModel != null)
         {
             m_viewModel.QuitGame();

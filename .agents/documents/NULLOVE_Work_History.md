@@ -300,8 +300,20 @@ public class ChoiceTriggerDTO
 
 ### 6.4. 플레이모드 통합 테스트 및 어셈블리 빌드 종속성 해결
 - **종속성 격리**: `DOTween` 및 `EasyTransitions`가 어셈블리 정의 파일(`.asmdef`) 없이 배치되어 커스텀 테스트 어셈블리(`Tests.asmdef`)에서 참조가 불가능한 문제를 해결하기 위해, `DOTween.Modules.asmdef` 및 `easytransitions.asmdef` 등을 신규 생성하고 `Game.asmdef` 및 `Tests.asmdef` 간의 참조 계층을 명확히 설정했습니다.
+  - **EasyTransitions 에디터 스크립트 빌드 에러 해결**: `EasyTransitions.asmdef` 도입 후 플레이어 빌드 시 에디터 스크립트가 포함되어 발생하던 `CS0246` 에러(UnityEditor 참조 유실)를 막기 위해, `Assets/EasyTransitions/Editor/EasyTransitions.Editor.asmdef`를 생성하여 해당 영역을 **Editor 전용 플랫폼**으로 격리 및 분리 처리했습니다.
+  - **Game 에디터 스크립트 빌드 에러 해결**: `Game.asmdef` 도입 후 플레이어 빌드 시 `Editor/` 폴더 하위의 에디터 전용 스크립트(`PopupViewEditor.cs` 등)가 빌드 대상에 포함되어 `CS0246` 에러가 발생하는 문제를 감지하고, `Assets/Game/Scripts/Editor/Game.Editor.asmdef`를 신규 생성하여 **Editor 전용 플랫폼**으로 명확히 격리 분리했습니다.
 - **통합 테스트 작성 (`IntegrationTest.cs`)**:
   - 타이틀 씬 시작 -> 새 게임 버튼 클릭 및 로드 검증 -> 인트로 화면 스킵 클릭 -> 인게임 다이얼로그 진입 -> 49번/55번/58번 선택지 응답 및 스탯 변화 검증 -> 인벤토리 내 `ITEM_STRAW_DOLL` (짚 인형) 획득 정합성 검증까지의 플레이모드 통합 시나리오 테스트를 통과시켰습니다.
 
 ### 6.5. 기능 명세서 작성
 - 프로젝트 에이전트 문서폴더 하위에 [functional_spec.md](file:///e:/Unity_workSpace/Projects/howItWorks/.agents/documents/functional_spec.md)를 생성 및 작성하여 타이틀, 인트로 스킵, 다이얼로그 감정 스탯, 선택지 분기, 설정창의 세부 동작 메커니즘을 명세화했습니다.
+
+### 6.6. 사운드 확장성 개선 및 컴포넌트 기반 트리거 도입 (2026-06-20 추가 작업)
+- **상수 기반 사운드 키 관리 (`SoundKeys.cs` [NEW])**: 
+  - 문자열 하드코딩 리터럴을 걷어내고 컴파일 안전성을 확보하기 위해, BGM 및 SFX 자원 키값(`click`, `openMenu01`, `closeMenu01`, `newGameSample`)을 상수로 선언하는 정적 클래스 `SoundKeys`를 도입했습니다.
+- **선언적 클릭 사운드 트리거 (`UISoundTrigger.cs` [NEW])**:
+  - 개별 UI 뷰 스크립트에 매번 `ISoundService`를 주입하고 클릭 리스너를 수동 코딩하는 보일러플레이트 코드를 줄이기 위해, 버튼 클릭 시 자동으로 `ProjectLifetimeScope` 전역 컨테이너를 조회하여 지정 사운드를 재생하는 `UISoundTrigger` 컴포넌트를 구현했습니다.
+  - 이로써 디자인/기획 변경 시 코드 수정 없이 유니티 인스펙터 부착 및 키 설정 변경만으로 클릭 사운드 처리가 가능하게 확장성을 확보했습니다.
+- **주요 뷰 사운드 재생 연동 (`SettingsView.cs`, `TitleView.cs`, `InGameSceneInfoView.cs` [MODIFY])**:
+  - 설정창(`SettingsView`)의 활성화/비활성화 시점에 `MenuOpen`/`MenuClose` 전용 사운드가 재생되도록 이벤트를 묶고, 하단 액션 버튼들에 클릭음을 연동했습니다.
+  - 타이틀 씬(`TitleView`)의 "새 게임" 실행 핸들러에 `NewGame` 사운드를, 인게임 상단 메뉴 버튼에 `Click` 사운드를 각각 연동했습니다.
