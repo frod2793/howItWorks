@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using Features.InGame;
+using Domain.InGame;
 
 #region 뷰모델 (ViewModel)
 /// <summary>
@@ -9,6 +11,7 @@ public class TitleViewModel : ITitleViewModel
 {
     #region 내부 필드
     private readonly ISceneLoader m_sceneLoader;
+    private readonly IInGameSaveSystem m_saveSystem;
     #endregion
 
     #region 프로퍼티
@@ -17,12 +20,53 @@ public class TitleViewModel : ITitleViewModel
     /// </summary>
     public event Action<string> OnRequestPopup;
     public event Action OnRequestSettings;
+
+    public bool IsLoadGameActive
+    {
+        get
+        {
+            var saveData = m_saveSystem.LoadSessionData(0);
+            if (saveData != null)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public bool IsStoryTreeActive
+    {
+        get
+        {
+            var globalData = m_saveSystem.LoadGlobalProgress();
+            if (globalData != null && globalData.unlockedEndings != null && globalData.unlockedEndings.Count >= 1)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public string RecentEndingId
+    {
+        get
+        {
+            var globalData = m_saveSystem.LoadGlobalProgress();
+            if (globalData != null && globalData.unlockedEndings != null && globalData.unlockedEndings.Count > 0)
+            {
+                return globalData.unlockedEndings[globalData.unlockedEndings.Count - 1];
+            }
+            return string.Empty;
+        }
+    }
     #endregion
 
-    public TitleViewModel(ISceneLoader sceneLoader)
+    public TitleViewModel(ISceneLoader sceneLoader, IInGameSaveSystem saveSystem)
     {
         m_sceneLoader = sceneLoader;
+        m_saveSystem = saveSystem;
     }
+
 
     #region 공개 메서드
     public void NewGame()

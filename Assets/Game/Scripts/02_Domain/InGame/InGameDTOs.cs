@@ -93,6 +93,8 @@ namespace Domain.InGame
         public int playthroughCount;
         public List<string> unlockedEndings;
         public string currentAct;
+        public float totalPlayTimeSeconds;
+        public int archiveCount;
     }
 
     [Serializable]

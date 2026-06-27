@@ -6,6 +6,9 @@ using System;
 /// </summary>
 public interface ITitleViewModel
 {
+    bool IsLoadGameActive { get; }
+    bool IsStoryTreeActive { get; }
+    string RecentEndingId { get; }
     void NewGame();
     void LoadGame();
     void OpenSettings();
@@ -15,3 +18,4 @@ public interface ITitleViewModel
     void QuitGame();
 }
 #endregion
+

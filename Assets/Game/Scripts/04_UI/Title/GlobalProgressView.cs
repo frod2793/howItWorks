@@ -10,28 +10,7 @@ public class GlobalProgressView : MonoBehaviour
 
     private GlobalProgressViewModel m_viewModel;
 
-    private void Start()
-    {
-        if (m_viewModel == null)
-        {
-            GlobalProgressDTO mockDTO = new GlobalProgressDTO
-            {
-                PlayCount = 1,
-                AccumulatedTime = 9000f,
-                UnlockedEndings = 0,
-                TotalEndings = 9,
-                ArchiveCount = 8,
-                TotalArchives = 19,
-                SubplotCount = 0,
-                TotalSubplots = 5
-            };
 
-            GlobalProgressModel mockModel = new GlobalProgressModel(mockDTO);
-            GlobalProgressViewModel mockViewModel = new GlobalProgressViewModel(mockModel);
-
-            Initialize(mockViewModel);
-        }
-    }
 
     public void Initialize(GlobalProgressViewModel viewModel)
     {
