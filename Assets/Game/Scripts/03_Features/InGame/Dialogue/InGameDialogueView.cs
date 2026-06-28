@@ -155,6 +155,10 @@ namespace Features.InGame
                 {
                     m_speakerIcon.gameObject.SetActive(false);
                 }
+                if (m_contentText != null)
+                {
+                    m_contentText.text = "";
+                }
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
@@ -206,6 +210,10 @@ namespace Features.InGame
                     {
                         m_speakerIcon.gameObject.SetActive(true);
                     }
+                }
+                if (m_contentText != null)
+                {
+                    m_contentText.text = "";
                 }
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)

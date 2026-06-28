@@ -25,6 +25,9 @@ public class TypewriterEffect : MonoBehaviour
         }
 
         Stop();
+        tmpText.text = "";
+        tmpText.maxVisibleCharacters = 0;
+
         m_cts = new CancellationTokenSource();
         m_isTyping = true;
         
