@@ -22,15 +22,25 @@ namespace Features.InGame
         [Inject]
         public IInGameSaveSystem SaveSystem { get; set; }
 
-
+        private float m_autoPlayTimer;
+        private const float AutoPlayDelay = 2.5f;
 
         public void Start()
         {
             InitializeGameSession();
+            if (DialogueVM != null)
+            {
+                DialogueVM.OnChoiceSelected += HandleChoiceSelected;
+            }
         }
 
         public void InitializeGameSession()
         {
+            m_autoPlayTimer = 0f;
+            if (DialogueVM != null)
+            {
+                DialogueVM.IsAutoPlayActive = false;
+            }
             if (SaveSystem != null)
             {
                 SaveSystem.LoadSessionData(1);
@@ -54,11 +64,6 @@ namespace Features.InGame
         {
             if (DialogueVM != null)
             {
-                if (DialogueVM.IsFading)
-                {
-                    return;
-                }
-
                 if (DialogueVM.IsTyping)
                 {
                     DialogueVM.RequestSkip();
@@ -66,6 +71,7 @@ namespace Features.InGame
                 else
                 {
                     DialogueVM.RequestNext();
+                    m_autoPlayTimer = 0f;
                 }
             }
         }
@@ -74,7 +80,8 @@ namespace Features.InGame
         {
             if (DialogueVM != null)
             {
-                DialogueVM.IsAutoPlay = !DialogueVM.IsAutoPlay;
+                DialogueVM.IsAutoPlayActive = !DialogueVM.IsAutoPlayActive;
+                m_autoPlayTimer = 0f;
             }
         }
 
@@ -101,6 +108,29 @@ namespace Features.InGame
 
         public void Tick()
         {
+            if (DialogueVM != null && DialogueVM.IsAutoPlayActive)
+            {
+                if (DialogueVM.IsTyping || DialogueVM.IsDisplayingChoices)
+                {
+                    m_autoPlayTimer = 0f;
+                }
+                else
+                {
+                    m_autoPlayTimer += Time.deltaTime;
+                    float dynamicDelay = AutoPlayDelay;
+                    if (DialogueVM.CurrentDialogue != null && !string.IsNullOrEmpty(DialogueVM.CurrentDialogue.Content))
+                    {
+                        dynamicDelay = Mathf.Clamp(1.5f + (DialogueVM.CurrentDialogue.Content.Length * 0.06f), 1.5f, 5.0f);
+                    }
+                    if (m_autoPlayTimer >= dynamicDelay)
+                    {
+                        Debug.Log($"[InGameOrchestrator] 오토플레이 대기 완료 ({dynamicDelay}초). 다음 대사를 요청합니다.");
+                        m_autoPlayTimer = 0f;
+                        DialogueVM.RequestNext();
+                    }
+                }
+            }
+
             if (Keyboard.current == null)
             {
                 return;
@@ -180,6 +210,16 @@ namespace Features.InGame
 
         public void Dispose()
         {
+            if (DialogueVM != null)
+            {
+                DialogueVM.IsAutoPlayActive = false;
+                DialogueVM.OnChoiceSelected -= HandleChoiceSelected;
+            }
+        }
+
+        private void HandleChoiceSelected(int choiceId)
+        {
+            m_autoPlayTimer = 0f;
         }
     }
 }

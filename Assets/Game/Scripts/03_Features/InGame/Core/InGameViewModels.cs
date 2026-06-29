@@ -14,29 +14,28 @@ namespace Features.InGame
         public event Action<List<DialogueChoiceDTO>> OnChoicesUpdated;
         public event Action<int> OnChoiceSelected;
         public event Action OnRequestBacklog;
-        public event Action<bool> OnAutoPlayChanged;
+        public event Action<bool> OnAutoPlayStatusChanged;
 
-        private bool m_isAutoPlay;
+        private bool m_isAutoPlayActive;
 
         public bool IsTyping { get; set; }
-        public bool IsFading { get; set; }
         public bool IsDisplayingChoices { get; private set; }
         public DialogueDTO CurrentDialogue { get; private set; }
 
-        public bool IsAutoPlay
+        public bool IsAutoPlayActive
         {
             get
             {
-                return m_isAutoPlay;
+                return m_isAutoPlayActive;
             }
             set
             {
-                if (m_isAutoPlay != value)
+                if (m_isAutoPlayActive != value)
                 {
-                    m_isAutoPlay = value;
-                    if (OnAutoPlayChanged != null)
+                    m_isAutoPlayActive = value;
+                    if (OnAutoPlayStatusChanged != null)
                     {
-                        OnAutoPlayChanged.Invoke(m_isAutoPlay);
+                        OnAutoPlayStatusChanged.Invoke(m_isAutoPlayActive);
                     }
                 }
             }

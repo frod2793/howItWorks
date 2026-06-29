@@ -944,4 +944,44 @@ public class IntegrationTest
         yield return null;
         Assert.IsFalse(saveLoadView.gameObject.activeSelf);
     }
+
+    [UnityTest]
+    public IEnumerator TestInGame_16_AutoplayWorkflow()
+    {
+        yield return LoadInGameScene();
+        InGameLifetimeScope scope = Object.FindFirstObjectByType<InGameLifetimeScope>();
+        Assert.IsNotNull(scope);
+        Assert.IsNotNull(scope.Container);
+
+        IDialogueViewModel dialogueVM = scope.Container.Resolve<IDialogueViewModel>();
+        Assert.IsNotNull(dialogueVM);
+
+        InGameDialogueView dialogueView = Object.FindFirstObjectByType<InGameDialogueView>();
+        Assert.IsNotNull(dialogueView);
+
+        dialogueView.func_OnAutoButtonClicked();
+        yield return null;
+
+        Assert.IsTrue(dialogueVM.IsAutoPlayActive, "[IntegrationTest] 뷰 버튼 클릭 시 뷰모델의 IsAutoPlayActive가 활성화되어야 합니다.");
+
+        DialogueFlowController controller = scope.Container.Resolve<DialogueFlowController>();
+        FieldInfo field = controller.GetType().GetField("m_currentDialogueIndex", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(field);
+
+        int initialIdx = (int)field.GetValue(controller);
+
+        float elapsed = 0f;
+        while (elapsed < 5f)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        int nextIdx = (int)field.GetValue(controller);
+        Assert.Greater(nextIdx, initialIdx, "[IntegrationTest] 오토플레이 활성화 시 시간 경과 후 대사가 자동으로 진행되어야 합니다.");
+
+        dialogueView.func_OnAutoButtonClicked();
+        yield return null;
+        Assert.IsFalse(dialogueVM.IsAutoPlayActive, "[IntegrationTest] 뷰 버튼 재클릭 시 뷰모델의 IsAutoPlayActive가 비활성화되어야 합니다.");
+    }
 }

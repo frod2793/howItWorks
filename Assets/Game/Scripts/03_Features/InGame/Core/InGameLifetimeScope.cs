@@ -31,7 +31,7 @@ public class InGameLifetimeScope : LifetimeScope
             return new IntroViewModel(data, m_skipIntro);
         }, Lifetime.Scoped).As<IIntroViewModel>();
 
-        builder.RegisterComponentInHierarchy<IntroView>();
+        RegisterComponentSafe<IntroView>(builder);
     }
 
     private void ConfigureInGame(IContainerBuilder builder)
@@ -54,18 +54,18 @@ public class InGameLifetimeScope : LifetimeScope
 
         builder.RegisterEntryPoint<InGameOrchestrator>().AsSelf().As<IInGameOrchestrator>();
 
-        builder.RegisterComponentInHierarchy<InGameDialogueView>();
-        builder.RegisterComponentInHierarchy<InGameMiniDialogueView>();
-        builder.RegisterComponentInHierarchy<InGameDialogueOptionsManager>();
-        builder.RegisterComponentInHierarchy<InGameSceneInfoView>();
-        builder.RegisterComponentInHierarchy<InGameSidePanelView>();
-        builder.RegisterComponentInHierarchy<InGameCharacterView>();
-        builder.RegisterComponentInHierarchy<SettingsView>();
-        builder.RegisterComponentInHierarchy<BacklogView>();
+        RegisterComponentSafe<InGameDialogueView>(builder);
+        RegisterComponentSafe<InGameMiniDialogueView>(builder);
+        RegisterComponentSafe<InGameDialogueOptionsManager>(builder);
+        RegisterComponentSafe<InGameSceneInfoView>(builder);
+        RegisterComponentSafe<InGameSidePanelView>(builder);
+        RegisterComponentSafe<InGameCharacterView>(builder);
+        RegisterComponentSafe<SettingsView>(builder);
+        RegisterComponentSafe<BacklogView>(builder);
 
         builder.Register<SaveLoadModel>(Lifetime.Scoped);
         builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-        builder.RegisterComponentInHierarchy<SaveLoadView>();
+        RegisterComponentSafe<SaveLoadView>(builder);
     }
 
     private void Start()
@@ -194,6 +194,19 @@ public class InGameLifetimeScope : LifetimeScope
         if (saveLoadView != null && saveLoadVM != null)
         {
             saveLoadView.Initialize(saveLoadVM);
+        }
+    }
+
+    private void RegisterComponentSafe<T>(IContainerBuilder builder) where T : MonoBehaviour
+    {
+        T component = UnityEngine.Object.FindAnyObjectByType<T>(UnityEngine.FindObjectsInactive.Include);
+        if (component != null)
+        {
+            builder.RegisterComponent(component);
+        }
+        else
+        {
+            builder.RegisterComponentInHierarchy<T>();
         }
     }
 }

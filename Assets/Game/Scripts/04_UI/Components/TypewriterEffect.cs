@@ -26,7 +26,7 @@ public class TypewriterEffect : MonoBehaviour
 
         Stop();
         tmpText.text = "";
-        tmpText.maxVisibleCharacters = 0;
+        tmpText.maxVisibleCharacters = 99999;
 
         m_cts = new CancellationTokenSource();
         m_isTyping = true;
@@ -36,16 +36,13 @@ public class TypewriterEffect : MonoBehaviour
             OnStartTyping.Invoke();
         }
 
-        tmpText.text = content;
-        tmpText.maxVisibleCharacters = 0;
-
         var delayTimeSpan = System.TimeSpan.FromSeconds(m_typingSpeed);
         
         try
         {
             for (int i = 1; i <= content.Length; i++)
             {
-                tmpText.maxVisibleCharacters = i;
+                tmpText.text = content.Substring(0, i);
                 
                 if (!char.IsWhiteSpace(content[i - 1]))
                 {
@@ -60,7 +57,7 @@ public class TypewriterEffect : MonoBehaviour
         }
         catch (System.OperationCanceledException)
         {
-            tmpText.maxVisibleCharacters = content.Length;
+            tmpText.text = content;
         }
         finally
         {
