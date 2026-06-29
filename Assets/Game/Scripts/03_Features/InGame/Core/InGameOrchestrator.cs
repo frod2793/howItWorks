@@ -22,9 +22,7 @@ namespace Features.InGame
         [Inject]
         public IInGameSaveSystem SaveSystem { get; set; }
 
-        private bool m_isAutoPlay;
-        private float m_autoPlayTimer;
-        private const float AutoPlayDelay = 2.5f;
+
 
         public void Start()
         {
@@ -33,9 +31,6 @@ namespace Features.InGame
 
         public void InitializeGameSession()
         {
-            m_isAutoPlay = false;
-            m_autoPlayTimer = 0f;
-            
             if (SaveSystem != null)
             {
                 SaveSystem.LoadSessionData(1);
@@ -59,6 +54,11 @@ namespace Features.InGame
         {
             if (DialogueVM != null)
             {
+                if (DialogueVM.IsFading)
+                {
+                    return;
+                }
+
                 if (DialogueVM.IsTyping)
                 {
                     DialogueVM.RequestSkip();
@@ -72,8 +72,10 @@ namespace Features.InGame
 
         public void ToggleAutoPlay()
         {
-            m_isAutoPlay = !m_isAutoPlay;
-            m_autoPlayTimer = 0f;
+            if (DialogueVM != null)
+            {
+                DialogueVM.IsAutoPlay = !DialogueVM.IsAutoPlay;
+            }
         }
 
         public void ToggleSkip(bool enable)
@@ -174,21 +176,10 @@ namespace Features.InGame
                     }
                 }
             }
-
-            if (m_isAutoPlay && DialogueVM != null && !DialogueVM.IsTyping && !DialogueVM.IsDisplayingChoices)
-            {
-                m_autoPlayTimer += Time.deltaTime;
-                if (m_autoPlayTimer >= AutoPlayDelay)
-                {
-                    m_autoPlayTimer = 0f;
-                    DialogueVM.RequestNext();
-                }
-            }
         }
 
         public void Dispose()
         {
-            m_isAutoPlay = false;
         }
     }
 }

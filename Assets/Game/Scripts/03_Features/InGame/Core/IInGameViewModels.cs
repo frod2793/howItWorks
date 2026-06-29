@@ -14,7 +14,10 @@ namespace Features.InGame
         event Action<List<DialogueChoiceDTO>> OnChoicesUpdated;
         event Action<int> OnChoiceSelected;
         event Action OnRequestBacklog;
+        event Action<bool> OnAutoPlayChanged;
         bool IsTyping { get; set; }
+        bool IsFading { get; set; }
+        bool IsAutoPlay { get; set; }
         bool IsDisplayingChoices { get; }
         DialogueDTO CurrentDialogue { get; }
         void DisplayDialogue(DialogueDTO dialogue);

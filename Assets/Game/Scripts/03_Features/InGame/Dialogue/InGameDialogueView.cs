@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,6 +6,7 @@ using VContainer;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Domain.InGame;
+using DG.Tweening;
 
 namespace Features.InGame
 {
@@ -22,9 +24,8 @@ namespace Features.InGame
 
         private Image m_backgroundImage;
         private IDialogueViewModel m_viewModel;
-
-        private bool m_isAutoMode = false;
         private CancellationTokenSource m_autoProceedCts;
+        private CancellationTokenSource m_dialogueChangeCts;
 
         [Inject]
         public void Construct(IDialogueViewModel viewModel)
@@ -32,6 +33,7 @@ namespace Features.InGame
             m_viewModel = viewModel;
             m_viewModel.OnDialogueUpdated += UpdateDialogue;
             m_viewModel.OnChoicesUpdated += HandleChoicesUpdated;
+            m_viewModel.OnAutoPlayChanged += SyncAutoPlayState;
 
             m_viewModel.OnSkipRequested += () =>
             {
@@ -55,36 +57,27 @@ namespace Features.InGame
         {
             if (m_viewModel != null)
             {
-                m_viewModel.RequestNext();
+                if (m_viewModel.IsFading)
+                {
+                    return;
+                }
+
+                if (m_viewModel.IsTyping)
+                {
+                    m_viewModel.RequestSkip();
+                }
+                else
+                {
+                    m_viewModel.RequestNext();
+                }
             }
         }
 
         public void func_OnAutoButtonClicked()
         {
-            if (m_autoButton != null)
+            if (m_viewModel != null)
             {
-                var image = m_autoButton.GetComponent<Image>();
-                if (image != null)
-                {
-                    if (!m_isAutoMode)
-                    {
-                        image.color = new Color(Random.value, Random.value, Random.value, 1f);
-                    }
-                    else
-                    {
-                        image.color = Color.white;
-                    }
-                }
-            }
-
-            m_isAutoMode = !m_isAutoMode;
-            if (m_isAutoMode)
-            {
-                StartAutoProceed().Forget();
-            }
-            else
-            {
-                CancelAutoProceed();
+                m_viewModel.IsAutoPlay = !m_viewModel.IsAutoPlay;
             }
         }
 
@@ -112,14 +105,22 @@ namespace Features.InGame
 
             try
             {
-                while (m_isAutoMode)
+                while (m_viewModel != null && m_viewModel.IsAutoPlay)
                 {
-                    await UniTask.WaitUntil(() => { return !m_viewModel.IsTyping; }, cancellationToken: token);
-                    await UniTask.Delay(System.TimeSpan.FromSeconds(2.0f), cancellationToken: token);
+                    await UniTask.WaitUntil(() => { return !m_viewModel.IsTyping && !m_viewModel.IsDisplayingChoices; }, cancellationToken: token);
+                    
+                    await UniTask.Delay(System.TimeSpan.FromSeconds(0.5f), cancellationToken: token);
 
-                    if (m_isAutoMode && m_viewModel != null)
+                    if (m_viewModel != null && m_viewModel.IsAutoPlay && !m_viewModel.IsFading && !m_viewModel.IsDisplayingChoices)
                     {
                         m_viewModel.RequestNext();
+                        
+                        await UniTask.Yield(cancellationToken: token);
+                        
+                        if (m_viewModel.IsFading)
+                        {
+                            await UniTask.WaitUntil(() => { return !m_viewModel.IsFading; }, cancellationToken: token);
+                        }
                     }
                 }
             }
@@ -138,6 +139,40 @@ namespace Features.InGame
             }
         }
 
+        private void StartFadeOutEffect()
+        {
+        }
+
+        private void SyncAutoPlayState(bool isAuto)
+        {
+            if (m_autoButton != null)
+            {
+                var image = m_autoButton.GetComponent<Image>();
+                if (image != null)
+                {
+                    if (isAuto)
+                    {
+                        image.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
+                    }
+                    else
+                    {
+                        image.color = Color.white;
+                    }
+                }
+            }
+
+            if (isAuto)
+            {
+                StartAutoProceed().Forget();
+            }
+            else
+            {
+                CancelAutoProceed();
+            }
+        }
+
+
+
         private void UpdateDialogue(DialogueDTO dialogue)
         {
             if (this == null)
@@ -145,9 +180,98 @@ namespace Features.InGame
                 return;
             }
 
+            if (m_dialogueChangeCts != null)
+            {
+                m_dialogueChangeCts.Cancel();
+                m_dialogueChangeCts.Dispose();
+            }
+            m_dialogueChangeCts = new CancellationTokenSource();
+
+            PlayDialogueSequenceAsync(dialogue, m_dialogueChangeCts.Token).Forget();
+        }
+
+        private async UniTaskVoid PlayDialogueSequenceAsync(DialogueDTO dialogue, CancellationToken token)
+        {
+            if (m_typewriterEffect != null)
+            {
+                m_typewriterEffect.Stop();
+            }
+
             if (m_lineProgressText != null)
             {
                 m_lineProgressText.text = $"{dialogue.CurrentLine} / {dialogue.TotalLines}";
+            }
+
+            if (m_contentText != null && !string.IsNullOrEmpty(m_contentText.text))
+            {
+                if (m_viewModel != null)
+                {
+                    m_viewModel.IsFading = true;
+                }
+
+                float duration = 0.5f;
+                int activeFades = 0;
+                var tcs = new UniTaskCompletionSource();
+
+                System.Action onSingleFadeComplete = () =>
+                {
+                    activeFades--;
+                    if (activeFades <= 0)
+                    {
+                        tcs.TrySetResult();
+                    }
+                };
+
+                if (m_contentText != null)
+                {
+                    activeFades++;
+                    m_contentText.DOFade(0f, duration)
+                        .SetLink(m_contentText.gameObject)
+                        .OnComplete(() => { onSingleFadeComplete(); });
+                }
+
+                if (m_nameText != null && m_speakerBox != null && m_speakerBox.activeSelf)
+                {
+                    activeFades++;
+                    m_nameText.DOFade(0f, duration)
+                        .SetLink(m_nameText.gameObject)
+                        .OnComplete(() => { onSingleFadeComplete(); });
+                }
+
+                if (activeFades == 0)
+                {
+                    tcs.TrySetResult();
+                }
+
+                try
+                {
+                    await tcs.Task.AttachExternalCancellation(token);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+
+                if (m_viewModel != null)
+                {
+                    m_viewModel.IsFading = false;
+                }
+            }
+
+            if (m_contentText != null)
+            {
+                m_contentText.DOKill();
+                m_contentText.text = "";
+                Color c = m_contentText.color;
+                c.a = 1f;
+                m_contentText.color = c;
+            }
+            if (m_nameText != null)
+            {
+                m_nameText.DOKill();
+                Color c = m_nameText.color;
+                c.a = 1f;
+                m_nameText.color = c;
             }
 
             if (dialogue.Type == DialogueType.Narration)
@@ -160,19 +284,34 @@ namespace Features.InGame
                 {
                     m_speakerIcon.gameObject.SetActive(false);
                 }
-                if (m_contentText != null)
+                if (m_viewModel != null)
                 {
-                    m_contentText.text = "";
+                    m_viewModel.IsTyping = true;
                 }
-                m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
+                    try
+                    {
+                        await m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
+                        { 
+                            if (m_viewModel != null)
+                            {
+                                m_viewModel.IsTyping = false; 
+                            }
+                        }).AttachExternalCancellation(token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
+                    }
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
-                    m_viewModel.IsTyping = false;
+                    if (m_viewModel != null)
+                    {
+                        m_viewModel.IsTyping = false;
+                    }
                 }
             }
             else if (dialogue.Type == DialogueType.SystemMessage)
@@ -187,12 +326,11 @@ namespace Features.InGame
                 }
                 if (m_contentText != null)
                 {
-                    if (m_typewriterEffect != null)
-                    {
-                        m_typewriterEffect.Stop();
-                    }
                     m_contentText.text = dialogue.Content;
-                    m_viewModel.IsTyping = false;
+                    if (m_viewModel != null)
+                    {
+                        m_viewModel.IsTyping = false;
+                    }
                 }
             }
             else
@@ -216,19 +354,34 @@ namespace Features.InGame
                         m_speakerIcon.gameObject.SetActive(true);
                     }
                 }
-                if (m_contentText != null)
+                if (m_viewModel != null)
                 {
-                    m_contentText.text = "";
+                    m_viewModel.IsTyping = true;
                 }
-                m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
+                    try
+                    {
+                        await m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
+                        { 
+                            if (m_viewModel != null)
+                            {
+                                m_viewModel.IsTyping = false; 
+                            }
+                        }).AttachExternalCancellation(token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
+                    }
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
-                    m_viewModel.IsTyping = false;
+                    if (m_viewModel != null)
+                    {
+                        m_viewModel.IsTyping = false;
+                    }
                 }
             }
         }
@@ -256,6 +409,12 @@ namespace Features.InGame
             {
                 m_viewModel.OnDialogueUpdated -= UpdateDialogue;
                 m_viewModel.OnChoicesUpdated -= HandleChoicesUpdated;
+                m_viewModel.OnAutoPlayChanged -= SyncAutoPlayState;
+            }
+            if (m_dialogueChangeCts != null)
+            {
+                m_dialogueChangeCts.Cancel();
+                m_dialogueChangeCts.Dispose();
             }
             CancelAutoProceed();
         }

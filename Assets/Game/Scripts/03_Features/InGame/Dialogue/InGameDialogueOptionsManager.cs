@@ -44,6 +44,10 @@ namespace Features.InGame
 
         private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
         {
+            if (this == null)
+            {
+                return;
+            }
             if (m_optionCards != null)
             {
                 for (int i = 0; i < m_optionCards.Count; i++)

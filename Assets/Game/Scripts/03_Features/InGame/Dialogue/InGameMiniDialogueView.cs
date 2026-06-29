@@ -23,6 +23,10 @@ namespace Features.InGame
 
         private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
         {
+            if (this == null)
+            {
+                return;
+            }
             if (choices != null && choices.Count > 0)
             {
                 gameObject.SetActive(true);
