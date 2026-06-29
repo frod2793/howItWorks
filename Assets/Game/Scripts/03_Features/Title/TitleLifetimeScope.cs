@@ -19,6 +19,9 @@ public class TitleLifetimeScope : LifetimeScope
         builder.Register<TitleViewModel>(Lifetime.Scoped).AsImplementedInterfaces();
         builder.Register<SettingsViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         builder.Register<GlobalProgressViewModel>(Lifetime.Scoped);
+        builder.Register<SaveLoadModel>(Lifetime.Scoped);
+        builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.RegisterComponentInHierarchy<SaveLoadView>();
 
         builder.Register(c =>
         {
@@ -110,6 +113,39 @@ public class TitleLifetimeScope : LifetimeScope
             };
         }
 
+        SaveLoadView saveLoadView = null;
+        try
+        {
+            saveLoadView = Container.Resolve<SaveLoadView>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[TitleLifetimeScope] SaveLoadView 해결 실패: {e.Message}");
+        }
+
+        ISaveLoadViewModel saveLoadVMFace = null;
+        try
+        {
+            saveLoadVMFace = Container.Resolve<ISaveLoadViewModel>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[TitleLifetimeScope] ISaveLoadViewModel 해결 실패: {e.Message}");
+        }
+
+        var saveLoadVM = saveLoadVMFace as SaveLoadViewModel;
+        if (saveLoadView != null && saveLoadVM != null)
+        {
+            saveLoadView.Initialize(saveLoadVM);
+            saveLoadVM.OnCloseRequested += () =>
+            {
+                if (m_titleView != null)
+                {
+                    m_titleView.gameObject.SetActive(true);
+                }
+            };
+        }
+
         GlobalProgressViewModel progressVM = null;
         try
         {
@@ -150,6 +186,18 @@ public class TitleLifetimeScope : LifetimeScope
                 if (m_settingsView != null)
                 {
                     m_settingsView.func_Open();
+                    if (m_titleView != null)
+                    {
+                        m_titleView.gameObject.SetActive(false);
+                    }
+                }
+            };
+
+            titleVM.OnRequestSaveLoad += () =>
+            {
+                if (saveLoadView != null)
+                {
+                    saveLoadView.func_Open(false);
                     if (m_titleView != null)
                     {
                         m_titleView.gameObject.SetActive(false);

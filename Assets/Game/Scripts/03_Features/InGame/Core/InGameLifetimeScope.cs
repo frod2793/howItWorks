@@ -62,6 +62,10 @@ public class InGameLifetimeScope : LifetimeScope
         builder.RegisterComponentInHierarchy<InGameCharacterView>();
         builder.RegisterComponentInHierarchy<SettingsView>();
         builder.RegisterComponentInHierarchy<BacklogView>();
+
+        builder.Register<SaveLoadModel>(Lifetime.Scoped);
+        builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+        builder.RegisterComponentInHierarchy<SaveLoadView>();
     }
 
     private void Start()
@@ -165,6 +169,31 @@ public class InGameLifetimeScope : LifetimeScope
             {
                 dialogueFlowController.StartDialogueFlowAsync().Forget();
             };
+        }
+
+        SaveLoadView saveLoadView = null;
+        try
+        {
+            saveLoadView = Container.Resolve<SaveLoadView>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] SaveLoadView 해결 실패: {e.Message}");
+        }
+
+        ISaveLoadViewModel saveLoadVM = null;
+        try
+        {
+            saveLoadVM = Container.Resolve<ISaveLoadViewModel>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISaveLoadViewModel 해결 실패: {e.Message}");
+        }
+
+        if (saveLoadView != null && saveLoadVM != null)
+        {
+            saveLoadView.Initialize(saveLoadVM);
         }
     }
 }

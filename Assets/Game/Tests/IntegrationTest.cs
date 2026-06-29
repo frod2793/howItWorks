@@ -1,12 +1,14 @@
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
 using VContainer;
 using Features.InGame;
 using Features.Settings;
 using System.Reflection;
+using Domain.InGame;
 
 public class IntegrationTest
 {
@@ -16,7 +18,7 @@ public class IntegrationTest
         SceneManager.LoadScene("Title");
         yield return null;
 
-        TitleView titleView = Object.FindObjectOfType<TitleView>();
+        TitleView titleView = Object.FindFirstObjectByType<TitleView>();
         Assert.IsNotNull(titleView);
 
         titleView.func_OnNewGameButtonClicked();
@@ -31,13 +33,13 @@ public class IntegrationTest
         Assert.AreEqual("InGame", SceneManager.GetActiveScene().name);
         yield return new WaitForSeconds(1.0f);
 
-        InGameLifetimeScope scope = Object.FindObjectOfType<InGameLifetimeScope>();
+        InGameLifetimeScope scope = Object.FindFirstObjectByType<InGameLifetimeScope>();
         Assert.IsNotNull(scope);
         Assert.IsNotNull(scope.Container);
 
         IDialogueViewModel dialogueVM = scope.Container.Resolve<IDialogueViewModel>();
         SettingsView settingsView = scope.Container.Resolve<SettingsView>();
-        InGameSceneInfoView sceneInfoView = Object.FindObjectOfType<InGameSceneInfoView>();
+        InGameSceneInfoView sceneInfoView = Object.FindFirstObjectByType<InGameSceneInfoView>();
 
         Assert.IsNotNull(dialogueVM);
         Assert.IsNotNull(settingsView);
@@ -129,5 +131,93 @@ public class IntegrationTest
         yield return null;
 
         Assert.IsFalse(settingsView.gameObject.activeSelf, "취소 버튼 클릭 후 설정창이 닫혀야 합니다.");
+    }
+
+    [UnityTest]
+    public IEnumerator TestSaveLoadLobbyMode()
+    {
+        SceneManager.LoadScene("Title");
+        yield return null;
+
+        TitleLifetimeScope scope = Object.FindFirstObjectByType<TitleLifetimeScope>();
+        Assert.IsNotNull(scope);
+
+        SaveLoadView saveLoadView = scope.Container.Resolve<SaveLoadView>();
+        ISaveLoadViewModel saveLoadVM = scope.Container.Resolve<ISaveLoadViewModel>();
+
+        Assert.IsNotNull(saveLoadView);
+        Assert.IsNotNull(saveLoadVM);
+
+        TitleView titleView = Object.FindFirstObjectByType<TitleView>();
+        Assert.IsNotNull(titleView);
+
+        titleView.func_OnLoadGameButtonClicked();
+        yield return null;
+
+        Assert.IsTrue(saveLoadView.gameObject.activeSelf);
+        Assert.IsFalse(saveLoadVM.IsSaveActionAllowed);
+
+        var saveButtonField = typeof(SaveLoadView).GetField("m_saveButton", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(saveButtonField);
+        Button saveButton = saveButtonField.GetValue(saveLoadView) as Button;
+        Assert.IsNotNull(saveButton);
+        Assert.IsFalse(saveButton.interactable);
+
+        saveLoadView.func_Close();
+        yield return null;
+
+        Assert.IsFalse(saveLoadView.gameObject.activeSelf);
+    }
+
+    [UnityTest]
+    public IEnumerator TestSaveLoadInGameModeAndSave()
+    {
+        SceneManager.LoadScene("InGame");
+        yield return null;
+
+        InGameLifetimeScope scope = Object.FindFirstObjectByType<InGameLifetimeScope>();
+        Assert.IsNotNull(scope);
+
+        SaveLoadView saveLoadView = scope.Container.Resolve<SaveLoadView>();
+        ISaveLoadViewModel saveLoadVM = scope.Container.Resolve<ISaveLoadViewModel>();
+
+        Assert.IsNotNull(saveLoadView);
+        Assert.IsNotNull(saveLoadVM);
+
+        saveLoadView.func_Open(true);
+        yield return null;
+
+        Assert.IsTrue(saveLoadView.gameObject.activeSelf);
+        Assert.IsTrue(saveLoadVM.IsSaveActionAllowed);
+
+        saveLoadVM.SelectSlot(4);
+        yield return null;
+
+        Assert.AreEqual(4, saveLoadVM.SelectedSlotIndex);
+
+        var dummyData = new SaveDataFileDTO();
+        dummyData.currentSceneId = "InGame";
+        dummyData.globalProgress = new GlobalProgressDataDTO { playthroughCount = 1 };
+        dummyData.resources = new ResourceDataDTO { karma = 50, emotion = 10, monitoring = 0, trust = 100 };
+
+        saveLoadVM.ExecuteSave(dummyData);
+        yield return null;
+
+        var slotList = saveLoadVM.SlotList;
+        Assert.IsNotNull(slotList);
+        Assert.AreEqual(5, slotList.Count);
+        Assert.IsFalse(string.IsNullOrEmpty(slotList[4].savedAt));
+
+        string savePath = System.IO.Path.Combine(Application.persistentDataPath, "Saves", "save_slot_4.json");
+        Assert.IsTrue(System.IO.File.Exists(savePath));
+
+        saveLoadVM.ExecuteDelete();
+        yield return null;
+
+        Assert.IsTrue(string.IsNullOrEmpty(slotList[4].savedAt));
+        Assert.IsFalse(System.IO.File.Exists(savePath));
+
+        saveLoadView.func_Close();
+        yield return null;
     }
 }

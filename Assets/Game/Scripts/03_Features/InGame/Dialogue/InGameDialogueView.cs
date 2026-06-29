@@ -140,6 +140,11 @@ namespace Features.InGame
 
         private void UpdateDialogue(DialogueDTO dialogue)
         {
+            if (this == null)
+            {
+                return;
+            }
+
             if (m_lineProgressText != null)
             {
                 m_lineProgressText.text = $"{dialogue.CurrentLine} / {dialogue.TotalLines}";
@@ -230,6 +235,11 @@ namespace Features.InGame
 
         private void HandleChoicesUpdated(System.Collections.Generic.List<DialogueChoiceDTO> choices)
         {
+            if (this == null)
+            {
+                return;
+            }
+
             if (choices != null && choices.Count > 0)
             {
                 gameObject.SetActive(false);

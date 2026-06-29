@@ -20,6 +20,7 @@ public class TitleViewModel : ITitleViewModel
     /// </summary>
     public event Action<string> OnRequestPopup;
     public event Action OnRequestSettings;
+    public event Action OnRequestSaveLoad;
 
     public bool IsLoadGameActive
     {
@@ -81,9 +82,9 @@ public class TitleViewModel : ITitleViewModel
 
     public void LoadGame()
     {
-        if (OnRequestPopup != null)
+        if (OnRequestSaveLoad != null)
         {
-            OnRequestPopup.Invoke("Sorry");
+            OnRequestSaveLoad.Invoke();
         }
     }
 

@@ -9,6 +9,7 @@ public interface ITitleViewModel
     bool IsLoadGameActive { get; }
     bool IsStoryTreeActive { get; }
     string RecentEndingId { get; }
+    event Action OnRequestSaveLoad;
     void NewGame();
     void LoadGame();
     void OpenSettings();
