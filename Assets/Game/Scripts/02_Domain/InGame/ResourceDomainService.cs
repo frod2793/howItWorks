@@ -41,6 +41,7 @@ namespace Domain.InGame
             if (data != null)
             {
                 m_currentResources = data;
+                EvaluateLonging();
                 NotifyChanged();
             }
         }
@@ -58,6 +59,7 @@ namespace Domain.InGame
                 m_currentResources.Fear = Math.Max(0, m_currentResources.Fear - 2);
                 m_currentResources.Confusion = Math.Max(0, m_currentResources.Confusion - 2);
 
+                EvaluateLonging();
                 NotifyChanged();
             }
         }
@@ -74,6 +76,7 @@ namespace Domain.InGame
 
             m_currentResources.LoopAwareness = Math.Min(5, m_currentResources.LoopAwareness + 1);
 
+            EvaluateLonging();
             NotifyChanged();
         }
 
@@ -85,6 +88,7 @@ namespace Domain.InGame
             m_currentResources.Fear = Math.Max(0, Math.Min(10, m_currentResources.Fear + fear));
             m_currentResources.Confusion = Math.Max(0, Math.Min(10, m_currentResources.Confusion + confusion));
 
+            EvaluateLonging();
             NotifyChanged();
         }
 
@@ -104,6 +108,17 @@ namespace Domain.InGame
         {
             m_currentResources.LoopAwareness = Math.Max(0, Math.Min(5, m_currentResources.LoopAwareness + 1));
             NotifyChanged();
+        }
+
+        public void ApplyCatoDelta(int amount)
+        {
+            m_currentResources.CatoStocks = Math.Max(0, Math.Min(m_currentResources.MaxCatoStocks, m_currentResources.CatoStocks + amount));
+            NotifyChanged();
+        }
+
+        private void EvaluateLonging()
+        {
+            m_currentResources.IsLongingActive = (m_currentResources.Sadness >= 3 && m_currentResources.Joy >= 3);
         }
 
         private void NotifyChanged()

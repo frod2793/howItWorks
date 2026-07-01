@@ -8,12 +8,19 @@ using DG.Tweening;
 
 namespace Features.InGame
 {
+    public enum IllustrationPlacement
+    {
+        Left,
+        Center,
+        Right
+    }
+
     [Serializable]
     public struct CharacterSpriteMap
     {
         public string characterName;
         public Sprite sprite;
-        public bool isLeftPlacement;
+        public IllustrationPlacement placement;
     }
 
     public class InGameCharacterView : MonoBehaviour
@@ -76,27 +83,23 @@ namespace Features.InGame
                 return;
             }
 
-            Image targetImage = null;
-            if (matchedMap.isLeftPlacement)
+            if (matchedMap.placement == IllustrationPlacement.Left)
             {
-                targetImage = m_leftCharacterImage;
-                FadeOutImage(m_rightCharacterImage);
+                FadeInImage(m_leftCharacterImage, matchedMap.sprite);
                 FadeOutImage(m_centerCharacterImage);
+                FadeOutImage(m_rightCharacterImage);
+            }
+            else if (matchedMap.placement == IllustrationPlacement.Center)
+            {
+                FadeInImage(m_centerCharacterImage, matchedMap.sprite);
+                FadeOutImage(m_leftCharacterImage);
+                FadeOutImage(m_rightCharacterImage);
             }
             else
             {
-                targetImage = m_rightCharacterImage;
+                FadeInImage(m_rightCharacterImage, matchedMap.sprite);
                 FadeOutImage(m_leftCharacterImage);
                 FadeOutImage(m_centerCharacterImage);
-            }
-
-            if (targetImage != null)
-            {
-                if (matchedMap.sprite != null)
-                {
-                    targetImage.sprite = matchedMap.sprite;
-                    FadeInImage(targetImage);
-                }
             }
         }
 
@@ -111,10 +114,11 @@ namespace Features.InGame
             }
         }
 
-        private void FadeInImage(Image image)
+        private void FadeInImage(Image image, Sprite sprite)
         {
             if (image != null)
             {
+                image.sprite = sprite;
                 image.gameObject.SetActive(true);
                 image.DOKill();
                 image.DOFade(1f, 0.3f);

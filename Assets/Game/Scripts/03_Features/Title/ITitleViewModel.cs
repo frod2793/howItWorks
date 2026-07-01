@@ -14,6 +14,7 @@ public interface ITitleViewModel
     void LoadGame();
     void OpenSettings();
     void OpenArchive();
+    void OpenEncyclopedia();
     void OpenStoryTree();
     void OpenCredits();
     void QuitGame();

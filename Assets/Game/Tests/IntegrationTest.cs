@@ -956,10 +956,10 @@ public class IntegrationTest
         IDialogueViewModel dialogueVM = scope.Container.Resolve<IDialogueViewModel>();
         Assert.IsNotNull(dialogueVM);
 
-        InGameDialogueView dialogueView = Object.FindFirstObjectByType<InGameDialogueView>();
-        Assert.IsNotNull(dialogueView);
+        InGameSidePanelView sidePanelView = Object.FindFirstObjectByType<InGameSidePanelView>();
+        Assert.IsNotNull(sidePanelView);
 
-        dialogueView.func_OnAutoButtonClicked();
+        sidePanelView.func_OnAutoButtonClicked();
         yield return null;
 
         Assert.IsTrue(dialogueVM.IsAutoPlayActive, "[IntegrationTest] 뷰 버튼 클릭 시 뷰모델의 IsAutoPlayActive가 활성화되어야 합니다.");
@@ -980,7 +980,7 @@ public class IntegrationTest
         int nextIdx = (int)field.GetValue(controller);
         Assert.Greater(nextIdx, initialIdx, "[IntegrationTest] 오토플레이 활성화 시 시간 경과 후 대사가 자동으로 진행되어야 합니다.");
 
-        dialogueView.func_OnAutoButtonClicked();
+        sidePanelView.func_OnAutoButtonClicked();
         yield return null;
         Assert.IsFalse(dialogueVM.IsAutoPlayActive, "[IntegrationTest] 뷰 버튼 재클릭 시 뷰모델의 IsAutoPlayActive가 비활성화되어야 합니다.");
     }

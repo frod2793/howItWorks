@@ -8,7 +8,7 @@ public class TitleView : MonoBehaviour
     [SerializeField] private Button m_newGameButton;
     [SerializeField] private Button m_loadButton;
     [SerializeField] private Button m_storyTreeButton;
-    [SerializeField] private Button m_archiveButton;
+    [SerializeField] private Button m_encyclopediaButton;
     [SerializeField] private Button m_settingsButton;
     [SerializeField] private Button m_creditButton;
     [SerializeField] private Button m_exitButton;
@@ -52,10 +52,10 @@ public class TitleView : MonoBehaviour
                 activeButtons.Add(m_storyTreeButton);
             }
         }
-        if (m_archiveButton != null)
+        if (m_encyclopediaButton != null)
         {
-            m_archiveButton.navigation = new Navigation { mode = Navigation.Mode.None };
-            activeButtons.Add(m_archiveButton);
+            m_encyclopediaButton.navigation = new Navigation { mode = Navigation.Mode.None };
+            activeButtons.Add(m_encyclopediaButton);
         }
         if (m_settingsButton != null)
         {
@@ -262,7 +262,7 @@ public class TitleView : MonoBehaviour
         }
     }
 
-    public void func_OnArchiveButtonClicked()
+    public void func_OnEncyclopediaButtonClicked()
     {
         if (m_soundService != null)
         {
@@ -270,7 +270,7 @@ public class TitleView : MonoBehaviour
         }
         if (m_viewModel != null)
         {
-            m_viewModel.OpenArchive();
+            m_viewModel.OpenEncyclopedia();
         }
     }
 

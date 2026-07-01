@@ -21,6 +21,7 @@ public class TitleViewModel : ITitleViewModel
     public event Action<string> OnRequestPopup;
     public event Action OnRequestSettings;
     public event Action OnRequestSaveLoad;
+    public event Action OnRequestEncyclopedia;
 
     public bool IsLoadGameActive
     {
@@ -101,6 +102,14 @@ public class TitleViewModel : ITitleViewModel
         if (OnRequestPopup != null)
         {
             OnRequestPopup.Invoke("Sorry");
+        }
+    }
+
+    public void OpenEncyclopedia()
+    {
+        if (OnRequestEncyclopedia != null)
+        {
+            OnRequestEncyclopedia.Invoke();
         }
     }
 

@@ -17,6 +17,15 @@
       },
       "hash": "85c101f5329ec1b0c6f70cba44614166dd78f53c"
     },
+    "com.ucp.bridge": {
+      "version": "https://github.com/mflRevan/unity-control-protocol.git?path=unity-package/com.ucp.bridge#v0.6.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.31"
+      },
+      "hash": "a5fa420c29293b4225b6abfc90fd203a2ceae69a"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

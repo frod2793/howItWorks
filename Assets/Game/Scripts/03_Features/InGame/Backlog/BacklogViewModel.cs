@@ -14,6 +14,7 @@ namespace Features.InGame
         private string m_currentSceneInfoText = string.Empty;
 
         public event Action OnBacklogUpdated;
+        public event Action<int> OnRequestJump;
 
         public IReadOnlyList<BacklogItemDTO> Items
         {
@@ -89,12 +90,21 @@ namespace Features.InGame
                 Content = dialogue.Content,
                 SpeakerIconKey = dialogue.SpeakerIconKey,
                 Type = dialogue.Type,
-                HasBranchEffect = hasBranchEffect
+                HasBranchEffect = hasBranchEffect,
+                DialogueIndex = dialogue.CurrentLine - 1
             });
 
             if (OnBacklogUpdated != null)
             {
                 OnBacklogUpdated.Invoke();
+            }
+        }
+
+        public void JumpToLine(int dialogueIndex)
+        {
+            if (OnRequestJump != null)
+            {
+                OnRequestJump.Invoke(dialogueIndex);
             }
         }
 

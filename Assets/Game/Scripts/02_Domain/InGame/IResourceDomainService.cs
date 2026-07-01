@@ -13,5 +13,6 @@ namespace Domain.InGame
         void ApplyMonitoringDelta(int amount);
         void IncreaseLoopAwareness();
         void SetInitialData(SidePanelDTO data);
+        void ApplyCatoDelta(int amount);
     }
 }

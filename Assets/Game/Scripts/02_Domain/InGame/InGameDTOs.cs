@@ -42,6 +42,7 @@ namespace Domain.InGame
         public int MaxLoopAwareness;
         public string ActBranchInfo;
         public string PassedScenesInfo;
+        public bool IsLongingActive;
     }
 
     public enum DialogueType
@@ -308,5 +309,6 @@ namespace Domain.InGame
         public string SpeakerIconKey;
         public DialogueType Type;
         public bool HasBranchEffect;
+        public int DialogueIndex;
     }
 }

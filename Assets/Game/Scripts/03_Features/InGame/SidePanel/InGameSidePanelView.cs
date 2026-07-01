@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using TMPro;
 using VContainer;
 using Domain.InGame;
+using DG.Tweening;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace Features.InGame
 {
@@ -45,6 +49,12 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_actBranchText;
         [SerializeField] private TextMeshProUGUI m_passedScenesText;
 
+        [Header("진행 컨트롤 버튼")]
+        [SerializeField] private Button m_autoButton;
+        [SerializeField] private Button m_skipButton;
+        [SerializeField] private Button m_logButton;
+        [SerializeField] private Button m_inventoryButton;
+
         [SerializeField, Range(0, 10)] private int m_sadnessEditorVal = 6;
         [SerializeField, Range(0, 10)] private int m_joyEditorVal = 1;
         [SerializeField, Range(0, 10)] private int m_curiosityEditorVal = 7;
@@ -52,17 +62,49 @@ namespace Features.InGame
         [SerializeField, Range(0, 10)] private int m_confusionEditorVal = 3;
 
         private ISidePanelViewModel m_viewModel;
+        private IDialogueViewModel m_dialogueViewModel;
+        private Tweener m_monitoringPulseTween;
+        private bool m_isSkipActive;
+        private CancellationTokenSource m_skipCts;
 
         [Inject]
-        public void Construct(ISidePanelViewModel viewModel)
+        public void Construct(ISidePanelViewModel viewModel, IDialogueViewModel dialogueViewModel)
         {
             m_viewModel = viewModel;
+            m_dialogueViewModel = dialogueViewModel;
+
             m_viewModel.OnSidePanelDataChanged += UpdateSidePanelData;
+            m_dialogueViewModel.OnAutoPlayStatusChanged += SyncAutoPlayState;
+            m_dialogueViewModel.OnChoicesUpdated += HandleChoicesUpdated;
         }
 
         private void Start()
         {
             SetInitialMockData();
+
+            if (m_autoButton != null)
+            {
+                m_autoButton.onClick.RemoveAllListeners();
+                m_autoButton.onClick.AddListener(func_OnAutoButtonClicked);
+            }
+
+            if (m_skipButton != null)
+            {
+                m_skipButton.onClick.RemoveAllListeners();
+                m_skipButton.onClick.AddListener(func_OnSkipButtonClicked);
+            }
+
+            if (m_logButton != null)
+            {
+                m_logButton.onClick.RemoveAllListeners();
+                m_logButton.onClick.AddListener(func_OnLogButtonClicked);
+            }
+
+            if (m_inventoryButton != null)
+            {
+                m_inventoryButton.onClick.RemoveAllListeners();
+                m_inventoryButton.onClick.AddListener(func_OnInventoryButtonClicked);
+            }
         }
 
         private void SetInitialMockData()
@@ -104,7 +146,7 @@ namespace Features.InGame
             }
 
             UpdateTextsPosition();
-            UpdateStatusText(6, 1, 7, 3, 3);
+            UpdateStatusText(6, 1, 7, 3, 3, (6 >= 3 && 1 >= 3));
         }
 
         private void UpdateSidePanelData(SidePanelDTO data)
@@ -151,7 +193,7 @@ namespace Features.InGame
             }
 
             UpdateTextsPosition();
-            UpdateStatusText(data.Sadness, data.Joy, data.Curiosity, data.Fear, data.Confusion);
+            UpdateStatusText(data.Sadness, data.Joy, data.Curiosity, data.Fear, data.Confusion, data.IsLongingActive);
         }
 
         private void UpdateStockBlocks(GameObject[] blocks, int count)
@@ -182,6 +224,32 @@ namespace Features.InGame
             if (slider != null)
             {
                 slider.value = (float)value / max;
+
+                if (slider == m_monitoringSlider)
+                {
+                    var fillImage = slider.fillRect != null ? slider.fillRect.GetComponent<Image>() : null;
+                    if (fillImage != null)
+                    {
+                        if (value >= 8)
+                        {
+                            if (m_monitoringPulseTween == null)
+                            {
+                                m_monitoringPulseTween = fillImage.DOColor(Color.red, 0.5f)
+                                    .SetLoops(-1, LoopType.Yoyo)
+                                    .SetUpdate(true);
+                            }
+                        }
+                        else
+                        {
+                            if (m_monitoringPulseTween != null)
+                            {
+                                m_monitoringPulseTween.Kill();
+                                m_monitoringPulseTween = null;
+                                fillImage.color = new Color(0.68f, 0.3f, 0.33f, 1f);
+                            }
+                        }
+                    }
+                }
             }
 
             if (text != null)
@@ -283,7 +351,7 @@ namespace Features.InGame
             }
         }
 
-        private void UpdateStatusText(int sadness, int joy, int curiosity, int fear, int confusion)
+        private void UpdateStatusText(int sadness, int joy, int curiosity, int fear, int confusion, bool isLongingActive)
         {
             int maxVal = -1;
             string dominantName = "";
@@ -306,36 +374,134 @@ namespace Features.InGame
 
             if (m_yearningStatusText != null)
             {
-                if (sadness >= 3 && joy >= 3)
+                if (isLongingActive)
                 {
                     m_yearningStatusText.text = "그리움:  <color=#D4AF37>활성</color>";
                 }
                 else
                 {
-                    string reason = "";
-                    if (sadness < 3 && joy < 3)
-                    {
-                        reason = "슬픔, 기쁨 < 3";
-                    }
-                    else if (sadness < 3)
-                    {
-                        reason = "슬픔 < 3";
-                    }
-                    else
-                    {
-                        reason = "기쁨 < 3";
-                    }
-                    m_yearningStatusText.text = $"그리움:  <color=#888888>비활성 ({reason})</color>";
+                    m_yearningStatusText.text = "그리움:  <color=#888888>비활성</color>";
                 }
             }
         }
 
         private void OnDestroy()
         {
+            func_CancelSkipLoop();
+
+            if (m_monitoringPulseTween != null)
+            {
+                m_monitoringPulseTween.Kill();
+                m_monitoringPulseTween = null;
+            }
+
             if (m_viewModel != null)
             {
                 m_viewModel.OnSidePanelDataChanged -= UpdateSidePanelData;
             }
+
+            if (m_dialogueViewModel != null)
+            {
+                m_dialogueViewModel.OnAutoPlayStatusChanged -= SyncAutoPlayState;
+                m_dialogueViewModel.OnChoicesUpdated -= HandleChoicesUpdated;
+            }
+        }
+
+        public void func_OnAutoButtonClicked()
+        {
+            if (m_dialogueViewModel != null)
+            {
+                m_dialogueViewModel.IsAutoPlayActive = !m_dialogueViewModel.IsAutoPlayActive;
+            }
+        }
+
+        public void func_OnSkipButtonClicked()
+        {
+            m_isSkipActive = !m_isSkipActive;
+            if (m_isSkipActive)
+            {
+                if (m_dialogueViewModel != null)
+                {
+                    m_dialogueViewModel.IsAutoPlayActive = false;
+                }
+                func_RunSkipLoop().Forget();
+            }
+            else
+            {
+                func_CancelSkipLoop();
+            }
+        }
+
+        public void func_OnLogButtonClicked()
+        {
+            if (m_dialogueViewModel != null)
+            {
+                m_dialogueViewModel.RequestBacklog();
+            }
+        }
+
+        public void func_OnInventoryButtonClicked()
+        {
+        }
+
+        private void SyncAutoPlayState(bool isAuto)
+        {
+            if (m_autoButton != null)
+            {
+                Image image = m_autoButton.GetComponent<Image>();
+                if (image != null)
+                {
+                    if (isAuto)
+                    {
+                        image.color = new Color(Random.value, Random.value, Random.value, 1f);
+                    }
+                    else
+                    {
+                        image.color = Color.white;
+                    }
+                }
+            }
+        }
+
+        private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
+        {
+            if (choices != null && choices.Count > 0)
+            {
+                func_CancelSkipLoop();
+            }
+        }
+
+        private async UniTaskVoid func_RunSkipLoop()
+        {
+            func_CancelSkipLoop();
+            m_skipCts = new System.Threading.CancellationTokenSource();
+
+            try
+            {
+                while (m_isSkipActive)
+                {
+                    if (m_dialogueViewModel != null)
+                    {
+                        m_dialogueViewModel.RequestSkip();
+                        m_dialogueViewModel.RequestNext();
+                    }
+                    await UniTask.Delay(System.TimeSpan.FromSeconds(0.1f), cancellationToken: m_skipCts.Token);
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+        }
+
+        private void func_CancelSkipLoop()
+        {
+            if (m_skipCts != null)
+            {
+                m_skipCts.Cancel();
+                m_skipCts.Dispose();
+                m_skipCts = null;
+            }
+            m_isSkipActive = false;
         }
 
         private void UpdateEditorMockData()
@@ -377,7 +543,7 @@ namespace Features.InGame
             }
 
             UpdateTextsPosition();
-            UpdateStatusText(m_sadnessEditorVal, m_joyEditorVal, m_curiosityEditorVal, m_fearEditorVal, m_confusionEditorVal);
+            UpdateStatusText(m_sadnessEditorVal, m_joyEditorVal, m_curiosityEditorVal, m_fearEditorVal, m_confusionEditorVal, (m_sadnessEditorVal >= 3 && m_joyEditorVal >= 3));
         }
 
         private void OnValidate()

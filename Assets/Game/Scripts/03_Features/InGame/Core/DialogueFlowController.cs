@@ -13,6 +13,8 @@ namespace Features.InGame
         private readonly ISidePanelViewModel m_sidePanelVM;
         private readonly IGameDataManager m_dataManager;
         private readonly IInGameInventorySystem m_inventorySystem;
+        private readonly IResourceDomainService m_resourceService;
+        private readonly IBacklogViewModel m_backlogVM;
         private List<Domain.InGame.DialogueLineDTO> m_loadedDialogues;
         private int m_currentDialogueIndex = 0;
         private SidePanelDTO m_currentSidePanelData;
@@ -25,6 +27,8 @@ namespace Features.InGame
             ISidePanelViewModel sidePanelVM, 
             IGameDataManager dataManager,
             IInGameInventorySystem inventorySystem,
+            IResourceDomainService resourceService,
+            IBacklogViewModel backlogVM,
             int startDialogueIndex)
         {
             m_dialogueVM = dialogueVM;
@@ -32,9 +36,12 @@ namespace Features.InGame
             m_sidePanelVM = sidePanelVM;
             m_dataManager = dataManager;
             m_inventorySystem = inventorySystem;
+            m_resourceService = resourceService;
+            m_backlogVM = backlogVM;
             m_startDialogueIndex = startDialogueIndex;
             m_dialogueVM.OnNextRequested += PlayNextDialogue;
             m_dialogueVM.OnChoiceSelected += HandleChoiceSelected;
+            m_backlogVM.OnRequestJump += HandleJumpRequested;
         }
 
         public async UniTaskVoid StartDialogueFlowAsync()
@@ -66,6 +73,8 @@ namespace Features.InGame
                 PassedScenesInfo = "씬 1"
             };
 
+            m_resourceService.SetInitialData(m_currentSidePanelData);
+            m_currentSidePanelData = m_resourceService.CurrentResources;
             m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
 
             await m_dataManager.LoadAllDataAsync();
@@ -158,7 +167,16 @@ namespace Features.InGame
                     }
                 };
 
-                m_dialogueVM.DisplayChoices(choices);
+                var filteredChoices = new List<DialogueChoiceDTO>();
+                for (int i = 0; i < choices.Count; i++)
+                {
+                    if (choices[i].IsLocked == false)
+                    {
+                        filteredChoices.Add(choices[i]);
+                    }
+                }
+
+                m_dialogueVM.DisplayChoices(filteredChoices);
             }
         }
 
@@ -193,6 +211,11 @@ namespace Features.InGame
             var uiChoices = new List<DialogueChoiceDTO>();
             for (int i = 0; i < choices.Count; i++)
             {
+                if (choices[i].IsLocked)
+                {
+                    continue;
+                }
+
                 uiChoices.Add(new DialogueChoiceDTO
                 {
                     ChoiceId = choices[i].ChoiceId,
@@ -211,15 +234,6 @@ namespace Features.InGame
         {
             if (result != null)
             {
-                m_currentSidePanelData.CatoStocks += result.CatoDelta;
-                m_currentSidePanelData.Monitoring += result.MonitoringDelta;
-                m_currentSidePanelData.Curiosity += result.CuriosityDelta;
-                m_currentSidePanelData.Confusion += result.ConfusionDelta;
-                m_currentSidePanelData.Fear += result.FearDelta;
-                m_currentSidePanelData.Sadness += result.SadnessDelta;
-                m_currentSidePanelData.Joy += result.JoyDelta;
-                m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
-
                 if (string.IsNullOrEmpty(result.ItemRewardKey) == false)
                 {
                     if (m_inventorySystem != null)
@@ -244,6 +258,13 @@ namespace Features.InGame
                     }
                 }
 
+                m_resourceService.ApplyCatoDelta(result.CatoDelta);
+                m_resourceService.ApplyMonitoringDelta(result.MonitoringDelta);
+                m_resourceService.ApplyEmotionDelta(result.SadnessDelta, result.JoyDelta, result.CuriosityDelta, result.FearDelta, result.ConfusionDelta);
+
+                m_currentSidePanelData = m_resourceService.CurrentResources;
+                m_sidePanelVM.UpdateSidePanelData(m_currentSidePanelData);
+
                 if (!string.IsNullOrEmpty(result.FeedbackMessage))
                 {
                     m_dialogueVM.DisplayDialogue(new DialogueDTO
@@ -253,7 +274,19 @@ namespace Features.InGame
                     });
                 }
 
-                m_currentDialogueIndex = result.NextDialogueIndex;
+                if (m_currentSidePanelData.Monitoring >= 10)
+                {
+                    m_dialogueVM.DisplayDialogue(new DialogueDTO
+                    {
+                        Type = DialogueType.SystemMessage,
+                        Content = "[경고] 감시도가 10에 도달하여 강제 배드 루트로 진입합니다."
+                    });
+                    m_currentDialogueIndex = m_loadedDialogues.Count - 1;
+                }
+                else
+                {
+                    m_currentDialogueIndex = result.NextDialogueIndex;
+                }
             }
         }
 
@@ -347,6 +380,15 @@ namespace Features.InGame
                 CurrentLine = index + 1,
                 TotalLines = m_loadedDialogues.Count
             });
+        }
+
+        private void HandleJumpRequested(int dialogueIndex)
+        {
+            if (m_loadedDialogues != null && dialogueIndex >= 0 && dialogueIndex < m_loadedDialogues.Count)
+            {
+                m_currentDialogueIndex = dialogueIndex;
+                PlayDialogueAtIndex(m_currentDialogueIndex);
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
+using System;
+using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using VContainer;
 
 namespace Features.Settings
@@ -41,6 +43,14 @@ namespace Features.Settings
         [SerializeField] private Button m_restoreDefaultButton;
         [SerializeField] private Button m_cancelButton;
         [SerializeField] private Button m_applyButton;
+
+        [Header("해상도 롤백 다이얼로그")]
+        [SerializeField] private GameObject m_rollbackDialog;
+        [SerializeField] private TMP_Text m_timerText;
+        [SerializeField] private Button m_rollbackConfirmButton;
+        [SerializeField] private Button m_rollbackCancelButton;
+
+        private System.Threading.CancellationTokenSource m_rollbackCts;
 
         private ISettingsViewModel m_viewModel;
         private ISoundService m_soundService;
@@ -150,6 +160,16 @@ namespace Features.Settings
             {
                 m_applyButton.onClick.RemoveAllListeners();
                 m_applyButton.onClick.AddListener(func_OnApplyButtonClicked);
+            }
+            if (m_rollbackConfirmButton != null)
+            {
+                m_rollbackConfirmButton.onClick.RemoveAllListeners();
+                m_rollbackConfirmButton.onClick.AddListener(func_OnRollbackConfirmClicked);
+            }
+            if (m_rollbackCancelButton != null)
+            {
+                m_rollbackCancelButton.onClick.RemoveAllListeners();
+                m_rollbackCancelButton.onClick.AddListener(func_OnRollbackCancelClicked);
             }
         }
 
@@ -352,9 +372,16 @@ namespace Features.Settings
             {
                 m_soundService.PlaySFX(SoundKeys.Click);
             }
-            if (m_viewModel != null)
+            if (m_displayPanel != null && m_displayPanel.activeSelf)
             {
-                m_viewModel.ApplySettings();
+                func_StartRollbackTimer();
+            }
+            else
+            {
+                if (m_viewModel != null)
+                {
+                    m_viewModel.ApplySettings();
+                }
             }
         }
 
@@ -440,6 +467,84 @@ namespace Features.Settings
             if (m_soundService != null)
             {
                 m_soundService.PlaySFX(SoundKeys.MenuClose);
+            }
+        }
+
+        private void func_StartRollbackTimer()
+        {
+            if (m_rollbackDialog != null)
+            {
+                m_rollbackDialog.SetActive(true);
+            }
+            func_RunCountdownAsync().Forget();
+        }
+
+        private async UniTaskVoid func_RunCountdownAsync()
+        {
+            if (m_rollbackCts != null)
+            {
+                m_rollbackCts.Cancel();
+                m_rollbackCts.Dispose();
+            }
+            m_rollbackCts = new System.Threading.CancellationTokenSource();
+
+            int count = 15;
+            try
+            {
+                while (count > 0)
+                {
+                    if (m_timerText != null)
+                    {
+                        m_timerText.text = $"{count}초 후 변경 사항이 자동 취소됩니다.";
+                    }
+                    await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: m_rollbackCts.Token);
+                    count--;
+                }
+                func_ExecuteRollback();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
+
+        public void func_OnRollbackConfirmClicked()
+        {
+            if (m_rollbackCts != null)
+            {
+                m_rollbackCts.Cancel();
+                m_rollbackCts.Dispose();
+                m_rollbackCts = null;
+            }
+            if (m_rollbackDialog != null)
+            {
+                m_rollbackDialog.SetActive(false);
+            }
+            if (m_viewModel != null)
+            {
+                m_viewModel.ApplySettings();
+            }
+        }
+
+        public void func_OnRollbackCancelClicked()
+        {
+            func_ExecuteRollback();
+        }
+
+        private void func_ExecuteRollback()
+        {
+            if (m_rollbackCts != null)
+            {
+                m_rollbackCts.Cancel();
+                m_rollbackCts.Dispose();
+                m_rollbackCts = null;
+            }
+            if (m_rollbackDialog != null)
+            {
+                m_rollbackDialog.SetActive(false);
+            }
+            if (m_viewModel != null)
+            {
+                m_viewModel.CancelSettings();
             }
         }
     }

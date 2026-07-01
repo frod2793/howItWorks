@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Domain.InGame;
+using Features.InGame;
+using Features.Settings;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Features.InGame;
-using UnityEngine;
-using Domain.InGame;
-using Features.Settings;
 
 #region 씬 초기화 (VContainer)
 public class InGameLifetimeScope : LifetimeScope
@@ -55,13 +56,14 @@ public class InGameLifetimeScope : LifetimeScope
         builder.RegisterEntryPoint<InGameOrchestrator>().AsSelf().As<IInGameOrchestrator>();
 
         RegisterComponentSafe<InGameDialogueView>(builder);
-        RegisterComponentSafe<InGameMiniDialogueView>(builder);
         RegisterComponentSafe<InGameDialogueOptionsManager>(builder);
         RegisterComponentSafe<InGameSceneInfoView>(builder);
         RegisterComponentSafe<InGameSidePanelView>(builder);
         RegisterComponentSafe<InGameCharacterView>(builder);
         RegisterComponentSafe<SettingsView>(builder);
         RegisterComponentSafe<BacklogView>(builder);
+        RegisterComponentSafe<InGameInventoryView>(builder);
+        RegisterComponentSafe<InGameEncyclopediaView>(builder);
 
         builder.Register<SaveLoadModel>(Lifetime.Scoped);
         builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
@@ -194,6 +196,42 @@ public class InGameLifetimeScope : LifetimeScope
         if (saveLoadView != null && saveLoadVM != null)
         {
             saveLoadView.Initialize(saveLoadVM);
+        }
+
+        InGameInventoryView inventoryView = null;
+        IInGameInventorySystem inventorySystem = null;
+        try
+        {
+            inventoryView = Container.Resolve<InGameInventoryView>();
+            inventorySystem = Container.Resolve<IInGameInventorySystem>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] InGameInventoryView/System 해결 실패: {e.Message}");
+        }
+
+        if (inventoryView != null && inventorySystem != null)
+        {
+            inventoryView.Initialize(inventorySystem, "SCN_03_PLAZA");
+        }
+
+        InGameEncyclopediaView encyclopediaView = null;
+        IInGameSaveSystem saveSystem = null;
+        try
+        {
+            encyclopediaView = Container.Resolve<InGameEncyclopediaView>();
+            saveSystem = Container.Resolve<IInGameSaveSystem>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] InGameEncyclopediaView/SaveSystem 해결 실패: {e.Message}");
+        }
+
+        if (encyclopediaView != null && saveSystem != null)
+        {
+            var globalData = saveSystem.LoadGlobalProgress();
+            var unlockedEndings = globalData != null && globalData.unlockedEndings != null ? globalData.unlockedEndings : new List<string>();
+            encyclopediaView.Initialize(unlockedEndings);
         }
     }
 

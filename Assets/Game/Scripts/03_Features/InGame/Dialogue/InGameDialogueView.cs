@@ -4,6 +4,7 @@ using TMPro;
 using VContainer;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 using Domain.InGame;
 
 namespace Features.InGame
@@ -16,12 +17,13 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_nameText;
         [SerializeField] private TextMeshProUGUI m_contentText;
         [SerializeField] private TypewriterEffect m_typewriterEffect;
-        [SerializeField] private Button m_autoButton;
-        [SerializeField] private Button m_inventoryButton;
         [SerializeField] private TextMeshProUGUI m_lineProgressText;
 
         private Image m_backgroundImage;
         private IDialogueViewModel m_viewModel;
+        private CanvasGroup m_viewCanvasGroup;
+        private bool m_isUIHidden = false;
+        private CancellationTokenSource m_autoCts;
 
 
 
@@ -35,9 +37,6 @@ namespace Features.InGame
 
             m_viewModel.OnChoicesUpdated -= HandleChoicesUpdated;
             m_viewModel.OnChoicesUpdated += HandleChoicesUpdated;
-
-            m_viewModel.OnAutoPlayStatusChanged -= SyncAutoPlayState;
-            m_viewModel.OnAutoPlayStatusChanged += SyncAutoPlayState;
 
             m_viewModel.OnSkipRequested += () =>
             {
@@ -57,6 +56,15 @@ namespace Features.InGame
             }
         }
 
+        private void Start()
+        {
+            m_viewCanvasGroup = GetComponent<CanvasGroup>();
+            if (m_viewCanvasGroup == null)
+            {
+                m_viewCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
         public void func_OnNextButtonClicked()
         {
             if (m_viewModel != null)
@@ -65,52 +73,25 @@ namespace Features.InGame
             }
         }
 
-        public void func_OnAutoButtonClicked()
+        private void Update()
         {
-            if (m_viewModel != null)
+            var keyboard = UnityEngine.InputSystem.Keyboard.current;
+            if (keyboard != null && keyboard.hKey.wasPressedThisFrame)
             {
-                Debug.Log($"[InGameDialogueView] 오토 버튼 클릭됨. 토글 요청: {!m_viewModel.IsAutoPlayActive}");
-                m_viewModel.IsAutoPlayActive = !m_viewModel.IsAutoPlayActive;
+                func_ToggleUIHide();
             }
         }
 
-        private void SyncAutoPlayState(bool isAuto)
+        private void func_ToggleUIHide()
         {
-            Debug.Log($"[InGameDialogueView] 오토플레이 상태 변경 이벤트 수신: {isAuto}");
-            if (m_autoButton != null)
+            m_isUIHidden = !m_isUIHidden;
+            if (m_viewCanvasGroup != null)
             {
-                Image image = m_autoButton.GetComponent<Image>();
-                if (image != null)
-                {
-                    if (isAuto)
-                    {
-                        image.color = new Color(Random.value, Random.value, Random.value, 1f);
-                    }
-                    else
-                    {
-                        image.color = Color.white;
-                    }
-                }
+                m_viewCanvasGroup.alpha = m_isUIHidden ? 0f : 1f;
+                m_viewCanvasGroup.blocksRaycasts = !m_isUIHidden;
+                m_viewCanvasGroup.interactable = !m_isUIHidden;
             }
         }
-
-        public void func_OnSkipButtonClicked()
-        {
-        }
-
-        public void func_OnLogButtonClicked()
-        {
-            if (m_viewModel != null)
-            {
-                m_viewModel.RequestBacklog();
-            }
-        }
-
-        public void func_OnInventoryButtonClicked()
-        {
-        }
-
-
 
         private void UpdateDialogue(DialogueDTO dialogue)
         {
@@ -141,12 +122,23 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
+                    { 
+                        m_viewModel.IsTyping = false; 
+                        if (m_viewModel.IsAutoPlayActive)
+                        {
+                            func_RunAutoPlayDelay(dialogue.Content).Forget();
+                        }
+                    }).Forget();
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
                     m_viewModel.IsTyping = false;
+                    if (m_viewModel.IsAutoPlayActive)
+                    {
+                        func_RunAutoPlayDelay(dialogue.Content).Forget();
+                    }
                 }
             }
             else if (dialogue.Type == DialogueType.SystemMessage)
@@ -166,12 +158,23 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
+                    { 
+                        m_viewModel.IsTyping = false; 
+                        if (m_viewModel.IsAutoPlayActive)
+                        {
+                            func_RunAutoPlayDelay(dialogue.Content).Forget();
+                        }
+                    }).Forget();
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
                     m_viewModel.IsTyping = false;
+                    if (m_viewModel.IsAutoPlayActive)
+                    {
+                        func_RunAutoPlayDelay(dialogue.Content).Forget();
+                    }
                 }
             }
             else
@@ -202,17 +205,54 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => { m_viewModel.IsTyping = false; }).Forget();
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
+                    { 
+                        m_viewModel.IsTyping = false; 
+                        if (m_viewModel.IsAutoPlayActive)
+                        {
+                            func_RunAutoPlayDelay(dialogue.Content).Forget();
+                        }
+                    }).Forget();
                 }
                 else if (m_contentText != null)
                 {
                     m_contentText.text = dialogue.Content;
                     m_viewModel.IsTyping = false;
+                    if (m_viewModel.IsAutoPlayActive)
+                    {
+                        func_RunAutoPlayDelay(dialogue.Content).Forget();
+                    }
                 }
             }
         }
 
-        private void HandleChoicesUpdated(System.Collections.Generic.List<DialogueChoiceDTO> choices)
+        private async UniTaskVoid func_RunAutoPlayDelay(string content)
+        {
+            func_CancelAutoTimer();
+            m_autoCts = new CancellationTokenSource();
+
+            try
+            {
+                float delayTime = content.Length * 0.05f + 1.5f;
+                await UniTask.Delay(System.TimeSpan.FromSeconds(delayTime), cancellationToken: m_autoCts.Token);
+                func_OnNextButtonClicked();
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+        }
+
+        private void func_CancelAutoTimer()
+        {
+            if (m_autoCts != null)
+            {
+                m_autoCts.Cancel();
+                m_autoCts.Dispose();
+                m_autoCts = null;
+            }
+        }
+
+        private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
         {
             if (this == null)
             {
@@ -221,6 +261,11 @@ namespace Features.InGame
 
             if (choices != null && choices.Count > 0)
             {
+                func_CancelAutoTimer();
+                if (m_viewModel != null)
+                {
+                    m_viewModel.IsAutoPlayActive = false;
+                }
                 gameObject.SetActive(false);
             }
             else
@@ -231,11 +276,11 @@ namespace Features.InGame
 
         private void OnDestroy()
         {
+            func_CancelAutoTimer();
             if (m_viewModel != null)
             {
                 m_viewModel.OnDialogueUpdated -= UpdateDialogue;
                 m_viewModel.OnChoicesUpdated -= HandleChoicesUpdated;
-                m_viewModel.OnAutoPlayStatusChanged -= SyncAutoPlayState;
             }
         }
     }

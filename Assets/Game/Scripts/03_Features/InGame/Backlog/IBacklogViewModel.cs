@@ -8,7 +8,9 @@ namespace Features.InGame
     {
         IReadOnlyList<BacklogItemDTO> Items { get; }
         event Action OnBacklogUpdated;
+        event Action<int> OnRequestJump;
         void Clear();
+        void JumpToLine(int dialogueIndex);
         string CurrentSceneInfo { get; }
     }
 }
