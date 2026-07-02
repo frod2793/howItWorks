@@ -205,9 +205,9 @@ public class InGameLifetimeScope : LifetimeScope
             inventoryView = Container.Resolve<InGameInventoryView>();
             inventorySystem = Container.Resolve<IInGameInventorySystem>();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogError($"[InGameLifetimeScope] InGameInventoryView/System 해결 실패: {e.Message}");
+            Debug.LogWarning("[InGameLifetimeScope] 인벤토리 시스템 또는 뷰 객체 초기화가 생략되었습니다. (독립 씬 실행 상태 시 정상)");
         }
 
         if (inventoryView != null && inventorySystem != null)
@@ -222,9 +222,9 @@ public class InGameLifetimeScope : LifetimeScope
             encyclopediaView = Container.Resolve<InGameEncyclopediaView>();
             saveSystem = Container.Resolve<IInGameSaveSystem>();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.LogError($"[InGameLifetimeScope] InGameEncyclopediaView/SaveSystem 해결 실패: {e.Message}");
+            Debug.LogWarning("[InGameLifetimeScope] 백과사전 뷰 또는 저장 시스템 객체 초기화가 생략되었습니다. (독립 씬 실행 상태 시 정상)");
         }
 
         if (encyclopediaView != null && saveSystem != null)
@@ -244,7 +244,7 @@ public class InGameLifetimeScope : LifetimeScope
         }
         else
         {
-            builder.RegisterComponentInHierarchy<T>();
+            Debug.LogWarning($"[InGameLifetimeScope] 씬 하이어라키에서 {typeof(T).Name} 컴포넌트를 찾을 수 없어 VContainer 등록을 생략합니다.");
         }
     }
 }

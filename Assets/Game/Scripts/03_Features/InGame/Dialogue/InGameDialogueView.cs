@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Domain.InGame;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using VContainer;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
-using Domain.InGame;
 
 namespace Features.InGame
 {
@@ -76,9 +76,16 @@ namespace Features.InGame
         private void Update()
         {
             var keyboard = UnityEngine.InputSystem.Keyboard.current;
-            if (keyboard != null && keyboard.hKey.wasPressedThisFrame)
+            if (keyboard != null)
             {
-                func_ToggleUIHide();
+                if (keyboard.hKey.wasPressedThisFrame)
+                {
+                    func_ToggleUIHide();
+                }
+                else if (keyboard.spaceKey.wasPressedThisFrame)
+                {
+                    func_OnNextButtonClicked();
+                }
             }
         }
 
@@ -122,9 +129,9 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
-                    { 
-                        m_viewModel.IsTyping = false; 
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () =>
+                    {
+                        m_viewModel.IsTyping = false;
                         if (m_viewModel.IsAutoPlayActive)
                         {
                             func_RunAutoPlayDelay(dialogue.Content).Forget();
@@ -158,9 +165,9 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
-                    { 
-                        m_viewModel.IsTyping = false; 
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () =>
+                    {
+                        m_viewModel.IsTyping = false;
                         if (m_viewModel.IsAutoPlayActive)
                         {
                             func_RunAutoPlayDelay(dialogue.Content).Forget();
@@ -205,9 +212,9 @@ namespace Features.InGame
                 m_viewModel.IsTyping = true;
                 if (m_typewriterEffect != null && m_contentText != null)
                 {
-                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () => 
-                    { 
-                        m_viewModel.IsTyping = false; 
+                    m_typewriterEffect.Play(m_contentText, dialogue.Content, () =>
+                    {
+                        m_viewModel.IsTyping = false;
                         if (m_viewModel.IsAutoPlayActive)
                         {
                             func_RunAutoPlayDelay(dialogue.Content).Forget();
@@ -259,18 +266,25 @@ namespace Features.InGame
                 return;
             }
 
-            if (choices != null && choices.Count > 0)
+            int activeCount = 0;
+            if (choices != null)
+            {
+                for (int i = 0; i < choices.Count; i++)
+                {
+                    if (choices[i] != null && !choices[i].IsLocked)
+                    {
+                        activeCount++;
+                    }
+                }
+            }
+
+            if (activeCount > 0)
             {
                 func_CancelAutoTimer();
                 if (m_viewModel != null)
                 {
                     m_viewModel.IsAutoPlayActive = false;
                 }
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                gameObject.SetActive(true);
             }
         }
 

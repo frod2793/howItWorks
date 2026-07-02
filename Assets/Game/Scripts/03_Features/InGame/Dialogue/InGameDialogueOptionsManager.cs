@@ -3,17 +3,23 @@ using VContainer;
 using System.Collections.Generic;
 using System;
 using Domain.InGame;
+using UnityEngine.UI;
 
 namespace Features.InGame
 {
     public class InGameDialogueOptionsManager : MonoBehaviour
     {
         private List<InGameDialogueOptionCardView> m_optionCards;
-
         private IDialogueViewModel m_viewModel;
+
+        private Canvas m_canvas;
+        private GraphicRaycaster m_raycaster;
 
         private void Awake()
         {
+            m_canvas = GetComponent<Canvas>();
+            m_raycaster = GetComponent<GraphicRaycaster>();
+
             var cards = GetComponentsInChildren<InGameDialogueOptionCardView>(true);
             if (cards != null)
             {
@@ -39,7 +45,7 @@ namespace Features.InGame
                 }
             }
 
-            gameObject.SetActive(false);
+            func_SetCanvasActive(false);
         }
 
         private void HandleChoicesUpdated(List<DialogueChoiceDTO> choices)
@@ -60,23 +66,37 @@ namespace Features.InGame
                 }
             }
 
-            if (choices == null || choices.Count == 0)
+            List<DialogueChoiceDTO> activeChoices = new List<DialogueChoiceDTO>();
+            if (choices != null)
             {
-                gameObject.SetActive(false);
+                for (int i = 0; i < choices.Count; i++)
+                {
+                    if (choices[i] != null && !choices[i].IsLocked)
+                    {
+                        activeChoices.Add(choices[i]);
+                    }
+                }
+            }
+
+            if (activeChoices.Count == 0)
+            {
+                func_SetCanvasActive(false);
                 return;
             }
 
-            gameObject.SetActive(true);
+            func_SetCanvasActive(true);
 
             if (m_optionCards != null)
             {
+                int cardIndex = 0;
                 for (int i = 0; i < m_optionCards.Count; i++)
                 {
                     if (m_optionCards[i] != null)
                     {
-                        if (i < choices.Count)
+                        if (cardIndex < activeChoices.Count)
                         {
-                            m_optionCards[i].SetCardData(choices[i], OnCardSelected);
+                            m_optionCards[i].SetCardData(activeChoices[cardIndex], OnCardSelected);
+                            cardIndex++;
                         }
                         else
                         {
@@ -84,6 +104,18 @@ namespace Features.InGame
                         }
                     }
                 }
+            }
+        }
+
+        private void func_SetCanvasActive(bool isActive)
+        {
+            if (m_canvas != null)
+            {
+                m_canvas.enabled = isActive;
+            }
+            if (m_raycaster != null)
+            {
+                m_raycaster.enabled = isActive;
             }
         }
 

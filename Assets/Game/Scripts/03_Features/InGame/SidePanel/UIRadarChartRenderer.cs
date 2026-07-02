@@ -9,13 +9,13 @@ namespace Features.InGame
         private const float m_maxRadius = 160f;
         private const float m_maxValue = 10f;
 
-        public void SetEmotionValues(float sadness, float joy, float curiosity, float fear, float confusion)
+        public void SetEmotionValues(float sadness, float confusion, float fear, float curiosity, float joy)
         {
             m_emotionValues[0] = sadness;
-            m_emotionValues[1] = joy;
-            m_emotionValues[2] = curiosity;
-            m_emotionValues[3] = fear;
-            m_emotionValues[4] = confusion;
+            m_emotionValues[1] = confusion;
+            m_emotionValues[2] = fear;
+            m_emotionValues[3] = curiosity;
+            m_emotionValues[4] = joy;
             SetAllDirty();
         }
 
@@ -85,10 +85,10 @@ namespace Features.InGame
             Color32[] emotionColors = new Color32[5]
             {
                 new Color32(121, 146, 200, 255),
-                new Color32(217, 184, 109, 255),
-                new Color32(202, 181, 131, 255),
+                new Color32(142, 114, 158, 255),
                 new Color32(173, 77, 83, 255),
-                new Color32(142, 114, 158, 255)
+                new Color32(202, 181, 131, 255),
+                new Color32(217, 184, 109, 255)
             };
 
             for (int i = 0; i < 5; i++)

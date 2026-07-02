@@ -109,10 +109,10 @@ namespace Features.InGame
 
         private void SetInitialMockData()
         {
-            UpdateStockBlocks(m_catoStockBlocks, 2);
+            UpdateStockBlocks(m_catoStockBlocks, 3);
             if (m_catoStockText != null)
             {
-                m_catoStockText.text = "2 / 5";
+                m_catoStockText.text = "3 / 5";
             }
 
             UpdateSliderAndText(null, m_sadnessText, 6, 10);
@@ -126,13 +126,13 @@ namespace Features.InGame
                 m_radarChart.SetEmotionValues(6, 3, 3, 7, 1);
             }
 
-            UpdateSliderAndText(m_monitoringSlider, m_monitoringText, 5, 10);
+            UpdateSliderAndText(m_monitoringSlider, m_monitoringText, 2, 10);
             UpdateSliderAndText(m_trustSlider, m_trustText, 4, 10);
 
-            UpdateStockBlocks(m_loopBlocks, 1);
+            UpdateStockBlocks(m_loopBlocks, 3);
             if (m_loopText != null)
             {
-                m_loopText.text = "1 / 5";
+                m_loopText.text = "3 / 5";
             }
 
             if (m_actBranchText != null)
@@ -145,7 +145,6 @@ namespace Features.InGame
                 m_passedScenesText.text = "씬 2 · 3 · 5 · 7";
             }
 
-            UpdateTextsPosition();
             UpdateStatusText(6, 1, 7, 3, 3, (6 >= 3 && 1 >= 3));
         }
 
@@ -192,7 +191,6 @@ namespace Features.InGame
                 m_passedScenesText.text = data.PassedScenesInfo;
             }
 
-            UpdateTextsPosition();
             UpdateStatusText(data.Sadness, data.Joy, data.Curiosity, data.Fear, data.Confusion, data.IsLongingActive);
         }
 
@@ -309,47 +307,7 @@ namespace Features.InGame
             }
         }
 
-        private void UpdateTextsPosition()
-        {
-            if (m_radarChart != null)
-            {
-                RectTransform chartRect = m_radarChart.GetComponent<RectTransform>();
-                if (chartRect != null)
-                {
-                    Vector2 center = chartRect.anchoredPosition;
-                    float textRadius = 180f;
 
-                    RectTransform[] textRects = new RectTransform[5]
-                    {
-                        m_sadnessText != null ? m_sadnessText.rectTransform : null,
-                        m_confusionText != null ? m_confusionText.rectTransform : null,
-                        m_fearText != null ? m_fearText.rectTransform : null,
-                        m_curiosityText != null ? m_curiosityText.rectTransform : null,
-                        m_joyText != null ? m_joyText.rectTransform : null
-                    };
-
-                    for (int i = 0; i < 5; i++)
-                    {
-                        if (textRects[i] != null)
-                        {
-                            textRects[i].anchorMin = new Vector2(0.5f, 0.5f);
-                            textRects[i].anchorMax = new Vector2(0.5f, 0.5f);
-
-                            float angle = (Mathf.PI * 2f / 5f) * i + (Mathf.PI / 2f);
-                            float x = center.x + Mathf.Cos(angle) * textRadius;
-                            float y = center.y + Mathf.Sin(angle) * textRadius;
-                            textRects[i].anchoredPosition = new Vector2(x, y);
-
-                            float cos = Mathf.Cos(angle);
-                            float sin = Mathf.Sin(angle);
-                            float pivotX = 0.5f - cos * 0.5f;
-                            float pivotY = 0.5f - sin * 0.5f;
-                            textRects[i].pivot = new Vector2(pivotX, pivotY);
-                        }
-                    }
-                }
-            }
-        }
 
         private void UpdateStatusText(int sadness, int joy, int curiosity, int fear, int confusion, bool isLongingActive)
         {
@@ -506,10 +464,10 @@ namespace Features.InGame
 
         private void UpdateEditorMockData()
         {
-            UpdateStockBlocks(m_catoStockBlocks, 2);
+            UpdateStockBlocks(m_catoStockBlocks, 3);
             if (m_catoStockText != null)
             {
-                m_catoStockText.text = "2 / 5";
+                m_catoStockText.text = "3 / 5";
             }
 
             UpdateSliderAndText(null, m_sadnessText, m_sadnessEditorVal, 10);
@@ -523,13 +481,13 @@ namespace Features.InGame
                 m_radarChart.SetEmotionValues(m_sadnessEditorVal, m_confusionEditorVal, m_fearEditorVal, m_curiosityEditorVal, m_joyEditorVal);
             }
 
-            UpdateSliderAndText(m_monitoringSlider, m_monitoringText, 5, 10);
+            UpdateSliderAndText(m_monitoringSlider, m_monitoringText, 2, 10);
             UpdateSliderAndText(m_trustSlider, m_trustText, 4, 10);
 
-            UpdateStockBlocks(m_loopBlocks, 1);
+            UpdateStockBlocks(m_loopBlocks, 3);
             if (m_loopText != null)
             {
-                m_loopText.text = "1 / 5";
+                m_loopText.text = "3 / 5";
             }
 
             if (m_actBranchText != null)
@@ -542,7 +500,6 @@ namespace Features.InGame
                 m_passedScenesText.text = "씬 2 · 3 · 5 · 7";
             }
 
-            UpdateTextsPosition();
             UpdateStatusText(m_sadnessEditorVal, m_joyEditorVal, m_curiosityEditorVal, m_fearEditorVal, m_confusionEditorVal, (m_sadnessEditorVal >= 3 && m_joyEditorVal >= 3));
         }
 
