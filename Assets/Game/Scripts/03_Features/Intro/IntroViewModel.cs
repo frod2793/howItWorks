@@ -10,6 +10,7 @@ public class IntroViewModel : IIntroViewModel
     #region 내부 필드
     private readonly IntroStoryDataDTO m_storyData;
     private readonly bool m_skipIntro;
+    private readonly ISoundService m_soundService;
     private int m_currentIndex = -1;
     #endregion
 
@@ -42,10 +43,11 @@ public class IntroViewModel : IIntroViewModel
     /// [설명]: 뷰모델 생성 시 스토리 데이터를 주입받습니다.
     /// </summary>
     /// <param name="storyData">로드된 인트로 스토리 DTO</param>
-    public IntroViewModel(IntroStoryDataDTO storyData, bool skipIntro)
+    public IntroViewModel(IntroStoryDataDTO storyData, bool skipIntro, ISoundService soundService)
     {
         m_storyData = storyData;
         m_skipIntro = skipIntro;
+        m_soundService = soundService;
     }
 
     #region 공개 메서드
@@ -93,6 +95,30 @@ public class IntroViewModel : IIntroViewModel
         if (OnIntroFinished != null)
         {
             OnIntroFinished.Invoke();
+        }
+    }
+
+    public void NotifyTypingStarted()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.PlayLoopSFX("Typing");
+        }
+    }
+
+    public void NotifyTypingCompleted()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.StopLoopSFX();
+        }
+    }
+
+    public void StopIntroBGM()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.StopBGM(1.0f);
         }
     }
     #endregion

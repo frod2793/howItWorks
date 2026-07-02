@@ -18,6 +18,8 @@ public interface ITitleViewModel
     void OpenStoryTree();
     void OpenCredits();
     void QuitGame();
+    void PlayTitleBGM();
+    void PlayNewGameSound();
+    void PlayClickSound();
 }
 #endregion
-

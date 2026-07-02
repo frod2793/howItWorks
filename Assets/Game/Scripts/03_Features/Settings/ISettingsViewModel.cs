@@ -17,5 +17,8 @@ namespace Features.Settings
         void CancelSettings();
         void ResetToDefault();
         void Close();
+        void PlayClickSound();
+        void PlayMenuOpenSound();
+        void PlayMenuCloseSound();
     }
 }

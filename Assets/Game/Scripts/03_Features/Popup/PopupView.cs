@@ -31,15 +31,9 @@ public class PopupView : MonoBehaviour
     #region 내부 필드
     private IPopupViewModel m_viewModel;
     private PopupDataProvider m_debugDataProvider;
-    private ISoundService m_soundService;
     #endregion
 
     #region 초기화 및 바인딩 로직
-    [VContainer.Inject]
-    public void Construct(ISoundService soundService)
-    {
-        m_soundService = soundService;
-    }
     public void Initialize(IPopupViewModel viewModel)
     {
         if (viewModel == null)
@@ -47,11 +41,6 @@ public class PopupView : MonoBehaviour
             return;
         }
         m_viewModel = viewModel;
-
-        if (m_soundService != null)
-        {
-            m_soundService.StopLoopSFX();
-        }
 
         if (m_messageText != null)
         {
@@ -84,7 +73,7 @@ public class PopupView : MonoBehaviour
     /// [설명]: 인스펙터 버튼을 통해 호출되는 테스트 메서드입니다.
     /// </summary>
     [ContextMenu("Test Current Key")]
-    public void TestFromInspector()
+    public void func_TestFromInspector()
     {
         if (m_debugDataProvider == null || string.IsNullOrEmpty(m_testKey))
         {
@@ -93,7 +82,11 @@ public class PopupView : MonoBehaviour
         }
 
         var data = m_debugDataProvider.GetPopupData(m_testKey);
-        var testVM = new PopupViewModel(data.Message, data.Subtitle, data.AnimationKey);
+        var testVM = System.Activator.CreateInstance(
+            typeof(PopupViewModel),
+            data.Message,
+            data.Subtitle,
+            data.AnimationKey) as IPopupViewModel;
         Initialize(testVM);
     }
     #endregion
@@ -115,7 +108,8 @@ public class PopupView : MonoBehaviour
             var delayOneSecond = System.TimeSpan.FromSeconds(1.0f);
             var delayHalfSecond = System.TimeSpan.FromSeconds(0.5f);
             
-            do
+            bool shouldContinueSubtitle = true;
+            while (shouldContinueSubtitle)
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -135,7 +129,8 @@ public class PopupView : MonoBehaviour
                     await UniTask.Delay(delayHalfSecond, cancellationToken: this.GetCancellationTokenOnDestroy());
                 }
 
-            } while (m_loopSubtitle);
+                shouldContinueSubtitle = m_loopSubtitle;
+            }
         }
     }
 

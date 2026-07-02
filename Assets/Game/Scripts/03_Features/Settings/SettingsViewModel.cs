@@ -167,5 +167,29 @@ namespace Features.Settings
                 OnCloseRequested.Invoke();
             }
         }
+
+        public void PlayClickSound()
+        {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
+            }
+        }
+
+        public void PlayMenuOpenSound()
+        {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.MenuOpen);
+            }
+        }
+
+        public void PlayMenuCloseSound()
+        {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.MenuClose);
+            }
+        }
     }
 }

@@ -118,9 +118,16 @@ namespace Features.InGame
         public event Action OnSceneInfoUpdated;
         public event Action OnRequestSettings;
 
+        private readonly ISoundService m_soundService;
+
         public string DisplaySceneTitle { get; private set; } = string.Empty;
         public string DisplayLocation { get; private set; } = string.Empty;
         public string DisplayPlaythrough { get; private set; } = string.Empty;
+
+        public SceneInfoViewModel(ISoundService soundService)
+        {
+            m_soundService = soundService;
+        }
 
         public void UpdateSceneInfo(SceneInfoDTO info)
         {
@@ -147,6 +154,14 @@ namespace Features.InGame
             if (OnRequestSettings != null)
             {
                 OnRequestSettings.Invoke();
+            }
+        }
+
+        public void PlayClickSound()
+        {
+            if (m_soundService != null)
+            {
+                m_soundService.PlaySFX(SoundKeys.Click);
             }
         }
     }

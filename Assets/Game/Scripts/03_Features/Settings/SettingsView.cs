@@ -53,16 +53,9 @@ namespace Features.Settings
         private System.Threading.CancellationTokenSource m_rollbackCts;
 
         private ISettingsViewModel m_viewModel;
-        private ISoundService m_soundService;
         private Button[] m_tabButtonsArray;
         private TMP_Text[] m_tabTextsArray;
         private Image[] m_tabImagesArray;
-
-        [Inject]
-        public void Construct(ISoundService soundService)
-        {
-            m_soundService = soundService;
-        }
 
         public void Initialize(ISettingsViewModel viewModel)
         {
@@ -250,54 +243,54 @@ namespace Features.Settings
 
         public void func_OnAudioTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(0);
         }
 
         public void func_OnTextTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(1);
         }
 
         public void func_OnDisplayTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(2);
         }
 
         public void func_OnAccessibilityTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(3);
         }
 
         public void func_OnSaveTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(4);
         }
 
         public void func_OnInputTabButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
             SwitchTab(5);
         }
@@ -344,34 +337,29 @@ namespace Features.Settings
 
         public void func_OnRestoreDefaultButtonClicked()
         {
-            if (m_soundService != null)
-            {
-                m_soundService.PlaySFX(SoundKeys.Click);
-            }
             if (m_viewModel != null)
             {
+                m_viewModel.PlayClickSound();
                 m_viewModel.ResetToDefault();
             }
         }
 
         public void func_OnCancelButtonClicked()
         {
-            if (m_soundService != null)
-            {
-                m_soundService.PlaySFX(SoundKeys.Click);
-            }
             if (m_viewModel != null)
             {
+                m_viewModel.PlayClickSound();
                 m_viewModel.CancelSettings();
             }
         }
 
         public void func_OnApplyButtonClicked()
         {
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.Click);
+                m_viewModel.PlayClickSound();
             }
+
             if (m_displayPanel != null && m_displayPanel.activeSelf)
             {
                 func_StartRollbackTimer();
@@ -450,9 +438,9 @@ namespace Features.Settings
                 m_settingsPanel.SetActive(true);
             }
 
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.MenuOpen);
+                m_viewModel.PlayMenuOpenSound();
             }
         }
 
@@ -464,9 +452,9 @@ namespace Features.Settings
                 m_settingsPanel.SetActive(false);
             }
 
-            if (m_soundService != null)
+            if (m_viewModel != null)
             {
-                m_soundService.PlaySFX(SoundKeys.MenuClose);
+                m_viewModel.PlayMenuCloseSound();
             }
         }
 

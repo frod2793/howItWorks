@@ -29,7 +29,8 @@ public class InGameLifetimeScope : LifetimeScope
         {
             var provider = container.Resolve<IntroDataProvider>();
             var data = provider.LoadIntroData();
-            return new IntroViewModel(data, m_skipIntro);
+            var soundService = container.Resolve<ISoundService>();
+            return new IntroViewModel(data, m_skipIntro, soundService);
         }, Lifetime.Scoped).As<IIntroViewModel>();
 
         RegisterComponentSafe<IntroView>(builder);
@@ -249,5 +250,4 @@ public class InGameLifetimeScope : LifetimeScope
     }
 }
 #endregion
-
 

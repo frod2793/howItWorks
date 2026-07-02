@@ -16,18 +16,16 @@ public class TitleView : MonoBehaviour
     [SerializeField] private Image m_backgroundImage;
 
     private ITitleViewModel m_viewModel;
-    private ISoundService m_soundService;
     private Button[] m_menuButtons;
     private int m_currentFocusIndex = 0;
 
-    public void Initialize(ITitleViewModel viewModel, ISoundService soundService = null)
+    public void Initialize(ITitleViewModel viewModel)
     {
         if (viewModel == null)
         {
             return;
         }
         m_viewModel = viewModel;
-        m_soundService = soundService;
 
         System.Collections.Generic.List<Button> activeButtons = new System.Collections.Generic.List<Button>();
 
@@ -87,9 +85,9 @@ public class TitleView : MonoBehaviour
         UpdateFocusVisuals(false);
         ApplyEndingBackground();
 
-        if (m_soundService != null)
+        if (m_viewModel != null)
         {
-            m_soundService.PlayBGM("Title/titleSample03", 1.0f);
+            m_viewModel.PlayTitleBGM();
         }
     }
 
@@ -228,84 +226,63 @@ public class TitleView : MonoBehaviour
 
     public void func_OnNewGameButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.NewGame);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayNewGameSound();
             m_viewModel.NewGame();
         }
     }
 
     public void func_OnLoadGameButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.LoadGame();
         }
     }
 
     public void func_OnStoryTreeButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.OpenStoryTree();
         }
     }
 
     public void func_OnEncyclopediaButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.OpenEncyclopedia();
         }
     }
 
     public void func_OnSettingsButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.OpenSettings();
         }
     }
 
     public void func_OnCreditsButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.OpenCredits();
         }
     }
 
     public void func_OnQuitButtonClicked()
     {
-        if (m_soundService != null)
-        {
-            m_soundService.PlaySFX(SoundKeys.Click);
-        }
         if (m_viewModel != null)
         {
+            m_viewModel.PlayClickSound();
             m_viewModel.QuitGame();
         }
     }

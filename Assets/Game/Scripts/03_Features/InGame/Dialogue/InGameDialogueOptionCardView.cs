@@ -60,14 +60,14 @@ namespace Features.InGame
 
             if (m_canvasGroup != null)
             {
-                m_canvasGroup.blocksRaycasts = true;
-                m_canvasGroup.alpha = 1.0f;
-                m_canvasGroup.interactable = true;
+                m_canvasGroup.blocksRaycasts = !dto.IsLocked;
+                m_canvasGroup.alpha = dto.IsLocked ? 0.5f : 1.0f;
+                m_canvasGroup.interactable = !dto.IsLocked;
             }
 
             if (m_button != null)
             {
-                m_button.interactable = true;
+                m_button.interactable = !dto.IsLocked;
             }
         }
 

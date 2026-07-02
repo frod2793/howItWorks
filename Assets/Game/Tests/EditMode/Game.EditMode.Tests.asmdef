@@ -1,15 +1,14 @@
 {
-    "name": "Game.PlayMode.Tests",
+    "name": "Game.EditMode.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
-        "VContainer",
-        "UniTask",
-        "Unity.InputSystem",
-        "Unity.TextMeshPro",
+        "UnityEditor.TestRunner",
         "Game"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

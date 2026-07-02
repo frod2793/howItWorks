@@ -33,6 +33,10 @@ namespace Features.InGame
         [SerializeField] private TextMeshProUGUI m_dominantEmotionText;
         [SerializeField] private TextMeshProUGUI m_yearningStatusText;
 
+        [Header("그리움 배너 구성요소")]
+        [SerializeField] private GameObject m_yearningBadgeGo;
+        [SerializeField] private TextMeshProUGUI m_yearningBadgeText;
+
         [Header("감시 구성요소")]
         [SerializeField] private Slider m_monitoringSlider;
         [SerializeField] private TextMeshProUGUI m_monitoringText;
@@ -48,6 +52,9 @@ namespace Features.InGame
         [Header("회차 분기 텍스트")]
         [SerializeField] private TextMeshProUGUI m_actBranchText;
         [SerializeField] private TextMeshProUGUI m_passedScenesText;
+
+        [Header("대사 진행 표시 텍스트")]
+        [SerializeField] private TextMeshProUGUI m_dialogueProgressText;
 
         [Header("진행 컨트롤 버튼")]
         [SerializeField] private Button m_autoButton;
@@ -66,6 +73,7 @@ namespace Features.InGame
         private Tweener m_monitoringPulseTween;
         private bool m_isSkipActive;
         private CancellationTokenSource m_skipCts;
+        private const string m_dialogueProgressSceneLabel = "씬 03";
 
         [Inject]
         public void Construct(ISidePanelViewModel viewModel, IDialogueViewModel dialogueViewModel)
@@ -76,6 +84,7 @@ namespace Features.InGame
             m_viewModel.OnSidePanelDataChanged += UpdateSidePanelData;
             m_dialogueViewModel.OnAutoPlayStatusChanged += SyncAutoPlayState;
             m_dialogueViewModel.OnChoicesUpdated += HandleChoicesUpdated;
+            m_dialogueViewModel.OnDialogueUpdated += UpdateDialogueProgress;
         }
 
         private void Start()
@@ -142,7 +151,12 @@ namespace Features.InGame
 
             if (m_passedScenesText != null)
             {
-                m_passedScenesText.text = "씬 2 · 3 · 5 · 7";
+                m_passedScenesText.text = "구역 ㆍ 제3 보존구";
+            }
+
+            if (m_dialogueProgressText != null)
+            {
+                m_dialogueProgressText.text = $"{m_dialogueProgressSceneLabel} ㆍ 줄 12 / 48";
             }
 
             UpdateStatusText(6, 1, 7, 3, 3, (6 >= 3 && 1 >= 3));
@@ -225,7 +239,12 @@ namespace Features.InGame
 
                 if (slider == m_monitoringSlider)
                 {
-                    var fillImage = slider.fillRect != null ? slider.fillRect.GetComponent<Image>() : null;
+                    Image fillImage = null;
+                    if (slider.fillRect != null)
+                    {
+                        fillImage = slider.fillRect.GetComponent<Image>();
+                    }
+
                     if (fillImage != null)
                     {
                         if (value >= 8)
@@ -311,27 +330,38 @@ namespace Features.InGame
 
         private void UpdateStatusText(int sadness, int joy, int curiosity, int fear, int confusion, bool isLongingActive)
         {
-            int maxVal = -1;
-            string dominantName = "";
-            int[] vals = new int[5] { sadness, joy, curiosity, fear, confusion };
-            string[] names = new string[5] { "슬픔", "기쁨", "호기심", "공포", "혼란" };
-
-            for (int i = 0; i < 5; i++)
-            {
-                if (vals[i] > maxVal)
-                {
-                    maxVal = vals[i];
-                    dominantName = names[i];
-                }
-            }
+            int maxVal = sadness;
+            string dominantName = "슬픔";
+            UpdateDominantEmotionCandidate(joy, "기쁨", ref maxVal, ref dominantName);
+            UpdateDominantEmotionCandidate(curiosity, "호기심", ref maxVal, ref dominantName);
+            UpdateDominantEmotionCandidate(fear, "공포", ref maxVal, ref dominantName);
+            UpdateDominantEmotionCandidate(confusion, "혼란", ref maxVal, ref dominantName);
 
             if (m_dominantEmotionText != null)
             {
-                m_dominantEmotionText.text = $"우세 감정:  <color=#D4AF37>{dominantName} ({maxVal})</color>";
+                m_dominantEmotionText.text = $"우세 - {dominantName} {maxVal}";
+            }
+
+            if (m_yearningBadgeGo != null)
+            {
+                m_yearningBadgeGo.SetActive(isLongingActive);
+
+                if (m_yearningBadgeText != null)
+                {
+                    m_yearningBadgeText.text = "그리움 <color=#FF3B30>●</color> 활성";
+                }
+
+                if (m_yearningStatusText != null)
+                {
+                    m_yearningStatusText.gameObject.SetActive(false);
+                }
+
+                return;
             }
 
             if (m_yearningStatusText != null)
             {
+                m_yearningStatusText.gameObject.SetActive(true);
                 if (isLongingActive)
                 {
                     m_yearningStatusText.text = "그리움:  <color=#D4AF37>활성</color>";
@@ -340,6 +370,42 @@ namespace Features.InGame
                 {
                     m_yearningStatusText.text = "그리움:  <color=#888888>비활성</color>";
                 }
+            }
+        }
+
+        /// <summary>
+        /// [기능]: 현재 우세 감정 후보를 비교하여 가장 높은 감정 이름과 값을 갱신합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-03
+        /// [마지막 수정 작성자]: 윤승종
+        /// [수정 내용]: 사이드 패널 상태 뱃지 리팩토링에 맞춘 무할당 우세 감정 계산 추가
+        /// </summary>
+        private void UpdateDominantEmotionCandidate(int value, string emotionName, ref int maxVal, ref string dominantName)
+        {
+            if (value > maxVal)
+            {
+                maxVal = value;
+                dominantName = emotionName;
+            }
+        }
+
+        /// <summary>
+        /// [기능]: 대사 ViewModel의 현재 줄 정보를 사이드 패널 진행 텍스트에 반영합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-03
+        /// [마지막 수정 작성자]: 윤승종
+        /// [수정 내용]: 기획 이미지 사양의 대사 진행 수치 실시간 동기화 추가
+        /// </summary>
+        private void UpdateDialogueProgress(DialogueDTO dialogue)
+        {
+            if (this == null || dialogue == null)
+            {
+                return;
+            }
+
+            if (m_dialogueProgressText != null)
+            {
+                m_dialogueProgressText.text = $"{m_dialogueProgressSceneLabel} ㆍ 줄 {dialogue.CurrentLine} / {dialogue.TotalLines}";
             }
         }
 
@@ -362,6 +428,7 @@ namespace Features.InGame
             {
                 m_dialogueViewModel.OnAutoPlayStatusChanged -= SyncAutoPlayState;
                 m_dialogueViewModel.OnChoicesUpdated -= HandleChoicesUpdated;
+                m_dialogueViewModel.OnDialogueUpdated -= UpdateDialogueProgress;
             }
         }
 
@@ -497,7 +564,12 @@ namespace Features.InGame
 
             if (m_passedScenesText != null)
             {
-                m_passedScenesText.text = "씬 2 · 3 · 5 · 7";
+                m_passedScenesText.text = "구역 ㆍ 제3 보존구";
+            }
+
+            if (m_dialogueProgressText != null)
+            {
+                m_dialogueProgressText.text = $"{m_dialogueProgressSceneLabel} ㆍ 줄 12 / 48";
             }
 
             UpdateStatusText(m_sadnessEditorVal, m_joyEditorVal, m_curiosityEditorVal, m_fearEditorVal, m_confusionEditorVal, (m_sadnessEditorVal >= 3 && m_joyEditorVal >= 3));

@@ -158,8 +158,7 @@ public class TitleLifetimeScope : LifetimeScope
 
         if (m_titleView != null && titleVM != null)
         {
-            var soundService = Container.Resolve<ISoundService>();
-            m_titleView.Initialize(titleVM, soundService);
+            m_titleView.Initialize(titleVM);
 
             if (m_globalProgressView != null && progressVM != null)
             {

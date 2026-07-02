@@ -21,7 +21,6 @@ public class IntroView : MonoBehaviour
 
     private IIntroViewModel m_viewModel;
     private ISceneLoader m_sceneLoader;
-    private ISoundService m_soundService;
     private bool m_canNextStep = false;
     private float m_typingSpeed = 0.05f;
     private CancellationTokenSource m_autoProceedCts;
@@ -29,11 +28,10 @@ public class IntroView : MonoBehaviour
     [Inject]
     public void Construct(
         IIntroViewModel viewModel, 
-        ISceneLoader sceneLoader = null, 
-        ISoundService soundService = null)
+        ISceneLoader sceneLoader = null)
     {
         Setup(viewModel.TypingSpeed);
-        Initialize(viewModel, sceneLoader, soundService);
+        Initialize(viewModel, sceneLoader);
     }
 
     public void Setup(float typingSpeed)
@@ -45,7 +43,7 @@ public class IntroView : MonoBehaviour
         }
     }
 
-    public void Initialize(IIntroViewModel viewModel, ISceneLoader sceneLoader = null, ISoundService soundService = null)
+    public void Initialize(IIntroViewModel viewModel, ISceneLoader sceneLoader = null)
     {
         if (viewModel == null)
         {
@@ -55,7 +53,6 @@ public class IntroView : MonoBehaviour
         m_viewModel = viewModel;
         m_skipIntro = viewModel.SkipIntro;
         m_sceneLoader = sceneLoader;
-        m_soundService = soundService;
 
         if (m_skipIntro)
         {
@@ -70,23 +67,23 @@ public class IntroView : MonoBehaviour
         {
             m_typewriter.OnStartTyping += () =>
             {
-                if (m_soundService != null)
+                if (m_viewModel != null)
                 {
-                    m_soundService.PlayLoopSFX("Typing");
+                    m_viewModel.NotifyTypingStarted();
                 }
             };
             m_typewriter.OnCompleteTyping += () =>
             {
-                if (m_soundService != null)
+                if (m_viewModel != null)
                 {
-                    m_soundService.StopLoopSFX();
+                    m_viewModel.NotifyTypingCompleted();
                 }
             };
         }
 
-        if (m_soundService != null)
+        if (m_viewModel != null)
         {
-            m_soundService.StopBGM(1.0f);
+            m_viewModel.StopIntroBGM();
         }
 
         StartIntroSequence().Forget();

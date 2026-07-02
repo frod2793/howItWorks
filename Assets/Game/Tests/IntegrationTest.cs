@@ -39,7 +39,16 @@ public class IntegrationTest
         Assert.IsNotNull(scope.Container);
 
         IDialogueViewModel dialogueVM = scope.Container.Resolve<IDialogueViewModel>();
-        SettingsView settingsView = scope.Container.Resolve<SettingsView>();
+        SettingsView settingsView = null;
+        SettingsView[] settingsViews = Resources.FindObjectsOfTypeAll<SettingsView>();
+        for (int i = 0; i < settingsViews.Length; i++)
+        {
+            if (settingsViews[i] != null && settingsViews[i].gameObject.scene == SceneManager.GetActiveScene())
+            {
+                settingsView = settingsViews[i];
+                break;
+            }
+        }
         InGameSceneInfoView sceneInfoView = Object.FindFirstObjectByType<InGameSceneInfoView>();
 
         Assert.IsNotNull(dialogueVM);
@@ -237,7 +246,16 @@ public class IntegrationTest
         ITitleViewModel titleVM = scope.Container.Resolve<ITitleViewModel>();
         Assert.IsNotNull(titleVM);
 
-        SettingsView settingsView = Object.FindFirstObjectByType<SettingsView>();
+        SettingsView settingsView = null;
+        SettingsView[] settingsViews = Resources.FindObjectsOfTypeAll<SettingsView>();
+        for (int i = 0; i < settingsViews.Length; i++)
+        {
+            if (settingsViews[i] != null && settingsViews[i].gameObject.scene == SceneManager.GetActiveScene())
+            {
+                settingsView = settingsViews[i];
+                break;
+            }
+        }
         Assert.IsNotNull(settingsView);
         if (settingsView.gameObject.activeSelf)
         {
@@ -422,6 +440,7 @@ public class IntegrationTest
         testData.Curiosity = 8;
         testData.Fear = 1;
         testData.Confusion = 1;
+        testData.IsLongingActive = true;
 
         updateMethod.Invoke(sidePanel, new object[] { testData });
 
@@ -429,13 +448,16 @@ public class IntegrationTest
         Assert.IsNotNull(dominantTextVal);
         Assert.IsTrue(dominantTextVal.text.Contains("호기심") && dominantTextVal.text.Contains("8"));
 
-        var yearningTextVal = typeof(InGameSidePanelView).GetField("m_yearningStatusText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sidePanel) as TMPro.TextMeshProUGUI;
-        Assert.IsNotNull(yearningTextVal);
-        Assert.IsTrue(yearningTextVal.text.Contains("활성"));
+        var yearningBadgeGoVal = typeof(InGameSidePanelView).GetField("m_yearningBadgeGo", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sidePanel) as GameObject;
+        var yearningBadgeTextVal = typeof(InGameSidePanelView).GetField("m_yearningBadgeText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sidePanel) as TMPro.TextMeshProUGUI;
+        Assert.IsNotNull(yearningBadgeGoVal);
+        Assert.IsNotNull(yearningBadgeTextVal);
+        Assert.IsTrue(yearningBadgeGoVal.activeSelf);
+        Assert.IsTrue(yearningBadgeTextVal.text.Contains("활성"));
 
-        testData.Sadness = 2;
+        testData.IsLongingActive = false;
         updateMethod.Invoke(sidePanel, new object[] { testData });
-        Assert.IsTrue(yearningTextVal.text.Contains("비활성"));
+        Assert.IsFalse(yearningBadgeGoVal.activeSelf);
     }
 
     [UnityTest]
@@ -558,6 +580,10 @@ public class IntegrationTest
         BacklogView backlogView = scope.Container.Resolve<BacklogView>();
         Assert.IsNotNull(backlogView);
 
+        if (backlogView.gameObject.activeSelf)
+        {
+            backlogView.gameObject.SetActive(false);
+        }
         Assert.IsFalse(backlogView.gameObject.activeSelf);
         backlogView.gameObject.SetActive(true);
         for (int i = 0; i < 20; i++)

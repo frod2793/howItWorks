@@ -14,14 +14,12 @@ namespace Features.InGame
         [SerializeField] private Button m_menuButton;
 
         private ISceneInfoViewModel m_viewModel;
-        private ISoundService m_soundService;
 
         [Inject]
-        public void Construct(ISceneInfoViewModel viewModel, ISoundService soundService = null)
+        public void Construct(ISceneInfoViewModel viewModel)
         {
             m_viewModel = viewModel;
             m_viewModel.OnSceneInfoUpdated += UpdateSceneInfo;
-            m_soundService = soundService;
         }
 
         private void Start()
@@ -73,13 +71,9 @@ namespace Features.InGame
 
         public void func_OnSettingsButtonClicked()
         {
-            if (m_soundService != null)
-            {
-                m_soundService.PlaySFX(SoundKeys.Click);
-            }
-
             if (m_viewModel != null)
             {
+                m_viewModel.PlayClickSound();
                 m_viewModel.RequestSettings();
             }
         }

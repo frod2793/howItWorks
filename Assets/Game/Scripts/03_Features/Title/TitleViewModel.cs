@@ -12,6 +12,7 @@ public class TitleViewModel : ITitleViewModel
     #region 내부 필드
     private readonly ISceneLoader m_sceneLoader;
     private readonly IInGameSaveSystem m_saveSystem;
+    private readonly ISoundService m_soundService;
     #endregion
 
     #region 프로퍼티
@@ -63,10 +64,11 @@ public class TitleViewModel : ITitleViewModel
     }
     #endregion
 
-    public TitleViewModel(ISceneLoader sceneLoader, IInGameSaveSystem saveSystem)
+    public TitleViewModel(ISceneLoader sceneLoader, IInGameSaveSystem saveSystem, ISoundService soundService)
     {
         m_sceneLoader = sceneLoader;
         m_saveSystem = saveSystem;
+        m_soundService = soundService;
     }
 
 
@@ -133,6 +135,30 @@ public class TitleViewModel : ITitleViewModel
     {
         Debug.Log("[TitleViewModel] 게임 종료 호출");
         Application.Quit();
+    }
+
+    public void PlayTitleBGM()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.PlayBGM("Title/titleSample03", 1.0f);
+        }
+    }
+
+    public void PlayNewGameSound()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.NewGame);
+        }
+    }
+
+    public void PlayClickSound()
+    {
+        if (m_soundService != null)
+        {
+            m_soundService.PlaySFX(SoundKeys.Click);
+        }
     }
     #endregion
 }

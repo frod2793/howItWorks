@@ -19,5 +19,8 @@ public interface IIntroViewModel
     void StartIntro();
     void HandleNext();
     void FinishIntro();
+    void NotifyTypingStarted();
+    void NotifyTypingCompleted();
+    void StopIntroBGM();
 }
 #endregion

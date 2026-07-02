@@ -21,7 +21,7 @@ public class PopupViewEditor : Editor
         {
             if (Application.isPlaying)
             {
-                view.TestFromInspector();
+                view.func_TestFromInspector();
             }
             else
             {

@@ -38,6 +38,7 @@ namespace Features.InGame
         string DisplayPlaythrough { get; }
         void UpdateSceneInfo(SceneInfoDTO info);
         void RequestSettings();
+        void PlayClickSound();
     }
 
     public interface ISidePanelViewModel
