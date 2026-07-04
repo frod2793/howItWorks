@@ -43,6 +43,7 @@ public class InGameLifetimeScope : LifetimeScope
         builder.Register<DialogueViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SceneInfoViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SidePanelViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.Register<SystemMenuViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<DialogueFlowController>(Lifetime.Singleton)
             .WithParameter("startDialogueIndex", m_startDialogueIndex);
 
@@ -65,6 +66,7 @@ public class InGameLifetimeScope : LifetimeScope
         RegisterComponentSafe<BacklogView>(builder);
         RegisterComponentSafe<InGameInventoryView>(builder);
         RegisterComponentSafe<InGameEncyclopediaView>(builder);
+        RegisterComponentSafe<SystemMenuView>(builder);
 
         builder.Register<SaveLoadModel>(Lifetime.Scoped);
         builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
@@ -104,11 +106,141 @@ public class InGameLifetimeScope : LifetimeScope
             Debug.LogError($"[InGameLifetimeScope] ISceneInfoViewModel 해결 실패: {e.Message}");
         }
 
-        if (sceneInfoVM != null && settingsView != null)
+        SystemMenuView systemMenuView = null;
+        try
+        {
+            systemMenuView = Container.Resolve<SystemMenuView>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] SystemMenuView 해결 실패: {e.Message}");
+        }
+
+        ISystemMenuViewModel systemMenuVM = null;
+        try
+        {
+            systemMenuVM = Container.Resolve<ISystemMenuViewModel>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISystemMenuViewModel 해결 실패: {e.Message}");
+        }
+
+        ISoundService soundService = null;
+        try
+        {
+            soundService = Container.Resolve<ISoundService>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISoundService 해결 실패: {e.Message}");
+        }
+
+        if (systemMenuView != null && systemMenuVM != null && soundService != null)
+        {
+            systemMenuView.Initialize(systemMenuVM, soundService);
+        }
+
+        if (sceneInfoVM != null && systemMenuView != null)
         {
             sceneInfoVM.OnRequestSettings += () =>
             {
-                settingsView.func_Open();
+                systemMenuView.func_Open();
+            };
+
+            if (systemMenuVM != null)
+            {
+                sceneInfoVM.OnSceneInfoChanged += (info) =>
+                {
+                    systemMenuVM.SetSceneInfo(info);
+                };
+            }
+        }
+
+        SaveLoadView saveLoadView = null;
+        try
+        {
+            saveLoadView = Container.Resolve<SaveLoadView>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] SaveLoadView 해결 실패: {e.Message}");
+        }
+
+        ISaveLoadViewModel saveLoadVM = null;
+        try
+        {
+            saveLoadVM = Container.Resolve<ISaveLoadViewModel>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] ISaveLoadViewModel 해결 실패: {e.Message}");
+        }
+
+        if (saveLoadView != null && saveLoadVM != null)
+        {
+            saveLoadView.Initialize(saveLoadVM);
+        }
+
+        InGameEncyclopediaView encyclopediaView = null;
+        try
+        {
+            encyclopediaView = Container.Resolve<InGameEncyclopediaView>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InGameLifetimeScope] InGameEncyclopediaView 해결 실패: {e.Message}");
+        }
+
+        if (systemMenuVM != null)
+        {
+            systemMenuVM.OnResumeRequested += () =>
+            {
+                if (systemMenuView != null)
+                {
+                    systemMenuView.func_Close();
+                }
+            };
+            systemMenuVM.OnSaveLoadRequested += () =>
+            {
+                if (saveLoadView != null)
+                {
+                    saveLoadView.func_Open(true);
+                }
+            };
+            systemMenuVM.OnSettingsRequested += () =>
+            {
+                if (settingsView != null)
+                {
+                    settingsView.func_Open();
+                }
+            };
+            systemMenuVM.OnEncyclopediaRequested += () =>
+            {
+                if (encyclopediaView != null)
+                {
+                    encyclopediaView.func_Open();
+                }
+            };
+            systemMenuVM.OnTitleRequested += () =>
+            {
+                try
+                {
+                    var sceneLoader = Container.Resolve<ISceneLoader>();
+                    if (sceneLoader != null)
+                    {
+                        sceneLoader.LoadScene("Title", 0.5f);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[InGameLifetimeScope] 타이틀 씬 로드 시도 실패: {ex.Message}");
+                }
+            };
+            systemMenuVM.OnExitRequested += () =>
+            {
+                Debug.Log("[InGameLifetimeScope] 게임 종료가 요청되었습니다.");
+                Application.Quit();
             };
         }
 
@@ -174,31 +306,6 @@ public class InGameLifetimeScope : LifetimeScope
             };
         }
 
-        SaveLoadView saveLoadView = null;
-        try
-        {
-            saveLoadView = Container.Resolve<SaveLoadView>();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InGameLifetimeScope] SaveLoadView 해결 실패: {e.Message}");
-        }
-
-        ISaveLoadViewModel saveLoadVM = null;
-        try
-        {
-            saveLoadVM = Container.Resolve<ISaveLoadViewModel>();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InGameLifetimeScope] ISaveLoadViewModel 해결 실패: {e.Message}");
-        }
-
-        if (saveLoadView != null && saveLoadVM != null)
-        {
-            saveLoadView.Initialize(saveLoadVM);
-        }
-
         InGameInventoryView inventoryView = null;
         IInGameInventorySystem inventorySystem = null;
         try
@@ -216,16 +323,14 @@ public class InGameLifetimeScope : LifetimeScope
             inventoryView.Initialize(inventorySystem, "SCN_03_PLAZA");
         }
 
-        InGameEncyclopediaView encyclopediaView = null;
         IInGameSaveSystem saveSystem = null;
         try
         {
-            encyclopediaView = Container.Resolve<InGameEncyclopediaView>();
             saveSystem = Container.Resolve<IInGameSaveSystem>();
         }
         catch (Exception)
         {
-            Debug.LogWarning("[InGameLifetimeScope] 백과사전 뷰 또는 저장 시스템 객체 초기화가 생략되었습니다. (독립 씬 실행 상태 시 정상)");
+            Debug.LogWarning("[InGameLifetimeScope] 저장 시스템 객체 초기화가 생략되었습니다. (독립 씬 실행 상태 시 정상)");
         }
 
         if (encyclopediaView != null && saveSystem != null)

@@ -50,10 +50,21 @@ public class IntegrationTest
             }
         }
         InGameSceneInfoView sceneInfoView = Object.FindFirstObjectByType<InGameSceneInfoView>();
+        SystemMenuView systemMenuView = null;
+        SystemMenuView[] systemMenuViews = Resources.FindObjectsOfTypeAll<SystemMenuView>();
+        for (int i = 0; i < systemMenuViews.Length; i++)
+        {
+            if (systemMenuViews[i] != null && systemMenuViews[i].gameObject.scene == SceneManager.GetActiveScene())
+            {
+                systemMenuView = systemMenuViews[i];
+                break;
+            }
+        }
 
         Assert.IsNotNull(dialogueVM);
         Assert.IsNotNull(settingsView);
         Assert.IsNotNull(sceneInfoView);
+        Assert.IsNotNull(systemMenuView);
 
         DialogueFlowController controller = scope.Container.Resolve<DialogueFlowController>();
         FieldInfo field = controller.GetType().GetField("m_currentDialogueIndex", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -135,12 +146,22 @@ public class IntegrationTest
         sceneInfoView.func_OnSettingsButtonClicked();
         yield return null;
 
-        Assert.IsTrue(settingsView.gameObject.activeSelf, "설정 버튼 클릭 후 설정창이 활성화되어야 합니다.");
+        var menuCanvas = systemMenuView.GetComponent<Canvas>();
+        Assert.IsNotNull(menuCanvas);
+        Assert.IsTrue(menuCanvas.enabled, "설정 버튼 클릭 후 시스템 메뉴 캔버스가 활성화되어야 합니다.");
+
+        systemMenuView.func_OnSettingsClick();
+        yield return null;
+
+        Assert.IsTrue(settingsView.gameObject.activeSelf, "시스템 메뉴에서 설정 버튼 클릭 후 설정창이 활성화되어야 합니다.");
 
         settingsView.func_OnCancelButtonClicked();
         yield return null;
 
         Assert.IsFalse(settingsView.gameObject.activeSelf, "취소 버튼 클릭 후 설정창이 닫혀야 합니다.");
+
+        systemMenuView.func_Close();
+        yield return null;
     }
 
     [UnityTest]

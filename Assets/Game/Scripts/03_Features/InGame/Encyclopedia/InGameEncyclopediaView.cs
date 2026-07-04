@@ -144,6 +144,18 @@ namespace Features.InGame
             {
                 list.Add(new MockEncyclopediaItem { Id = "item_cato", Name = "카토 알약", Description = "감정을 억제하고 생존을 돕는 파란 알약." });
             }
+            else if (category == "CG")
+            {
+                list.Add(new MockEncyclopediaItem { Id = "cg_start_loop", Name = "첫 번째 기억", Description = "반복되는 시간 속에서 처음으로 눈을 떴을 때의 단상." });
+                list.Add(new MockEncyclopediaItem { Id = "cg_collapsed", Name = "종말의 풍경", Description = "시간이 정지하고 차원이 붕괴되기 시작할 때의 기괴한 푸른 광원." });
+                list.Add(new MockEncyclopediaItem { Id = "cg_elena_smile", Name = "마지막 미소", Description = "모든 진실을 깨달은 엘레나가 주인공을 보며 지었던 미소." });
+            }
+            else if (category == "Sound")
+            {
+                list.Add(new MockEncyclopediaItem { Id = "bgm_theme", Name = "A Loop Has No Love", Description = "타이틀 화면의 쓸쓸함과 무한한 루프의 절망감을 담은 메인 테마곡." });
+                list.Add(new MockEncyclopediaItem { Id = "bgm_plaza", Name = "Frozen Air", Description = "시간이 멈춰버린 정지된 광장에서 흘러나오는 서늘한 앰비언트 사운드." });
+                list.Add(new MockEncyclopediaItem { Id = "bgm_conflict", Name = "Tense Loop", Description = "주요 인물들과 대치하여 긴장감이 최고조에 이르렀을 때 연주되는 퍼커션 BGM." });
+            }
             return list;
         }
 
