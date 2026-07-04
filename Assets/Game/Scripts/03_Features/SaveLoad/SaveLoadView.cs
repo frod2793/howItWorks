@@ -6,8 +6,9 @@ using TMPro;
 using Cysharp.Threading.Tasks;
 using Domain.InGame;
 using UnityEngine.InputSystem;
+using VContainer;
 
-public class SaveLoadView : MonoBehaviour
+public class SaveLoadView : MonoBehaviour, IStackablePopup
 {
     [SerializeField] private RectTransform m_contentContainer;
     [SerializeField] private GameObject m_slotItemPrefab;
@@ -19,9 +20,16 @@ public class SaveLoadView : MonoBehaviour
     [SerializeField] private Button m_deleteButton;
     [SerializeField] private TextMeshProUGUI m_globalProgressText;
 
+    private IUIStackService m_uiStackService;
     private ISaveLoadViewModel m_viewModel;
     private bool m_isOpened = false;
     private Sprite m_loadedSprite;
+
+    [Inject]
+    public void Construct(IUIStackService uiStackService)
+    {
+        m_uiStackService = uiStackService;
+    }
 
     public void Initialize(ISaveLoadViewModel viewModel)
     {
@@ -35,6 +43,10 @@ public class SaveLoadView : MonoBehaviour
     public void func_Open(bool isSaveAllowed)
     {
         m_isOpened = true;
+        if (m_uiStackService != null)
+        {
+            m_uiStackService.Push(this);
+        }
         gameObject.SetActive(true);
         if (m_viewModel != null)
         {
@@ -45,6 +57,10 @@ public class SaveLoadView : MonoBehaviour
     public void func_Close()
     {
         m_isOpened = false;
+        if (m_uiStackService != null)
+        {
+            m_uiStackService.Pop(this);
+        }
         CleanUpResources();
         gameObject.SetActive(false);
         if (m_viewModel != null)
@@ -66,11 +82,7 @@ public class SaveLoadView : MonoBehaviour
             return;
         }
 
-        if (keyboard.escapeKey.wasPressedThisFrame)
-        {
-            func_Close();
-            return;
-        }
+        // UIStackService가 통합 제어하므로 ESC 체크는 삭제함
 
         if (keyboard.upArrowKey.wasPressedThisFrame || keyboard.wKey.wasPressedThisFrame)
         {
@@ -325,5 +337,14 @@ public class SaveLoadView : MonoBehaviour
         {
             m_viewModel.OnStateChanged -= RefreshUI;
         }
+    }
+    public void ClosePopup()
+    {
+        func_Close();
+    }
+
+    public bool IsPopupActive()
+    {
+        return m_isOpened;
     }
 }

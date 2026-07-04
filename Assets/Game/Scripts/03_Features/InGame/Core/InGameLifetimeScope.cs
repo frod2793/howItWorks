@@ -44,6 +44,7 @@ public class InGameLifetimeScope : LifetimeScope
         builder.Register<SceneInfoViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SidePanelViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         builder.Register<SystemMenuViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+        builder.RegisterEntryPoint<UIStackService>();
         builder.Register<DialogueFlowController>(Lifetime.Singleton)
             .WithParameter("startDialogueIndex", m_startDialogueIndex);
 
@@ -65,6 +66,7 @@ public class InGameLifetimeScope : LifetimeScope
         RegisterComponentSafe<SettingsView>(builder);
         RegisterComponentSafe<BacklogView>(builder);
         RegisterComponentSafe<InGameInventoryView>(builder);
+        builder.Register<InGameEncyclopediaViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         RegisterComponentSafe<InGameEncyclopediaView>(builder);
         RegisterComponentSafe<SystemMenuView>(builder);
 
@@ -333,10 +335,17 @@ public class InGameLifetimeScope : LifetimeScope
             Debug.LogWarning("[InGameLifetimeScope] 저장 시스템 객체 초기화가 생략되었습니다. (독립 씬 실행 상태 시 정상)");
         }
 
-        if (encyclopediaView != null && saveSystem != null)
+        if (encyclopediaView != null)
         {
-            var globalData = saveSystem.LoadGlobalProgress();
-            var unlockedEndings = globalData != null && globalData.unlockedEndings != null ? globalData.unlockedEndings : new List<string>();
+            List<string> unlockedEndings = new List<string>();
+            if (saveSystem != null)
+            {
+                var globalData = saveSystem.LoadGlobalProgress();
+                if (globalData != null && globalData.unlockedEndings != null)
+                {
+                    unlockedEndings = globalData.unlockedEndings;
+                }
+            }
             encyclopediaView.Initialize(unlockedEndings);
         }
     }
@@ -352,6 +361,26 @@ public class InGameLifetimeScope : LifetimeScope
         {
             Debug.LogWarning($"[InGameLifetimeScope] 씬 하이어라키에서 {typeof(T).Name} 컴포넌트를 찾을 수 없어 VContainer 등록을 생략합니다.");
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        try
+        {
+            if (Container != null)
+            {
+                var uiStack = Container.Resolve<IUIStackService>();
+                if (uiStack != null)
+                {
+                    uiStack.Clear();
+                }
+            }
+        }
+        catch (Exception)
+        {
+            // 컨테이너 파괴 과정 중의 의존성 오류 무시
+        }
+        base.OnDestroy();
     }
 }
 #endregion

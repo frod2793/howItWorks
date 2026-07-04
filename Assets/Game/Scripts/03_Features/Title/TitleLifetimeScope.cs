@@ -19,6 +19,7 @@ public class TitleLifetimeScope : LifetimeScope
         builder.Register<TitleViewModel>(Lifetime.Scoped).AsImplementedInterfaces();
         builder.Register<SettingsViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         builder.Register<GlobalProgressViewModel>(Lifetime.Scoped);
+        builder.RegisterEntryPoint<UIStackService>();
         builder.Register<SaveLoadModel>(Lifetime.Scoped);
         builder.Register<SaveLoadViewModel>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
         builder.RegisterComponentInHierarchy<SaveLoadView>();
@@ -204,5 +205,24 @@ public class TitleLifetimeScope : LifetimeScope
                 }
             };
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        try
+        {
+            if (Container != null)
+            {
+                var uiStack = Container.Resolve<IUIStackService>();
+                if (uiStack != null)
+                {
+                    uiStack.Clear();
+                }
+            }
+        }
+        catch (System.Exception)
+        {
+        }
+        base.OnDestroy();
     }
 }

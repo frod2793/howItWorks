@@ -4,10 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+using UnityEngine.InputSystem;
 
 namespace Features.Settings
 {
-    public class SettingsView : MonoBehaviour
+    public class SettingsView : MonoBehaviour, IStackablePopup
     {
         [SerializeField] private GameObject m_settingsPanel;
 
@@ -52,11 +53,27 @@ namespace Features.Settings
 
         private System.Threading.CancellationTokenSource m_rollbackCts;
 
+        private IUIStackService m_uiStackService;
         private ISettingsViewModel m_viewModel;
         private Button[] m_tabButtonsArray;
         private TMP_Text[] m_tabTextsArray;
         private Image[] m_tabImagesArray;
-
+ 
+        #region 초기화 (Initialization)
+        /// <summary>
+        /// [기능]: UI Stack 관리 서비스를 주입받습니다.
+        /// [작성자]: 윤승종
+        /// </summary>
+        [Inject]
+        public void Construct(IUIStackService uiStackService)
+        {
+            m_uiStackService = uiStackService;
+        }
+ 
+        /// <summary>
+        /// [기능]: 뷰 모델의 이벤트를 구독하고 초기 UI 데이터를 설정합니다.
+        /// [작성자]: 윤승종
+        /// </summary>
         public void Initialize(ISettingsViewModel viewModel)
         {
             if (viewModel == null)
@@ -64,7 +81,6 @@ namespace Features.Settings
                 return;
             }
             m_viewModel = viewModel;
-
             m_viewModel.OnStateChanged += UpdateUIValues;
             m_viewModel.OnCloseRequested += func_Close;
 
@@ -96,7 +112,8 @@ namespace Features.Settings
             UpdateUIValues();
             func_OnAudioTabButtonClicked();
         }
-
+        #endregion
+ 
         private void OnDestroy()
         {
             if (m_viewModel != null)
@@ -105,6 +122,8 @@ namespace Features.Settings
                 m_viewModel.OnCloseRequested -= func_Close;
             }
         }
+
+        // UIStackService가 통합 제어하므로 Update 주기는 삭제함
 
         private void SetupButtonListeners()
         {
@@ -432,6 +451,10 @@ namespace Features.Settings
 
         public void func_Open()
         {
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Push(this);
+            }
             gameObject.SetActive(true);
             if (m_settingsPanel != null)
             {
@@ -446,6 +469,10 @@ namespace Features.Settings
 
         public void func_Close()
         {
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Pop(this);
+            }
             gameObject.SetActive(false);
             if (m_settingsPanel != null)
             {
@@ -534,6 +561,15 @@ namespace Features.Settings
             {
                 m_viewModel.CancelSettings();
             }
+        }
+        public void ClosePopup()
+        {
+            func_OnCancelButtonClicked();
+        }
+
+        public bool IsPopupActive()
+        {
+            return gameObject.activeSelf;
         }
     }
 }

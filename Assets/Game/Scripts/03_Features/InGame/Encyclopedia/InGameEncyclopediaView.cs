@@ -3,14 +3,21 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Domain.InGame;
 using TMPro;
+using VContainer;
 
+/// <summary>
+/// [기능]: 기획서 13번 슬라이드 기반의 도감 UI 바인딩 및 키보드 입력을 처리하는 뷰 컴포넌트입니다.
+/// [작성자]: 윤승종
+/// </summary>
 namespace Features.InGame
 {
-    public class InGameEncyclopediaView : MonoBehaviour
+    public class InGameEncyclopediaView : MonoBehaviour, IStackablePopup
     {
+        #region UI 참조 (Inspector)
         [SerializeField] private GameObject m_encyclopediaPanel;
         [SerializeField] private RectTransform m_itemGridParent;
         [SerializeField] private GameObject m_encyclopediaCardPrefab;
+        [SerializeField] private Button m_closeButton;
 
         [Header("카테고리 탭")]
         [SerializeField] private Button m_characterTabButton;
@@ -18,61 +25,201 @@ namespace Features.InGame
         [SerializeField] private Button m_cgTabButton;
         [SerializeField] private Button m_soundTabButton;
 
-        [Header("우측 상세설명")]
+        [Header("필터 토글")]
+        [SerializeField] private Button m_filterToggleButton;
+        [SerializeField] private TextMeshProUGUI m_filterText;
+
+        [Header("상세 설명 팝업 (오버레이)")]
+        [SerializeField] private GameObject m_detailPopupOverlay;
+        [SerializeField] private Button m_detailCloseButton;
         [SerializeField] private TextMeshProUGUI m_detailNameText;
         [SerializeField] private TextMeshProUGUI m_detailDescriptionText;
+        [SerializeField] private Image m_previewImage;
+        [SerializeField] private Button m_playButton;
+        #endregion
 
+        #region 내부 필드 (Private Fields)
+        private IUIStackService m_uiStackService;
+        private IInGameEncyclopediaViewModel m_viewModel;
         private List<GameObject> m_spawnedCards = new List<GameObject>();
-        private List<string> m_unlockedItems = new List<string>();
+        #endregion
 
+        #region 초기화 (Initialization)
+        /// <summary>
+        /// [기능]: DI 컨테이너로부터 필요한 의존성을 주입받습니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        [Inject]
+        public void Construct(IUIStackService uiStackService, IInGameEncyclopediaViewModel viewModel)
+        {
+            m_uiStackService = uiStackService;
+            m_viewModel = viewModel;
+        }
+
+        /// <summary>
+        /// [기능]: 도감 뷰를 초기화하고 뷰모델 상태 이벤트를 바인딩합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
         public void Initialize(List<string> unlockedItems)
         {
-            m_unlockedItems = unlockedItems != null ? unlockedItems : new List<string>();
+            if (m_viewModel != null)
+            {
+                m_viewModel.OnDataChanged += RefreshUI;
+                m_viewModel.OnDetailOpened += func_OnDetailOpened;
+                m_viewModel.OnDetailClosed += func_OnDetailClosed;
+                m_viewModel.Initialize(unlockedItems);
+            }
 
             if (m_characterTabButton != null)
             {
-                m_characterTabButton.onClick.AddListener(() => func_OnTabSelected("Character"));
+                m_characterTabButton.onClick.AddListener(() => m_viewModel?.func_SelectCategory("Character"));
             }
             if (m_itemTabButton != null)
             {
-                m_itemTabButton.onClick.AddListener(() => func_OnTabSelected("Item"));
+                m_itemTabButton.onClick.AddListener(() => m_viewModel?.func_SelectCategory("Item"));
             }
             if (m_cgTabButton != null)
             {
-                m_cgTabButton.onClick.AddListener(() => func_OnTabSelected("CG"));
+                m_cgTabButton.onClick.AddListener(() => m_viewModel?.func_SelectCategory("CG"));
             }
             if (m_soundTabButton != null)
             {
-                m_soundTabButton.onClick.AddListener(() => func_OnTabSelected("Sound"));
+                m_soundTabButton.onClick.AddListener(() => m_viewModel?.func_SelectCategory("Sound"));
             }
 
+            if (m_filterToggleButton != null)
+            {
+                m_filterToggleButton.onClick.AddListener(() => m_viewModel?.func_ToggleFilter());
+            }
+
+            if (m_closeButton != null)
+            {
+                m_closeButton.onClick.AddListener(func_Close);
+            }
+
+            if (m_detailCloseButton != null)
+            {
+                m_detailCloseButton.onClick.AddListener(() => m_viewModel?.func_CloseDetail());
+            }
+
+            var canvas = GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.enabled = false;
+            }
+
+            func_OnDetailClosed();
             func_Close();
         }
+        #endregion
 
+        #region 공개 메서드 (Public Methods)
+        /// <summary>
+        /// [기능]: 도감 화면을 활성화하고 스택에 등록합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
         public void func_Open()
         {
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Push(this);
+            }
+            var canvas = GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.enabled = true;
+            }
+
             if (m_encyclopediaPanel != null)
             {
                 m_encyclopediaPanel.SetActive(true);
             }
-            func_OnTabSelected("Character");
+            m_viewModel?.func_SelectCategory("Character");
         }
 
+        /// <summary>
+        /// [기능]: 도감 화면을 비활성화하고 스택에서 제거합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
         public void func_Close()
         {
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Pop(this);
+            }
+            var canvas = GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.enabled = false;
+            }
+
             if (m_encyclopediaPanel != null)
             {
                 m_encyclopediaPanel.SetActive(false);
             }
+            func_OnDetailClosed();
         }
 
-        public void func_OnTabSelected(string category)
+        /// <summary>
+        /// [기능]: IStackablePopup 닫기 인터페이스 구현 메서드입니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        public void ClosePopup()
         {
-            for (int i = 0; i < m_spawnedCards.Count; i++)
+            func_Close();
+        }
+
+        /// <summary>
+        /// [기능]: 도감 팝업의 활성 유무 상태를 반환합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        public bool IsPopupActive()
+        {
+            return m_encyclopediaPanel != null && m_encyclopediaPanel.activeSelf;
+        }
+        #endregion
+
+        #region 내부 메서드 (Private Methods)
+        /// <summary>
+        /// [기능]: 뷰모델 상태를 기반으로 UI 전체 데이터를 다시 그립니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        private void RefreshUI()
+        {
+            if (m_viewModel == null)
             {
-                if (m_spawnedCards[i] != null)
+                return;
+            }
+
+            // 1. 카테고리 탭 수치 갱신
+            UpdateTabButtonText(m_characterTabButton, "캐릭터", "Character");
+            UpdateTabButtonText(m_itemTabButton, "아이템", "Item");
+            UpdateTabButtonText(m_cgTabButton, "CG 갤러리", "CG");
+            UpdateTabButtonText(m_soundTabButton, "사운드룸", "Sound");
+
+            // 2. 필터 버튼 텍스트 갱신
+            if (m_filterText != null)
+            {
+                m_filterText.text = m_viewModel.ShowOnlyUnlocked ? "해금만 보기: ON" : "해금만 보기: OFF";
+            }
+
+            // 3. 카드 클리어 및 3열 그리드 생성
+            if (m_itemGridParent != null)
+            {
+                for (int i = m_itemGridParent.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(m_spawnedCards[i]);
+                    var child = m_itemGridParent.GetChild(i).gameObject;
+                    if (child != null)
+                    {
+                        Destroy(child);
+                    }
                 }
             }
             m_spawnedCards.Clear();
@@ -82,10 +229,10 @@ namespace Features.InGame
                 return;
             }
 
-            var mockItems = GetMockEncyclopediaData(category);
-            for (int i = 0; i < mockItems.Count; i++)
+            var items = m_viewModel.CurrentItems;
+            for (int i = 0; i < items.Count; i++)
             {
-                var item = mockItems[i];
+                var item = items[i];
                 var inst = Instantiate(m_encyclopediaCardPrefab, m_itemGridParent);
                 if (inst != null)
                 {
@@ -93,77 +240,149 @@ namespace Features.InGame
                     m_spawnedCards.Add(inst);
 
                     var nameText = inst.transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
-                    bool isUnlocked = m_unlockedItems.Contains(item.Id);
+                    var tagText = inst.transform.Find("TagText")?.GetComponent<TextMeshProUGUI>();
+                    var iconImage = inst.transform.Find("IconImage")?.GetComponent<Image>();
+                    var lockIcon = inst.transform.Find("LockIcon")?.GetComponent<Image>();
 
                     if (nameText != null)
                     {
-                        nameText.text = isUnlocked ? item.Name : "???";
+                        nameText.text = item.IsUnlocked ? item.Name : "??? (미해금)";
+                    }
+                    if (tagText != null)
+                    {
+                        tagText.text = item.IsUnlocked ? item.Tag : "";
                     }
 
-                    var img = inst.GetComponent<Image>();
-                    if (img != null)
+                    if (iconImage != null)
                     {
-                        img.color = isUnlocked ? Color.white : new Color(0.3f, 0.3f, 0.3f, 0.8f);
+                        if (item.IsUnlocked)
+                        {
+                            iconImage.color = Color.white;
+                            var sprite = Resources.Load<Sprite>(item.IconPath);
+                            if (sprite != null)
+                            {
+                                iconImage.sprite = sprite;
+                            }
+                        }
+                        else
+                        {
+                            iconImage.color = new Color(0.2f, 0.2f, 0.2f, 1.0f);
+                        }
+                    }
+
+                    if (lockIcon != null)
+                    {
+                        lockIcon.gameObject.SetActive(!item.IsUnlocked);
+                    }
+
+                    var cardBg = inst.GetComponent<Image>();
+                    if (cardBg != null)
+                    {
+                        cardBg.color = item.IsUnlocked ? Color.white : new Color(0.9f, 0.9f, 0.88f, 1.0f);
                     }
 
                     var btn = inst.GetComponent<Button>();
                     if (btn != null)
                     {
-                        btn.onClick.AddListener(() => func_OnCardSelected(item, isUnlocked));
+                        btn.onClick.AddListener(() => m_viewModel.func_SelectCard(item.Id));
                     }
                 }
             }
         }
 
-        private void func_OnCardSelected(MockEncyclopediaItem item, bool isUnlocked)
+        /// <summary>
+        /// [기능]: 특정 카테고리 버튼의 텍스트에 진행도를 갱신합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        private void UpdateTabButtonText(Button tabButton, string prefix, string category)
         {
-            if (item == null)
+            if (tabButton == null)
+            {
+                return;
+            }
+            var textComp = tabButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComp != null && m_viewModel != null)
+            {
+                var progress = m_viewModel.GetCategoryProgress(category);
+                textComp.text = $"{prefix} {progress.unlocked} / {progress.total}";
+            }
+        }
+
+        /// <summary>
+        /// [기능]: 카드가 선택되어 뷰모델에서 상세창 오픈 이벤트 시 처리할 콜백입니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        private void func_OnDetailOpened(EncyclopediaItemDTO item)
+        {
+            if (m_detailPopupOverlay == null || item == null)
             {
                 return;
             }
 
+            m_detailPopupOverlay.SetActive(true);
+
             if (m_detailNameText != null)
             {
-                m_detailNameText.text = isUnlocked ? item.Name : "???";
+                m_detailNameText.text = item.IsUnlocked ? item.Name : "??? (미해금)";
             }
             if (m_detailDescriptionText != null)
             {
-                m_detailDescriptionText.text = isUnlocked ? item.Description : "아직 해금되지 않은 도감 항목입니다.";
+                m_detailDescriptionText.text = item.IsUnlocked ? item.Description : "???";
+            }
+
+            bool isCG = (item.Category == "CG") && item.IsUnlocked;
+            bool isSound = (item.Category == "Sound") && item.IsUnlocked;
+
+            if (m_previewImage != null)
+            {
+                m_previewImage.gameObject.SetActive(isCG);
+                if (isCG)
+                {
+                    var loadedSprite = Resources.Load<Sprite>(item.IconPath);
+                    if (loadedSprite != null)
+                    {
+                        m_previewImage.sprite = loadedSprite;
+                    }
+                }
+            }
+
+            if (m_playButton != null)
+            {
+                m_playButton.gameObject.SetActive(isSound);
             }
         }
 
-        private List<MockEncyclopediaItem> GetMockEncyclopediaData(string category)
+        /// <summary>
+        /// [기능]: 뷰모델 상세창 닫기 이벤트 시 처리할 콜백입니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        private void func_OnDetailClosed()
         {
-            var list = new List<MockEncyclopediaItem>();
-            if (category == "Character")
+            if (m_detailPopupOverlay != null)
             {
-                list.Add(new MockEncyclopediaItem { Id = "char_elena", Name = "엘레나", Description = "이 루프를 반복하는 주요 관찰 대상이자 동반자." });
-                list.Add(new MockEncyclopediaItem { Id = "char_rain", Name = "레인", Description = "독자적으로 움직이는 수사관." });
+                m_detailPopupOverlay.SetActive(false);
             }
-            else if (category == "Item")
-            {
-                list.Add(new MockEncyclopediaItem { Id = "item_cato", Name = "카토 알약", Description = "감정을 억제하고 생존을 돕는 파란 알약." });
-            }
-            else if (category == "CG")
-            {
-                list.Add(new MockEncyclopediaItem { Id = "cg_start_loop", Name = "첫 번째 기억", Description = "반복되는 시간 속에서 처음으로 눈을 떴을 때의 단상." });
-                list.Add(new MockEncyclopediaItem { Id = "cg_collapsed", Name = "종말의 풍경", Description = "시간이 정지하고 차원이 붕괴되기 시작할 때의 기괴한 푸른 광원." });
-                list.Add(new MockEncyclopediaItem { Id = "cg_elena_smile", Name = "마지막 미소", Description = "모든 진실을 깨달은 엘레나가 주인공을 보며 지었던 미소." });
-            }
-            else if (category == "Sound")
-            {
-                list.Add(new MockEncyclopediaItem { Id = "bgm_theme", Name = "A Loop Has No Love", Description = "타이틀 화면의 쓸쓸함과 무한한 루프의 절망감을 담은 메인 테마곡." });
-                list.Add(new MockEncyclopediaItem { Id = "bgm_plaza", Name = "Frozen Air", Description = "시간이 멈춰버린 정지된 광장에서 흘러나오는 서늘한 앰비언트 사운드." });
-                list.Add(new MockEncyclopediaItem { Id = "bgm_conflict", Name = "Tense Loop", Description = "주요 인물들과 대치하여 긴장감이 최고조에 이르렀을 때 연주되는 퍼커션 BGM." });
-            }
-            return list;
         }
+        #endregion
 
-        public class MockEncyclopediaItem
+        #region 유니티 생명주기 (Unity Lifecycle)
+        /// <summary>
+        /// [기능]: 객체 파괴 시 뷰모델의 이벤트를 안전하게 해제하여 메모리 누수를 방지합니다.
+        /// [작성자]: 윤승종
+        /// [수정 날짜]: 2026-07-05
+        /// </summary>
+        private void OnDestroy()
         {
-            public string Id;
-            public string Name;
-            public string Description;
+            if (m_viewModel != null)
+            {
+                m_viewModel.OnDataChanged -= RefreshUI;
+                m_viewModel.OnDetailOpened -= func_OnDetailOpened;
+                m_viewModel.OnDetailClosed -= func_OnDetailClosed;
+            }
         }
+        #endregion
     }
 }

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using VContainer;
 
 namespace Features.InGame
 {
@@ -13,7 +14,7 @@ namespace Features.InGame
     /// [기능]: 시스템 메뉴의 UI 렌더링, 페이드 애니메이션 및 사용자 클릭 이벤트를 바인딩하는 뷰 클래스입니다.
     /// [작성자]: 윤승종
     /// </summary>
-    public class SystemMenuView : MonoBehaviour
+    public class SystemMenuView : MonoBehaviour, IStackablePopup
     {
         #region UI 참조 (Inspector)
         [Header("오버레이 제어")]
@@ -38,6 +39,7 @@ namespace Features.InGame
         #region 내부 필드 (Private Fields)
         private ISystemMenuViewModel m_viewModel;
         private ISoundService m_soundService;
+        private IUIStackService m_uiStackService;
         private bool m_isOpen;
         private float m_cachedOriginalBgmVolume = 1.0f;
         #endregion
@@ -48,6 +50,12 @@ namespace Features.InGame
         /// [작성자]: 윤승종
         /// [수정 날짜]: 2026-07-04
         /// </summary>
+        [Inject]
+        public void Construct(IUIStackService uiStackService)
+        {
+            m_uiStackService = uiStackService;
+        }
+
         public void Initialize(ISystemMenuViewModel viewModel, ISoundService soundService)
         {
             m_viewModel = viewModel;
@@ -151,27 +159,7 @@ namespace Features.InGame
         }
         #endregion
 
-        #region 유니티 생명주기 (Unity Lifecycle)
-        private void Update()
-        {
-            if (m_isOpen == false)
-            {
-                return;
-            }
-
-            var keyboard = Keyboard.current;
-            if (keyboard == null)
-            {
-                return;
-            }
-
-            // Esc 단축키 입력으로 닫기 처리 (Input System Package 대응)
-            if (keyboard.escapeKey.wasPressedThisFrame)
-            {
-                func_Close();
-            }
-        }
-        #endregion
+        // UIStackService가 통합 제어하므로 Update 주기는 삭제함
 
         #region 공개 메서드 (Public Methods)
         /// <summary>
@@ -187,6 +175,10 @@ namespace Features.InGame
             }
 
             m_isOpen = true;
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Push(this);
+            }
             if (m_canvas != null)
             {
                 m_canvas.enabled = true;
@@ -229,6 +221,10 @@ namespace Features.InGame
             }
 
             m_isOpen = false;
+            if (m_uiStackService != null)
+            {
+                m_uiStackService.Pop(this);
+            }
             m_canvasGroup.blocksRaycasts = false;
 
             m_canvasGroup.DOKill();
@@ -249,6 +245,15 @@ namespace Features.InGame
             }
 
             Debug.Log("[SystemMenuView] 시스템 메뉴 패널 닫기 및 BGM 볼륨 원복.");
+        }
+        public void ClosePopup()
+        {
+            func_Close();
+        }
+
+        public bool IsPopupActive()
+        {
+            return m_isOpen;
         }
         #endregion
 

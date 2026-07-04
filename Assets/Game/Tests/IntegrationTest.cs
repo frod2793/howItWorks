@@ -13,6 +13,18 @@ using TMPro;
 
 public class IntegrationTest
 {
+    [SetUp]
+    public void SetUp()
+    {
+        UIStackService.IsTestMode = true;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        UIStackService.IsTestMode = false;
+    }
+
     [UnityTest]
     public IEnumerator RunGameFlowTest()
     {
