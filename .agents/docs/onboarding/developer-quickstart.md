@@ -1,56 +1,87 @@
-# 신규 개발자 온보딩 가이드 (Developer Quickstart)
+# 개발자 온보딩
 
-> 이 문서는 이 프로젝트에 새로 투입된 **인간 개발자**를 위한 온보딩 가이드입니다.
-> 개발 환경 구성, 코딩 표준 준수 방법, 첫 기능 개발 워크플로우를 다룹니다.
+이 하네스는 프로젝트의 Unity 버전, 패키지, 폴더, 아키텍처를 미리 고정하지 않습니다. 실제 설치 상태와 확정 프로필을 먼저 확인합니다.
 
----
+## 프로필 준비 흐름
 
-## 1. 개발 환경 설정
+### 1. 초기화
 
-### 요구 소프트웨어
-- **Unity Editor**: Unity 6.x (정확한 마이너 버전은 프로젝트 설정을 참조하십시오)
-- **외부 IDE**: JetBrains Rider (권장) 또는 Visual Studio, VS Code
-- **IDE 에이전트 플러그인**: Antigravity IDE 설정 및 단축키 바인딩 완료 권장
+macOS/Linux Bash:
 
-### UPM 패키지 및 주요 플러그인 설치
-이 프로젝트는 다음의 핵심 패키지를 기반으로 합니다. 프로젝트 로드 후 패키지 관리자에서 정상 로드되었는지 확인하십시오.
-1. **VContainer**: 의존성 주입(DI) 솔루션
-2. **UniTask**: 고성능 Zero-Alloc 비동기 C# 라이브러리
-3. **DOTween (Pro)**: 애니메이션 및 트윈 효과 엔진
+```bash
+bash .agents/scripts/init/initialize-harness.sh --project-root .
+```
 
----
+Windows PowerShell:
 
-## 2. 첫 기능 구현 워크플로우
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/scripts/init/initialize-harness.ps1 -ProjectRoot .
+```
 
-새로운 기능을 추가하거나 수정할 때는 다음 순서로 작업을 진행해야 아키텍처 충돌 및 에이전트와의 협업 오류를 방지할 수 있습니다.
+### 2. 감지 보고서 검토
 
-### Step 1: 기획 스펙 및 아키텍처 검토
-- `docs/product-specs/` 폴더에서 구현할 기능에 대한 기획 요구사항을 검토합니다.
-- `ARCHITECTURE.md`에서 이 기능이 들어갈 네임스페이스와 레이어(Model, ViewModel, View, Service)를 선정합니다.
+`.agents/reports/detection-report.md`와 실제 `ProjectSettings/ProjectVersion.txt`, `Packages/manifest.json`, 코드 사용 근거를 대조합니다. `.agents/config/project-profile.conf`의 source, test, exclude 경로도 직접 확인합니다.
 
-### Step 2: 설계 문서 작성
-- `docs/design-docs/` 디렉토리에 `_TEMPLATE.md`를 복사하여 `YYYY-MM-DD-[기능명]-design.md`를 생성하고 설계를 구상합니다.
-- 동료 개발자나 AI 에이전트에게 설계를 공유하여 의존성 순환이나 규칙 위반이 없는지 검토받습니다.
+### 3. 프로필 확정
 
-### Step 3: 실행 계획 설계 (TDD 지향)
-- `docs/exec-plans/_TEMPLATE.md`를 기반으로 구체적인 구현 체크리스트를 작성하여 `docs/exec-plans/active/`에 배치합니다.
-- 테스트 케이스의 검증을 명확하게 하기 위해, 작성 가능한 단위 테스트를 계획에 포함합니다.
+```bash
+bash .agents/scripts/init/initialize-harness.sh --project-root . --confirm
+```
 
-### Step 4: 구현 및 자동 검증
-- 테스트를 먼저 빌드하고, 최소 코드로 기능을 완성한 뒤 리팩토링을 진행합니다.
-- 로컬 커밋 전에 다음 린터 및 검증 스크립트를 수동 또는 Git Hook을 통해 실행하여 위반 사항이 없는지 검증합니다.
-  ```bash
-  # 로컬 아키텍처 규칙 검증
-  bash .agents/scripts/lint/check-architecture.sh
-  ```
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/scripts/init/initialize-harness.ps1 -ProjectRoot . -Confirm
+```
 
----
+### 4. 검사 명령 준비
 
-## 3. 핵심 아키텍처 3대 원칙 요약
+다음 명령은 사용자가 현재 하네스 검사를 요청한 경우에만 실행하는 예시입니다. 요청하지 않았다면 `not_run`으로 기록합니다.
 
-1. **싱글톤 대신 DI 컨테이너(VContainer)를 생활화하십시오.**
-   - 클래스 간 직접 참조를 줄이고, 생성자 주입 또는 프로퍼티 주입을 통해 결합도를 낮추십시오.
-2. **UI와 핵심 비즈니스 로직을 철저히 분리하십시오.**
-   - UI 처리는 오직 View(MonoBehaviour)가 맡으며, 데이터 표현 가공과 로직은 ViewModel 및 Model(Pure C#)에서 담당합니다.
-3. **메모리 릭 및 에러 방지를 위해 Unity 전용 안전 규칙을 지키십시오.**
-   - UnityEngine.Object에 `?.`을 쓰는 실수를 차단하고, `OnDestroy` 생명주기에서 이벤트 핸들러 해제 및 트윈 Kill 처리를 누락하지 마십시오.
+```bash
+bash .agents/scripts/lint/check-harness.sh --project-root .
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .agents/scripts/lint/check-harness.ps1 -ProjectRoot .
+```
+
+## 개발 환경 확인
+
+- Unity Editor 버전은 프로필과 `ProjectVersion.txt`가 일치하는지 확인합니다.
+- 현재 실행 루트의 물리 절대 경로와 Git 유형을 `normal_checkout`, `linked_worktree`, `submodule`, `non_git` 중 하나로 판별합니다.
+- 모든 Unity 실행 루트는 실행 중 Editor를 사용할 때 `unity status --format json`의 인스턴스 `project`와 대상 물리 프로젝트 루트의 exact match, `unity command editor_status --project-path <물리 경로>`의 `projectPath` exact match·`status=ready`(승인된 PlayMode 관측·정지·캡처는 `playing` 허용)·`compiling=false`를 확인합니다.
+- `linked_worktree`의 Unity 작업은 추가로 `ProjectVersion.txt` 버전과 물리 `projectPath`의 전용 Editor를 사용합니다(`bash .agents/scripts/setup/open-unity-editor.sh --project-root <물리 절대 경로>`; 이미 CLI 실패를 확인했으면 `--skip-cli`). port는 identity가 아니며 CLI가 관리합니다.
+- 바인딩이 `ready`가 아니면 `background: editor_unavailable`로 기록하고 CLI·batchmode 백그라운드 경로로 진행합니다. 실행 루트·물리 경로를 확정할 수 없을 때만 Unity 구현을 시작하지 않습니다. 인스턴스 고정 절차는 [Unity linked worktree Editor·CLI 격리](unity-worktree-cli.md)를 따릅니다.
+- 설치해야 할 DI, async, tween, rendering 패키지는 확정된 값과 [기술 프로필 안내](tech-stack-overview.md)에서 확인합니다.
+- 값이 `none` 또는 `unknown`이면 특정 패키지를 임의 설치하지 않습니다.
+- 소스는 `${source_root}`, 테스트는 `${test_root}`, 제외 경로는 `exclude_root`를 따릅니다.
+
+## 코드 검사 경계 확인
+
+코드 검사는 `project-profile.conf`의 `source_root`를 사용하며 모든 `source_root`는 `Assets/_Game` 또는 그 하위 경로여야 합니다. `Assets/_Game` 밖의 Asset Store, UPM과 기타 외부 에셋 코드는 검사하지 않습니다. `_Game` 내부의 외부 원본만 `exclude_root`로 명시합니다.
+
+## Unity 기능·마일스톤 검증
+
+다음은 사용자가 해당 검증을 현재 요청한 경우에 실행하는 품질 명세입니다. 요청하지 않은 항목은 `not_run`이며 통과로 간주하지 않습니다.
+
+- 개별 Task 검증 범위는 정적 검사, 대상 테스트, 논리적 변경 묶음 단위 Unity 컴파일이며 Player Build를 포함하지 않습니다.
+- 기능·마일스톤 검증은 `Assets/_Game` 프로젝트 소유 모듈과 상호작용의 전체 자동화 통합 테스트를 수행합니다.
+- Player Build가 현재 명시적으로 요청된 경우 사전 게이트를 통과한 동일 변경분에만 1회 수행하며, Unity CI Build Validation이 있으면 로컬 중복 빌드를 수행하지 않습니다.
+- 증거 형식과 변경 후 무효화 기준은 [Unity 기능·마일스톤 검증 정책](../coding-standards/core/unity-validation.md)을 따릅니다.
+
+## 첫 기능 작업
+
+1. 현재 실행 루트의 물리 절대 경로와 Git 유형을 판별합니다.
+2. [제품 스펙](../product-specs/)에서 사용자 요구와 수용 기준을 확인합니다.
+3. [설계 템플릿](../design-docs/_TEMPLATE.md)에 선택 프로필 역할과 의존 방향을 기록합니다.
+4. [실행 계획 템플릿](../exec-plans/_TEMPLATE.md)에 실행 루트, Unity Editor 바인딩, 현재 테스트 권한과 `not_run` 항목을 기록합니다. 실패 검증은 사용자가 요청한 경우에만 실행하도록 계획합니다.
+5. 전체 승인 후 Unity 작업이면 모든 실행 루트의 Editor identity 바인딩을 `ready`로 확정하고, `linked_worktree`에는 전용 Editor를 추가로 확정합니다. 실행 루트를 확정할 수 없을 때만 구현 전체를 중단하며, 상주 Editor만 불가하면 `background: editor_unavailable`로 기록하고 CLI·batchmode 백그라운드 경로로 진행합니다. 다른 Editor로 대상을 바꾸지 않습니다. Editor 비의존 변경(기존 `.cs` 로직 수정만·직렬화 표면 불변·scene/prefab/asset/UI 배치/Inspector 값 무변경)은 이 게이트의 대상이 아니며 실행 루트 판별만 하고 파견합니다 — 정의는 [Unity linked worktree Editor·CLI 격리](unity-worktree-cli.md)의 적용 범위를 따릅니다.
+6. 전체 승인 후 메인 에이전트가 필수 전달 패킷을 구현 서브 에이전트에게 전달합니다.
+7. 구현 서브 에이전트가 최소 범위로 구현하고 적용 가능한 코드·스크립트의 컴파일·구문 오류를 확인합니다. 문서만 변경하면 `N/A`입니다.
+8. 메인 에이전트가 독립 정적 리뷰하고, 중요한 지적은 같은 구현 서브 에이전트가 수정한 뒤 메인 에이전트가 재리뷰합니다.
+9. 대상 테스트, 프로필 검사, 직렬화·런타임 검증은 사용자가 현재 요청한 항목만 실행하고 나머지는 `not_run`으로 기록합니다.
+
+서드파티 원본은 수정하지 않고 프로젝트 소유 Adapter·Wrapper 경계에서 대응합니다. `not_run`은 `ci_tests_passed`, `ci_passed`, Approve, Merge 또는 Done의 근거가 아닙니다.
+
+Editor 기동은 `bash .agents/scripts/setup/open-unity-editor.sh --project-root <물리 절대 경로>`를 사용합니다. 이미 `unity open` 실패를 확인했다면 `--skip-cli`를 지정합니다. 동일 버전 앱을 직접 실행해도 [Unity CLI 실행 가이드](unity-cli.md)의 후속 identity·ready 확인을 통과해야 합니다.
+
+작업 종료·반복 방지는 [AGENTS](../../AGENTS.md)의 작업 종료와 반복 방지 절을, 매 파견 모델 배정과 현재 승인 예외는 [도구 준비](agent-tooling.md)의 역할별 에이전트·모델 분담 절을 따릅니다.

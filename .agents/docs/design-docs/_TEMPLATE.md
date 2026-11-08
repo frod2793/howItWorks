@@ -1,147 +1,112 @@
 # [기능명] 설계 문서
 
-> 파일명 규칙: `YYYY-MM-DD-기능명-design.md`
-> 이 템플릿을 복사하여 새 설계 문서를 작성하십시오.
+> 파일명: `YYYY-MM-DD-기능명-design.md`
 
----
+## 문서 정보
 
-## 개요
-
-- **기능명**: [기능명]
 - **작성자**: [작성자]
 - **작성일**: YYYY-MM-DD
-- **상태**: 📝 작성 중 / 🔍 리뷰 중 / ✅ 승인됨
+- **상태**: 작성 중 / 리뷰 중 / 승인됨
+- **관련 제품 스펙**: [경로]
+
+## 프로필 계약
+
+설계 시작 시 `.agents/config/project-profile.conf`를 읽고 아래 스냅샷을 채웁니다.
+
+| 항목 | 확정값 | 설계 영향 |
+|------|--------|-----------|
+| `confirmation_status` | [pending/confirmed] | [강제 가능한 규칙 범위] |
+| `architecture` | [값] | `docs/profiles/architecture/`에서 선택한 흐름 |
+| `dependency_injection` | [값] | `none`이면 Composition Root의 명시적 조립 위치 |
+| `${source_root}` | [모든 값] | 생성·수정 대상 |
+| `${test_root}` | [모든 값 또는 N/A] | 테스트 대상 또는 대체 검증 |
+
+## 배경과 목표
 
 ### 배경
 
-[이 기능이 필요한 이유와 배경을 기술합니다.]
+[현재 문제와 실제 파일·실행 근거]
 
 ### 목표
 
-[이 기능이 달성해야 할 구체적인 목표를 기술합니다.]
+[측정 가능한 완료 상태]
 
----
+### 범위 밖
+
+[이번 변경에서 다루지 않는 항목]
 
 ## 요구사항
 
-### 기능 요구사항
-
-| ID | 요구사항 | 우선순위 |
-|----|---------|---------|
-| FR-001 | [요구사항 설명] | 필수 |
-| FR-002 | [요구사항 설명] | 선택 |
-
-### 비기능 요구사항
-
-| ID | 요구사항 | 기준 |
-|----|---------|------|
-| NFR-001 | 성능 | [구체적 수치 목표] |
-| NFR-002 | 메모리 | [구체적 수치 목표] |
-
----
+| ID | 요구사항 | 우선순위 | 검증 방법 |
+|----|----------|----------|-----------|
+| FR-001 | [기능 요구사항] | 필수 | [검증] |
+| NFR-001 | [비기능 요구사항] | 필수 | [측정] |
 
 ## 아키텍처 설계
 
-### 레이어 배치
+확정된 architecture에 대응하는 [MVVM](../profiles/architecture/mvvm.md), [MVP](../profiles/architecture/mvp.md), [MVC](../profiles/architecture/mvc.md), [Layered/Clean](../profiles/architecture/layered-clean.md), [Custom](../profiles/architecture/custom.md) 중 하나를 연결합니다.
 
-[이 기능의 클래스들이 어느 레이어에 배치되는지 명시합니다.]
+| 선택 프로필의 역할 | 클래스 | 책임 |
+|---------------------|--------|------|
+| [선택 프로필의 역할] | `[ClassName]` | [책임] |
 
-| 레이어 | 클래스 | 역할 |
-|--------|--------|------|
-| Presentation (View) | `[ClassName]View` | UI 바인딩 |
-| Application (ViewModel) | `[ClassName]ViewModel` | 상태 가공 |
-| Domain (Model) | `[ClassName]Model` | 데이터 및 규칙 |
-| Domain (Service) | `[ClassName]Service` | 비즈니스 로직 |
+### 허용·금지 의존 방향
 
-### 데이터 흐름 (MVVM)
+- **선택 문서**: [프로필 문서]
+- **허용 방향**: [방향과 근거]
+- **금지 방향**: [방향과 근거]
 
-```
-[사용자 입력] → View → ViewModel.Command() → Model/Service 갱신
-                                                ↓
-[UI 갱신]    ← View ← ViewModel.StateChanged ←
-```
+### 데이터 흐름
 
-[구체적인 데이터 흐름을 다이어그램으로 기술합니다.]
-
-### 클래스 다이어그램
+고정 다이어그램을 복사하지 않고 선택한 프로필 문서의 흐름을 링크한 뒤 이 기능의 실제 타입으로 기술합니다.
 
 ```mermaid
-classDiagram
-    class FeatureModel {
-        +string Name
-        +int Value
-        +void UpdateValue(int newValue)
-    }
-
-    class FeatureViewModel {
-        -FeatureModel m_model
-        +event Action OnValueChanged
-        +void ExecuteCommand()
-    }
-
-    class FeatureView {
-        -FeatureViewModel m_viewModel
-        +void func_OnButtonClick()
-    }
-
-    FeatureView --> FeatureViewModel : 구독/Command
-    FeatureViewModel --> FeatureModel : 데이터 접근
+flowchart LR
+    Input[입력] --> Boundary[선택 프로필 경계]
+    Boundary --> Domain[도메인 규칙]
+    Domain --> Output[결과]
 ```
 
-### 의존성 주입 설정 (VContainer)
+### 파일 배치
 
-```csharp
-private void ConfigureFeature(IContainerBuilder builder)
-{
-    builder.Register<FeatureModel>(Lifetime.Singleton);
-    builder.Register<FeatureViewModel>(Lifetime.Singleton);
-    builder.RegisterComponentInHierarchy<FeatureView>();
-}
-```
+| 작업 | 경로 | 이유 |
+|------|------|------|
+| 생성/수정 | `${source_root}/[경로]` | [프로필 경계와의 관계] |
+| 테스트 | `${test_root}/[경로]` 또는 `N/A` | [테스트 또는 대체 검증] |
 
----
+## 의존성 조립
 
-## 디자인 패턴 적용
+| `dependency_injection` | 조립 위치 | 수명·해제 책임 |
+|------------------------|-----------|----------------|
+| [확정값 또는 `none`] | [컨테이너 설정 또는 Composition Root] | [책임] |
 
-| 패턴 | 적용 위치 | 이유 |
-|------|----------|------|
-| [패턴명] | [클래스/모듈] | [적용 이유] |
+`none`은 허용되는 값입니다. 이 경우 구체 타입 생성을 한 곳에 모으고 소비자는 인터페이스 또는 명시적인 생성자 인자를 사용합니다.
 
----
+## 최적화 결정
 
-## 에러 처리
+| 기법 | 적용 상태 | 측정 근거 | 롤백 조건 |
+|------|-----------|-----------|-----------|
+| [기법] | applicable / not_applicable / unknown | [Profiler 기준값과 적용 후 값] | [회귀 수치·화질·호환 조건] |
 
-| 시나리오 | 처리 방법 |
-|---------|----------|
-| [에러 시나리오] | [처리 방법] |
+## 에러와 복구
 
----
+| 시나리오 | 탐지 방법 | 처리 | 복구·롤백 |
+|----------|-----------|------|-----------|
+| [실패] | [근거] | [처리] | [복구] |
 
 ## 테스트 계획
 
-### 단위 테스트
-
-| 테스트 | 대상 | 기대 결과 |
-|--------|------|----------|
-| [테스트명] | [대상 메서드] | [기대 결과] |
-
-### 통합 테스트
-
-| 테스트 | 시나리오 | 기대 결과 |
-|--------|---------|----------|
-| [테스트명] | [시나리오] | [기대 결과] |
-
----
+| 구분 | `${test_root}` 또는 대체 위치 | 시나리오 | 기대 결과 |
+|------|--------------------------------|----------|-----------|
+| 단위 | [경로/N/A] | [시나리오] | [결과] |
+| 통합 | [경로/N/A] | [시나리오] | [결과] |
 
 ## Open Questions
 
-- [ ] [해결되지 않은 질문 1]
-- [ ] [해결되지 않은 질문 2]
-
----
+실제 미결정 사항만 질문·결정권자·결정 기한과 함께 기록합니다. **미결정 사항이 없으면 이 섹션을 삭제**합니다.
 
 ## 변경 이력
 
 | 날짜 | 작성자 | 변경 내용 |
-|------|--------|----------|
-| YYYY-MM-DD | [작성자] | 초안 작성 |
+|------|--------|-----------|
+| YYYY-MM-DD | [작성자] | 초안 |
