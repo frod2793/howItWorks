@@ -4828,6 +4828,10 @@ test_docs_define_role_model_assignment()
         'orca skills get orchestration' \
         '현재 설치된 orca 버전의 가이드·preamble이 우선합니다' \
         '자동 깨우기가 없는 orca 버전에서만' \
+        'goal 모드(Codex 등)가 활성이면 자동 깨우기가 있어도 턴을 종료하지 않고 제한 시간 블로킹 대기 1회' \
+        '실행 중 worker가 있거나 승인·답변 대기만 남은 상태는 goal을 `blocked`로 둘 사유가 아니며' \
+        '`update_goal`에는 active 상태가 없으므로 재개는 `/goal resume`으로 하며' \
+        '턴의 마지막 행동으로 지연 없이 동기 실행' \
         '새 Run의 감독자·알림 수신 터미널은 사용자가 입력 중인 대화 PTY와 분리된 전용 터미널로 둡니다' \
         'headless 실패를 headed 모드나 물리 입력으로 우회하지 않습니다' \
         '역할별 에이전트·모델 분담' \
