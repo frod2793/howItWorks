@@ -206,6 +206,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .agents/scripts/lint/check-h
 - 변경 영향과 온보딩은 graphify 그래프가 있으면 graphify 쿼리로 수행하고, graphify가 없고 Understand 그래프가 이미 있을 때만 `understand-diff`, `understand-onboard`를 사용합니다.
 - 스타일 플러그인 적용과 외부 서비스 MCP 경계는 [도구 준비 문서](docs/onboarding/agent-tooling.md)의 스타일 플러그인 규칙을 따릅니다.
 - 역할별 모델 분담은 [도구 준비 문서](docs/onboarding/agent-tooling.md)의 사용자 배정 절차를 따릅니다. 모든 역할은 매 파견 사용자 질문·답변 확인을 기본으로 하며, 현재 명시 승인된 자동 선택 예외만 해당 범위에 적용합니다. 역할 경계와 증거 기준을 변경하지 않습니다.
+- 토큰 절약은 [도구 준비 문서](docs/onboarding/agent-tooling.md)의 토큰 절약 절을 따릅니다. 필요한 부분만 읽고 원문 대신 경로로 가리키되, 증거 기준과 `.agents/AGENTS.md` 직접 재독 의무는 줄이지 않습니다.
 - 에이전트 간 통신은 Orca 오케스트레이션을 우선 사용합니다. 구현 파견과 완료 보고, 검수 요청과 결과 수신, 질문과 답변은 오케스트레이션으로 주고받고, 오케스트레이션을 사용할 수 없을 때만 orca terminal 명령으로 주고받으며 사유를 기록합니다. 오케스트레이션을 사용하기 전에 `orca skills get orchestration`으로 현재 orca 버전의 가이드를 읽고 역할 분류·파견·완료 절차를 확인합니다. 세부 기준은 [도구 준비 문서](docs/onboarding/agent-tooling.md)를 따릅니다.
 - 도구 누락은 Unity 코드 린트 실패가 아닙니다. [도구 준비 문서](docs/onboarding/agent-tooling.md)의 복구 절차를 따릅니다.
 - Superpowers 설치 상태는 활성화된 `plugin@marketplace`와 같은 marketplace의 캐시 조합 또는 공식 저장소와 사용자 홈의 전역 `superpowers` 스킬 링크 조합을 확인합니다.

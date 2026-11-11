@@ -5007,6 +5007,13 @@ test_docs_define_wait_timeout()
         '미설치 환경에서만' \
         '일반 기동으로 폴백하고 트러블슈팅 사례로 기록' \
         '증거 기준과 검증 권한을 변경하지 않습니다' || return 1
+    assert_document_contains_all "$agent_tooling_document" "토큰 절약 계약" '## 토큰 절약' \
+        '요약 줄과 실패 줄만 읽고' \
+        '변경되지 않은 파일은 다시 읽지 않습니다' \
+        '직접 재독 의무는 이 항목의 예외' \
+        '경로와 줄 번호로 가리킵니다' \
+        '구현·독립 검수 파견은 역할 분리 규칙대로 유지' \
+        '실행하지 않은 검증은 그대로 `not_run`' || return 1
 
     return 0
 }
@@ -5628,6 +5635,7 @@ test_docs_compatibility_preserves_rules_and_xml_templates()
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 작성자 템플릿" '[작성자]:' || return 1
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 수정 날짜 템플릿" '[수정 날짜]:' || return 1
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 마지막 작성자 템플릿" '[마지막 수정 작성자]:' || return 1
+    assert_h2_section_contains_all "$naming_document" '## 포맷과 using 호환 지침' "주석·코드 이모지 금지" '주석과 코드 파일' '이모지를 쓰지 않습니다' || return 1
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 수정 내용 템플릿" '[수정 내용]:' || return 1
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 클래스 템플릿" 'public class' || return 1
     assert_h2_section_contains_all "$naming_document" '## XML 문서 정책' "XML 메서드 템플릿" 'public void' || return 1
